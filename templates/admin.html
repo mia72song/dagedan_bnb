@@ -2,14 +2,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--Load React and React DOM-->
-    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
-    <!-- Load Babel -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <title>Staff Only</title>
     <style>
-        #main{
+        main{
             width: 300px;
             height: 450px;
             margin: auto;
@@ -21,80 +16,46 @@
             width: 150px;
             display: block;
             margin: auto;
-            border-radius: 10px;
-            border:2px white solid;
+            border-radius: 12px;
         }
-        #logo>img:hover{
-            border:2px green solid;
+        form{
+            margin: 33px;
         }
-        #box{
-            height: 250px;
-            text-align: center;
-            margin-top: 20px;
-            color: red;
-            font: 5em sans-serif;
-        }
-        #login{
-            margin: 30px;
-        }
+        
         input{
             line-height: 1.8;
+        }
+        .flash{
+            color: red;
+            list-style: none;
         }
 
     </style>
 </head>
 <body>
     <main>
-        <!--由Main組件渲染-->
+        <div id="box">
+            <div id="logo">
+                <img src="../static/images/logo2.jpg" alt="">
+            </div>
+            <form action={{ url_for("admin.login") }} method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                <label for="">帳號：</label>
+                <input type="text" name="username" id="username"><p>
+                <label for="">密碼：</label>
+                <input type="password" name="password" id="password"><p>
+                <input type="submit" value="登入">
+            </form>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <ul class="flash">
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            {% endwith %}
+        </div>
     </main>
-    <script type="text/babel">
-        class Main extends React.Component{
-            state={
-                staff: false
-            }
-            render(){
-                let login=(
-                    <div id="box">STAFF ONLY</div>
-                );
-                if(this.state.staff){login=<Login/>}                
-                return(
-                    <div id="main">
-                        <div id="logo">
-                            <img src="../static/images/logo2.jpg" alt="" onClick={this.handleClick}></img>
-                        </div>
-                        {login}
-                    </div>
-                )
-            }
-            handleClick=()=>{
-                this.setState({staff:true})
-            }
-        }
-        class Login extends React.Component{
-            state={
-                useranme: "",
-                password: ""
-            }
-            render(){
-                return(
-                    <div id="login">
-                        <lable>帳號：</lable>
-                        <input type="text" name="useranme" id="useranme" onChange={this.handleChang}/>
-                        <p/>
-                        <lable>密碼：</lable>
-                        <input type="password" name="password" id="password"/>
-                        <p/>
-                        <input type="checkbox" name="remember_me" id="remember_me"/>
-                        <lable>記住我</lable>
-                        <p/>
-                        <button type="submit">登入</button>
-                    </div>
-                )
-            }
-        }
-        addEventListener("load", ()=>{
-            ReactDOM.render(<Main/>, document.querySelector("main"));
-        })
-    </script>
 </body>
 </html>

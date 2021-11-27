@@ -1,7 +1,17 @@
 from flask import *
+import os
+from flask_wtf import CSRFProtect
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = os.urandom(24)
+app.config["PERMANENT_SESSION_LIFETIME"] = 86400
+app.config["JSON_AS_ASCII"] = False
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+
+CSRFProtect(app)
+
+from admin import admin
+app.register_blueprint(admin, url_prefix = "/admin")
 
 # 前台頁面
 @app.route("/")
@@ -16,28 +26,4 @@ def about():
 def booking():
     return render_template("booking.html")
 
-# 管理後台頁面
-@app.route("/admin/")
-def admin():
-    return render_template("admin.html")
-
-def logout():
-    pass
-
-@app.route("/admin/room")
-def room():
-    return render_template("room.html")
-
-@app.route("/admin/order")
-def order():
-    return render_template("order.html")
-
-@app.route("/admin/guest")
-def guest():
-    return render_template("guest.html")
-
-@app.route("/admin/user")
-def user():
-    return render_template("/user.html")
-
-app.run()
+app.run(debug=True)
