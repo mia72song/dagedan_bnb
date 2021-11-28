@@ -1,9 +1,12 @@
 import csv
 import json
 import os
+from datetime import datetime, timedelta
 
 # 日曆JSON檔
-json_file_name = "tw_calendar.json" 
+json_file_name = "tw_calendar.json"
+# 中華民國政府行政機關辦公日曆表(csv檔)：https://data.gov.tw/dataset/14718
+lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
 
 def updateTwCalendarJson(json_file_name, csv_file_mane):
     calendar_dict = {}
@@ -35,15 +38,13 @@ def csvFileToDict(csv_file_mane, dict_name):
     with open(csv_file_mane, "r") as f:
         data = csv.DictReader(f)
         for row in data:
-            if row['是否放假']==2:
-                dict_name[row['西元日期']] = {"is_holiday":True, "note":row['備註']}
+            if row['是否放假']=="2":
+                dict_name[row['西元日期']] = {"weekday":row['星期'], "is_holiday":True, "note":row['備註']}
             else:
-                dict_name[row['西元日期']] = {"is_holiday":False, "note":row['備註']}
+                dict_name[row['西元日期']] = {"weekday":row['星期'], "is_holiday":False, "note":row['備註']}
 
     return dict_name
 
-# 中華民國政府行政機關辦公日曆表(csv檔)：https://data.gov.tw/dataset/14718
-lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
-
 if __name__=="__main__":
     updateTwCalendarJson(json_file_name, lastest_csv)
+    
