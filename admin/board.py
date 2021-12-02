@@ -19,9 +19,7 @@ def board():
 
 @admin.route("/board/<int:page>")
 def next_page(page):
-    if page==0:
-        return redirect("/admin/board")
-    if session.get("user") :
+    if session.get("user") and page>0 :
         seven_days = timedelta(days=7)
         today = datetime.today()
         return render_template(

@@ -16,7 +16,7 @@ app.register_blueprint(admin, url_prefix = "/admin")
 # 前台頁面
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("home.html")
 
 @app.route("/about")
 def about():
@@ -24,6 +24,8 @@ def about():
 
 @app.route("/booking")
 def booking():
+    date = request.args.get("checkin")
+    print(date)
     return render_template("booking.html")
 
 app.run(debug=True)

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}關於打個蛋{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/about.css") }}>
+{% endblock %}
+{% block content %}
+<main>
+    <div class="box">
+        <div class="about">
+            <h3>心之所向、身之所往</h3>
+            <div>
+                <p>Sam老闆本在台北工作，回到故鄉金崙，以其在旅館業積累的豐富經驗為基礎，提供旅人一個真正放鬆的悠閒假期。</p>
+                <p>幼稚園就離開部落，後來才回鄉的Sam說：「35歲第一次參加自己部落小米收穫祭，突然間淚流滿面，我覺得自己應該是參與部落祭儀的人，怎麼現在像個局外人，像個觀光客看著一切在眼前流過」，那份想找自己根的渴望愈來愈強烈，於是便決定把台中的房子賣掉回台東，也結束了台北待了十幾年的連鎖型商務旅店集團高階主管職務。</p>
+                <p>有十幾年旅宿經驗的Sam，回鄉成立「打個蛋海旅」民宿，希望讓打個蛋可以做個讓部落發亮的燈泡，就像料理時打個蛋「扣，那樣。」變成太陽。</p>
+            </div>
+        </div>
+    </div>
+    <div class="ig">
+        
+    </div>
+</main>
+{% endblock %}

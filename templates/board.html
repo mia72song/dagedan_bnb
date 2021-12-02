@@ -7,6 +7,16 @@
         .holiday{
             background-color: pink;
         }
+        table, th, td{
+            border: 1px solid black;
+        }
+        th{
+            width: 88px;
+            height: 115px;
+        }
+        #date{
+            vertical-align:text-top;
+        }
     </style>
 </head>
 <body>
@@ -18,7 +28,7 @@
     <table>
         <thead>
             <tr>
-                <th>
+                <th class="pre_page">
                     {% if pre_page %}
                     <a href={{ pre_page }}>上週</a>
                     {% else %}
@@ -27,24 +37,81 @@
                 </th>
                 {% for d in data %}
                     {% if d["is_holiday"] %}
-                        <th class="holiday">
+                        <th class="holiday" id="date">
                             {{ d["date"][4:6] }}月{{ d["date"][6:] }}日<p/>
                             {{ d["weekday"] }}<p/>
                             {{ d["note"] }}
                         </th>
                     {% else %}
-                        <th>
+                        <th id="date">
                             {{ d["date"][4:6] }}月{{ d["date"][6:] }}日<p/>
                             {{ d["weekday"] }}<p/>
                             {{ d["note"] }}
                         </th>
                     {% endif %}
                 {% endfor %}
-                <th>
+                <th class="next_page">
                     <a href={{ next_page }}>下週</a>
                 </th>
             </tr>
         </thead>
+        <tbody>
+            <tr id="d001">
+                <td>海旅雙人套房1</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr id="d002">
+                <td>海旅雙人套房2</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr id="d003">
+                <td>海旅雙人套房3</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr id="d004">
+                <td>海旅雙人套房4</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr id="t001">
+                <td>星空雙人雅房1</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
     </table>
     {% endif %}
     <p/>

@@ -13,11 +13,9 @@ def index():
 @admin.route("/login", methods=["POST",])
 def login():
     if request.method=="POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        if username and password:
+        if request.form.get("username") and request.form.get("password"):
             mydb = Mydb()
-            user_info = mydb.getUser(username, password)
+            user_info = mydb.getUser(request.form.get("username"), request.form.get("password"))
             if user_info:
                 session["user"] = user_info
                 return redirect("/admin/board")

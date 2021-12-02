@@ -1,0 +1,34 @@
+main{
+    width: 1000px;
+    text-align: center;
+    margin: 0 auto;
+}
+.booking_wrap{
+    
+}
+#booking{
+    width: 590px;
+    margin: 50px auto;
+    border: 3.5px #1A1A1A double;
+    display: flex;
+    align-items: center;
+}
+#booking:hover{
+    opacity: 1;
+}
+#booking>div{
+    margin: 10px;
+    font-size: 13px;
+}
+#booking input{
+    line-height: 1.8;
+}
+.submit>button{
+    line-height: 3.2;
+    font-weight: bolder;
+}
+.submit>button:hover{
+    background-color: #F39801;
+    border: 2px #F39801 solid;
+    color: #FFFFFF;
+}

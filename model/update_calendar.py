@@ -1,7 +1,6 @@
 import csv
 import json
 import os
-from datetime import datetime, timedelta
 
 # 日曆JSON檔
 json_file_name = "tw_calendar.json"

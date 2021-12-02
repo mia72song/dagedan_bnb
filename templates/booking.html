@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Booking Calendar{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/booking.css") }}>
+    <!--Load React and React DOM-->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <!-- Load Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+{% endblock %}
+{% block content %}
+<main>
+    <div class="booking_wrap">
+        <!--由Booking組件渲染-->
+    </div>
+    <div class="calendar_wrap">
+
+    </div>
+</main>
+<script type="text/babel">
+    class Booking extends React.Component{
+        state={
+            check_in_date: "",
+            check_out_date: "",
+            adults: 1,
+            kids: 0
+        }
+        componentDidMount(){
+            if(window.location.search==""){
+                this.setState({
+                    check_in_date: getDateString(),
+                    check_out_date: getDateString(2)
+                })
+            }
+        }
+        render(){
+            return(
+                <div id="booking">
+                    <div class="check_in_date">
+                        <p>Check In入住</p>
+                        <input type="date" name="check_in_date" id="check_in_date" 
+                            value={this.state.check_in_date} onChange={this.handleChange("check_in_date")}/>
+                    </div>
+                    <div class="check_out_date">
+                        <p>Check Out退房</p>
+                        <input type="date" name="check_out_date" id="check_out_date" 
+                            value={this.state.check_out_date} onChange={this.handleChange("check_out_date")}/>
+                    </div>
+                    <div class="adults">
+                        <p>Adults大人</p>
+                        <input type="number" name="adults" id="adults" min="1" max="99" 
+                            value={this.state.adults} onChange={this.handleChange("adults")}/>
+                    </div>
+                    <div class="kids">
+                        <p>Kids小孩</p>
+                        <input type="number" name="kids" id="kids" min="0" max="99" 
+                            value={this.state.kids} onChange={this.handleChange("kids")}/>
+                    </div>
+                    <div class="submit">
+                        <button type="submit" onClick={this.handleSubmit}>查詢空房</button>
+                    </div>
+                </div>
+            )
+        }
+        handleChange=(dataType)=>{         
+            return (eObj)=>{
+                let thatDay_s = 0
+                if(dataType=="check_in_date"){
+                    let today_s = new Date(getDateString(0)).getTime()
+                    thatDay_s = new Date(eObj.target.value).getTime()
+                    if(today_s==thatDay_s){
+                        alert("本日住宿，請電洽089-771-551")
+                        return
+                    }else if(today_s>thatDay_s){
+                        alert("無效日期")
+                        return
+                    }
+                }else if(dataType=="check_out_date"){
+                    let nextDay_s = new Date(getDateString()).getTime()
+                    thatDay_s = new Date(eObj.target.value).getTime()
+                    if(nextDay_s>thatDay_s){
+                        alert("無效日期")
+                        return
+                    }
+                }
+                this.setState({[dataType]: eObj.target.value})
+            }
+        }
+        handleSubmit=()=>{
+            const {check_in_date, check_out_date, adults, kids} = this.state
+            if(new Date(check_out_date)>new Date(check_in_date)){
+                let search_string = "checkin="+check_in_date+"&checkout="+check_out_date+"&adults="+adults+"&kids="+kids
+                location.href = `${window.origin}/booking?${search_string}`
+            }else{
+                alert("退房日期必須晚於入住日期")
+                return
+            }
+        }
+    }
+    addEventListener("load", ()=>{
+        ReactDOM.render(<Booking/>, document.querySelector(".booking_wrap"))
+    })
+</script>
+{% endblock %}

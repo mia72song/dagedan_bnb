@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import json
 import os 
 
-def datetimeToSting(datetime_class):
+def datetimeToString(datetime_class):
     date_string = str(datetime_class.year)
     if datetime_class.month<10:
         date_string += "0"+str(datetime_class.month)
@@ -32,7 +32,7 @@ def getSevenDays(datetime_class=None):
             if n!=0:
                 one_day = timedelta(days=1)
                 datetime_class += one_day
-            date_string = datetimeToSting(datetime_class)
+            date_string = datetimeToString(datetime_class)
             data["date"] = date_string
             data = {**data, **calendar_dict[date_string]}
             seven_days.append(data)

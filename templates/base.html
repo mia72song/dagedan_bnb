@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/base.css") }}>
+    <script type="text/javascript" src={{ url_for("static", filename="js/base.js") }}></script>
+    {% endblock %}
+</head>
+<body>
+    <header>
+        <div class="nav">
+            <div class="logo">
+                <a href="/">
+                    <img src={{ url_for("static", filename="images/logo.png") }} alt="home">
+                </a>
+            </div>
+            <div class="menu">
+                <ul>
+                    <li>
+                        <a href="/about">關於打個蛋</a>
+                    </li>
+                    <li>
+                        <a href="/booking">
+                            <button id="book_now">線上訂房</button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="menu_toggler">
+                <button type="button" class="menu_toggler_btn">☰</button>
+            </div>
+        </div>
+    </header>
+    <div class="nav_wrap"></div>
+    {% block content %}
+
+    {% endblock %}
+    <footer>
+        <div>
+            <div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5683.436265064969!2d120.96262041299455!3d22.532213062953314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346fd238755907d9%3A0xd7080d5c3712b102!2z5omT5YCL6JuL5rW35peF!5e0!3m2!1szh-TW!2stw!4v1638271003790!5m2!1szh-TW!2stw" width="250" height="180" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            </div>
+            <div class="contact">
+                <h3>打個蛋海旅 Dagedan House B&B</h3>
+                <p>本館：台東縣太麻里鄉金崙村4鄰金崙128號​</p>
+                <p>Tel：089-771-551</p>
+                <p>E-Mail：dagedanhouse@gmail.com</p>
+                <p>COPYRIGHT © 2020 by Dagedan House B&B</p>
+            </div>
+        </div>
+                 
+    </footer>
+</body>
+</html>
