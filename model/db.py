@@ -51,10 +51,15 @@ class Mydb:
     '''
     
     def getBookingByDate(self, start_date, end_date):
-        '''type
-        start_date: String
-        end_date: String
-        return List
+        '''
+        Parameters
+        ----------
+        start_date : String，格式yyyy-mm-dd
+        end_date : String，格式yyyy-mm-dd
+
+        Returns
+        -------
+        List
         '''
         data_list = []
         sql = f"""SELECT c.date, b.room_no, b.order_id, c.weekday, c.is_holiday, c.note 

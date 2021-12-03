@@ -1,7 +1,7 @@
-from datetime import datetime
 from flask import *
-import os
 from flask_wtf import CSRFProtect
+import os
+from datetime import datetime
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
@@ -27,8 +27,8 @@ def about():
 
 @app.route("/booking")
 def booking():
-    if request.args.get("checkin") or request.args.get("checkin"):
-        date = request.args.get("checkin") or request.args.get("checkin")
+    if request.args.get("checkin") or request.args.get("checkout"):
+        date = request.args.get("checkin") or request.args.get("checkout")
         date = datetime.strptime(date, "%Y-%m-%d")
         if date<datetime.today():
             return redirect("/booking")
