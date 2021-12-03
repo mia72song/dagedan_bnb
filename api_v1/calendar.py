@@ -13,7 +13,7 @@ def get_calendar(search_sting):
     slist = search_sting.split("&")
     check_in_date = (slist[0].split("="))[1]
 
-    start_date = datetime.strptime(check_in_date, dateFormatter)
+    start_date = datetime.strptime(check_in_date, dateFormatter) # 轉datetime格式
     if start_date<datetime.today():
         start_date = datetime.today()+timedelta(days=1)
         check_in_date = datetime.strftime(start_date, dateFormatter) # 轉字串
@@ -23,14 +23,18 @@ def get_calendar(search_sting):
     try:
         mydb = Mydb()
         booking_list = mydb.getBookingByDate(check_in_date, end_date)
+        status_code = 200
+        body = json.dumps({
+            "list": booking_list
+        }, ensure_ascii=False, indent=2)
             
     except Exception as e:
-        print("資料庫出錯了：", e)
-
-    body = json.dumps({
-        "list": booking_list
-    }, ensure_ascii=False, indent=2)
-
-    resp = make_response(body, 200)
+        status_code = 500
+        body = json.dumps({
+            "error": True,
+            "message": f"Server Error：{e}"
+        }, ensure_ascii=False, indent=2)
+    
+    resp = make_response(body, status_code)
     resp.headers["Content-Type"] = "application/json"
     return resp
