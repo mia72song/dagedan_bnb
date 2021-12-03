@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import *
 import os
 from flask_wtf import CSRFProtect
@@ -26,6 +27,12 @@ def about():
 
 @app.route("/booking")
 def booking():
+    if request.args.get("checkin") or request.args.get("checkin"):
+        date = request.args.get("checkin") or request.args.get("checkin")
+        date = datetime.strptime(date, "%Y-%m-%d")
+        if date<datetime.today():
+            return redirect("/booking")
+    
     return render_template("booking.html")
 
 app.run(debug=True)
