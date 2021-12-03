@@ -35,9 +35,15 @@
                 })
             }else{
                 let search_sting = (location.search).replace("?", "")
+                let slist = search_sting.split("&")
+                this.setState({
+                    check_in_date: (slist[0].split("="))[1],
+                    check_out_date: (slist[1].split("="))[1],
+                    adults: parseInt((slist[2].split("="))[1]),
+                    kids: parseInt((slist[3].split("="))[1])
+                })
                 getCalendar(search_sting).then(data=>{
-                    console.log(data.data)
-                    this.setState(data.data)
+                    console.log(data.list)
                 })
             }
         }

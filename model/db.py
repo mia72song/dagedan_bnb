@@ -49,6 +49,7 @@ class Mydb:
         self.conn.commit()
         print("密碼已更新")
     '''
+    
     def getBookingByDate(self, start_date, end_date):
         '''type
         start_date: String
@@ -56,15 +57,22 @@ class Mydb:
         return List
         '''
         data_list = []
-        sql = f"SELECT * FROM booking WHERE date<='{end_date}' AND date>='{start_date}' ORDER BY date, room_no"
+        sql = f"""SELECT c.date, b.room_no, b.order_id, c.weekday, c.is_holiday, c.note 
+            FROM calendar AS c
+            LEFT JOIN booking AS b ON c.date=b.date
+            WHERE c.date<='{end_date}' AND c.date>='{start_date}'
+            ORDER BY c.date, b.room_no"""
         self.cur.execute(sql)
         data = self.cur.fetchall()
-        print(f"搜尋{start_date}到{end_date}的預約")
         for d in data:
             d = list(d)
-            date = datetime.strftime(d[0], "%Y-%m-%d")
-            d[0] = date
+            d[0] = datetime.strftime(d[0], "%Y-%m-%d")
+            is_holiday = False
+            if d[-2]==1 : is_holiday = True
+            d[-2] = is_holiday
             data_list.append(d)
+
+        print(f"搜尋{start_date}到{end_date}的預約")
         return data_list
 
     def updateCalendar(self, csv_file_mane):
@@ -91,5 +99,6 @@ if __name__=="__main__":
     lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
     
     mydb = Mydb()
-    mydb.updateCalendar(lastest_csv)
+    data = mydb.getBookingByDate('2021-12-28', '2022-01-02')
+    print(data)
     del mydb

@@ -2,7 +2,6 @@ from flask import render_template, session, redirect
 from datetime import datetime, timedelta
 
 from model.db import Mydb
-from model.seven_days import getSevenDays
 from . import admin
 
 @admin.route("/board")
@@ -11,7 +10,7 @@ def board():
         return render_template(
             "board.html", 
             user = (session.get("user"))[1], 
-            data = getSevenDays(datetime.today()), 
+            data = None, 
             next_page = "/admin/board/1"
             )
     else:
@@ -25,7 +24,7 @@ def next_page(page):
         return render_template(
             "board.html", 
             user = (session.get("user"))[1], 
-            data = getSevenDays(today+seven_days*page), 
+            data = None, 
             next_page = "/admin/board/"+str(page+1),
             pre_page = "/admin/board/"+str(page-1)
         )

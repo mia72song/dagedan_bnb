@@ -17,20 +17,20 @@ def get_calendar(search_sting):
     kids = int((slist[3].split("="))[1])
 
     today = datetime.today()
-    print(today)
+
     start_date = datetime.strptime(check_in_date, dateFormatter)
     end_date = start_date+timedelta(days=6)
     end_date = datetime.strftime(end_date, dateFormatter) # 轉字串
     try:
         mydb = Mydb()
         data = mydb.getBookingByDate(check_in_date, end_date)
-        print(data)
+            
     except Exception as e:
         print("資料庫出錯了：", e)
 
 
     body = json.dumps({
-        "data": data
+        "list": data
     }, ensure_ascii=False, indent=2)
 
     resp = make_response(body, 200)
