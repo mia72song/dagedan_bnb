@@ -3,6 +3,7 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/booking.css") }}>
+    <script type="text/javascript" src={{ url_for("static", filename="js/calendar.js") }}></script>
     <!--Load React and React DOM-->
     <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
@@ -32,6 +33,12 @@
                     check_in_date: getDateString(),
                     check_out_date: getDateString(2)
                 })
+            }else{
+                let search_sting = (location.search).replace("?", "")
+                getCalendar(search_sting).then(data=>{
+                    console.log(data.data)
+                    this.setState(data.data)
+                })
             }
         }
         render(){
@@ -58,7 +65,7 @@
                             value={this.state.kids} onChange={this.handleChange("kids")}/>
                     </div>
                     <div class="submit">
-                        <button type="submit" onClick={this.handleSubmit}>查詢空房</button>
+                        <button type="submit" onClick={this.handleSubmit}>查詢</button>
                     </div>
                 </div>
             )

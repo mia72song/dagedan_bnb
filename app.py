@@ -12,6 +12,8 @@ CSRFProtect(app)
 
 from admin import admin
 app.register_blueprint(admin, url_prefix = "/admin")
+from api_v1 import api
+app.register_blueprint(api, url_prefix = "/api")
 
 # 前台頁面
 @app.route("/")
@@ -24,8 +26,6 @@ def about():
 
 @app.route("/booking")
 def booking():
-    date = request.args.get("checkin")
-    print(date)
     return render_template("booking.html")
 
 app.run(debug=True)
