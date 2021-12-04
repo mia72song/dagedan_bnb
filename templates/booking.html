@@ -114,6 +114,9 @@
 
     addEventListener("load", ()=>{
         ReactDOM.render(<Booking/>, document.querySelector(".booking_wrap"))
+        getRooms().then(data=>{
+            console.log(data.list)
+        })
     })
 </script>
 {% endblock %}

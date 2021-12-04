@@ -28,3 +28,15 @@ function getCalendar(search_string){
     })
     return p
 }
+
+function getRooms(){
+    let url = `${window.origin}/api/rooms`
+    let p = fetch(url).then(response=>{
+        if(response.status===200){
+            return response.json()
+        }else{
+            console.log(response.json())
+        }
+    })
+    return p
+}

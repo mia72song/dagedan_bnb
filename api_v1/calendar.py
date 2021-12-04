@@ -4,13 +4,13 @@ from datetime import datetime, timedelta
 
 from model.db import Mydb
 from . import api
-from .utils import dateFormatter, bookingDateFormatter
+from .utils import dateFormatter, bookingDateFormatter, roomFormatter
+
+body = None
+status_code = 0
 
 @api.route("/calendar/<search_sting>")
 def get_calendar(search_sting):
-    body = None
-    status_code = 0
-
     slist = search_sting.split("&")
     start_date_string = (slist[0].split("="))[1]
     
@@ -45,6 +45,39 @@ def get_calendar(search_sting):
         }, ensure_ascii=False, indent=2)
         status_code = 500
     
+    resp = make_response(body, status_code)
+    resp.headers["Content-Type"] = "application/json"
+    return resp
+
+@api.route("/rooms")
+def get_rooms():
+    try:
+        mydb = Mydb()
+        rooms = mydb.getRooms()
+        room_list = []
+        if rooms:
+            for r in rooms:
+                room_info = roomFormatter(r)
+                room_list.append(room_info)
+            body = json.dumps({
+                "list":room_list
+            }, ensure_ascii=False, indent=2)
+            status_code = 200
+        
+        else:
+            body = json.dumps({
+            "error": True,
+            "message": "All Rooms are Not Available"
+            }, ensure_ascii=False, indent=2)
+            status_code = 500
+    
+    except Exception as e:
+        body = json.dumps({
+            "error": True,
+            "message": f"Server Error：{e}"
+        }, ensure_ascii=False, indent=2)
+        status_code = 500
+
     resp = make_response(body, status_code)
     resp.headers["Content-Type"] = "application/json"
     return resp

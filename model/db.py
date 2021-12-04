@@ -66,6 +66,16 @@ class Mydb:
 
         print(f"搜尋{start_date}到{end_date}的預約")
         return data
+    
+    def getRooms(self):
+        sql = f"""SELECT r.room_no, r.name, r.room_type, 
+            rt.accommodate, rt.rate_weekday, rt.rate_holiday, rt.single_discount
+            FROM rooms AS r
+            INNER JOIN room_type AS rt ON rt.type=r.room_type
+            WHERE is_available=1"""
+        self.cur.execute(sql)
+        data = self.cur.fetchall()
+        return data
 
     def updateCalendar(self, csv_file_mane):
         with open(csv_file_mane, "r") as f:
@@ -91,6 +101,6 @@ if __name__=="__main__":
     lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
     
     mydb = Mydb()
-    data = mydb.getBookingByDate('2021-12-28', '2022-01-02')
+    data = mydb.getRooms()
     print(data)
     del mydb
