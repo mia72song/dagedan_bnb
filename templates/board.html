@@ -36,19 +36,7 @@
                     {% endif %}
                 </th>
                 {% for d in data %}
-                    {% if d["is_holiday"] %}
-                        <th class="holiday" id="date">
-                            {{ d["date"][4:6] }}月{{ d["date"][6:] }}日<p/>
-                            {{ d["weekday"] }}<p/>
-                            {{ d["note"] }}
-                        </th>
-                    {% else %}
-                        <th id="date">
-                            {{ d["date"][4:6] }}月{{ d["date"][6:] }}日<p/>
-                            {{ d["weekday"] }}<p/>
-                            {{ d["note"] }}
-                        </th>
-                    {% endif %}
+                    <th>{{ d }}</th>
                 {% endfor %}
                 <th class="next_page">
                     <a href={{ next_page }}>下週</a>

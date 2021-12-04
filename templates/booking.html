@@ -15,10 +15,11 @@
         <!--由Booking組件渲染-->
     </div>
     <div class="calendar_wrap">
-
+        <!--由Calendar組件渲染-->
     </div>
 </main>
 <script type="text/babel">
+    let p;
     class Booking extends React.Component{
         state={
             check_in_date: "",
@@ -35,7 +36,7 @@
             }else{
                 let search_sting = (location.search).replace("?", "")
                 let slist = search_sting.split("&")
-                getCalendar(search_sting).then(data=>{
+                p = getCalendar(search_sting).then(data=>{
                     console.log(data.list)
                     this.setState({
                         check_in_date: (slist[0].split("="))[1],
@@ -110,6 +111,7 @@
             }
         }
     }
+
     addEventListener("load", ()=>{
         ReactDOM.render(<Booking/>, document.querySelector(".booking_wrap"))
     })

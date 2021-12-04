@@ -1,40 +1,40 @@
-from flask import make_response
-import json
+from flask import jsonify
 from datetime import datetime, timedelta
 
 from model.db import Mydb
 from . import api
 
+dateFormatter = "%Y-%m-%d"
+
 @api.route("/calendar/<search_sting>")
 def get_calendar(search_sting):
     status_code = 0
     booking_list = []
-    dateFormatter = "%Y-%m-%d"
-    slist = search_sting.split("&")
-    check_in_date = (slist[0].split("="))[1]
 
-    start_date = datetime.strptime(check_in_date, dateFormatter) # 轉datetime格式
-    if start_date<datetime.today():
+    slist = search_sting.split("&")
+    start_date_string = (slist[0].split("="))[1]
+    
+    # 檢查start_date是否早於今天日期，是則以明天為start_date
+    start_date = datetime.strptime(start_date_string, dateFormatter)
+    if datetime.strptime(start_date_string, dateFormatter)<=datetime.today():
         start_date = datetime.today()+timedelta(days=1)
-        check_in_date = datetime.strftime(start_date, dateFormatter) # 轉字串
+        start_date_string = datetime.strftime(start_date, dateFormatter)
 
     end_date = start_date+timedelta(days=6)
-    end_date = datetime.strftime(end_date, dateFormatter) # 轉字串
+    end_date_string = datetime.strftime(end_date, dateFormatter)
     try:
         mydb = Mydb()
-        booking_list = mydb.getBookingByDate(check_in_date, end_date)
+        booking_list = mydb.getBookingByDate(start_date_string, end_date_string)
         status_code = 200
-        body = json.dumps({
+        body = {
             "list": booking_list
-        }, ensure_ascii=False, indent=2)
+        }
             
     except Exception as e:
         status_code = 500
-        body = json.dumps({
+        body = {
             "error": True,
             "message": f"Server Error：{e}"
-        }, ensure_ascii=False, indent=2)
+        }
     
-    resp = make_response(body, status_code)
-    resp.headers["Content-Type"] = "application/json"
-    return resp
+    return jsonify(body), status_code
