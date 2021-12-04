@@ -4,8 +4,7 @@ from datetime import datetime, timedelta
 from model.db import Mydb
 from . import admin
 from .auth import login_required
-
-dateFormatter = "%Y-%m-%d"
+from api_v1.utils import dateFormatter, bookingDateFormatter
 
 @login_required
 @admin.route("/board")

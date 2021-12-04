@@ -1,15 +1,15 @@
-from flask import jsonify
+from flask import make_response
+import json
 from datetime import datetime, timedelta
 
 from model.db import Mydb
 from . import api
-
-dateFormatter = "%Y-%m-%d"
+from .utils import dateFormatter, bookingDateFormatter
 
 @api.route("/calendar/<search_sting>")
 def get_calendar(search_sting):
+    body = None
     status_code = 0
-    booking_list = []
 
     slist = search_sting.split("&")
     start_date_string = (slist[0].split("="))[1]
@@ -24,17 +24,27 @@ def get_calendar(search_sting):
     end_date_string = datetime.strftime(end_date, dateFormatter)
     try:
         mydb = Mydb()
-        booking_list = mydb.getBookingByDate(start_date_string, end_date_string)
+        results = mydb.getBookingByDate(start_date_string, end_date_string)
+        data_list = []
+        if results:
+            for r in results:
+                data = bookingDateFormatter(r)
+                data_list.append(data)
+        
+        body = json.dumps({
+            "start_date":start_date_string,
+            "end_date":end_date_string,
+            "list": data_list
+        }, ensure_ascii=False, indent=2)
         status_code = 200
-        body = {
-            "list": booking_list
-        }
             
     except Exception as e:
-        status_code = 500
-        body = {
+        body = json.dumps({
             "error": True,
             "message": f"Server Error：{e}"
-        }
+        }, ensure_ascii=False, indent=2)
+        status_code = 500
     
-    return jsonify(body), status_code
+    resp = make_response(body, status_code)
+    resp.headers["Content-Type"] = "application/json"
+    return resp

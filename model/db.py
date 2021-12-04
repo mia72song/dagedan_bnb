@@ -56,12 +56,7 @@ class Mydb:
         ----------
         start_date : String，格式yyyy-mm-dd
         end_date : String，格式yyyy-mm-dd
-
-        Returns
-        -------
-        List
         '''
-        data_list = []
         sql = f"""SELECT c.date, b.room_no, b.order_id, c.weekday, c.is_holiday, c.note 
             FROM calendar AS c
             LEFT JOIN booking AS b ON c.date=b.date
@@ -69,16 +64,9 @@ class Mydb:
             ORDER BY c.date, b.room_no"""
         self.cur.execute(sql)
         data = self.cur.fetchall()
-        for d in data:
-            d = list(d)
-            d[0] = datetime.strftime(d[0], "%Y-%m-%d")
-            is_holiday = False
-            if d[-2]==1 : is_holiday = True
-            d[-2] = is_holiday
-            data_list.append(d)
 
         print(f"搜尋{start_date}到{end_date}的預約")
-        return data_list
+        return data
 
     def updateCalendar(self, csv_file_mane):
         with open(csv_file_mane, "r") as f:

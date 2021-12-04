@@ -37,7 +37,7 @@
                 let search_sting = (location.search).replace("?", "")
                 let slist = search_sting.split("&")
                 p = getCalendar(search_sting).then(data=>{
-                    console.log(data.list)
+                    console.log(data)
                     this.setState({
                         check_in_date: (slist[0].split("="))[1],
                         check_out_date: (slist[1].split("="))[1],
