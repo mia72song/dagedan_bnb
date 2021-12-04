@@ -16,6 +16,8 @@ app.register_blueprint(admin, url_prefix = "/admin")
 from api_v1 import api
 app.register_blueprint(api, url_prefix = "/api")
 
+from api_v1.utils import dateFormatter
+
 # 前台頁面
 @app.route("/")
 def index():
@@ -29,7 +31,7 @@ def about():
 def booking():
     if request.args.get("checkin") or request.args.get("checkout"):
         date = request.args.get("checkin") or request.args.get("checkout")
-        date = datetime.strptime(date, "%Y-%m-%d")
+        date = datetime.strptime(date, dateFormatter)
         if date<datetime.today():
             return redirect("/booking")
     
