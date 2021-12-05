@@ -1,61 +1,64 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Staff Only</title>
-    <style>
-        main{
-            width: 300px;
-            height: 450px;
-            margin: auto;
-        }
-        #logo{
-            margin-top: 100px; 
-        }
-        #logo>img{
-            width: 150px;
-            display: block;
-            margin: auto;
-            border-radius: 12px;
-        }
-        form{
-            margin: 33px;
-        }
-        
-        input{
-            line-height: 1.8;
-        }
-        .flash{
-            color: red;
-            list-style: none;
-        }
-
-    </style>
-</head>
-<body>
+{% extends "admin_base.html" %}
+{% block title %}Staff Only{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/admin.css") }}>
+    <script type="text/javascript" src={{ url_for("static", filename="js/user.js") }}></script>
+{% endblock %}
+{% block content %}
     <main>
-        <div id="box">
-            <div id="logo">
-                <img src="../static/images/logo2.jpg" alt="">
-            </div>
-            <form action={{ url_for("admin.login") }} method="post">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-                <label for="">帳號：</label>
-                <input type="text" name="username" id="username"><p>
-                <label for="">密碼：</label>
-                <input type="password" name="password" id="password"><p>
-                <input type="submit" value="登入">
-            </form>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <ul class="flash">
-                {% for message in messages %}
-                    <li>{{ message }}</li>
-                {% endfor %}
-                </ul>
-            {% endif %}
-            {% endwith %}
-        </div>
+        <!--由LoginForm組件渲染-->
     </main>
-</body>
-</html>
+    <script type="text/babel">
+        class LoginForm extends React.Component{
+            state = {
+                username:"",
+                password:""
+            }
+            render(){
+                return(
+                    <div id="box">
+                        <div id="logo">
+                            <img src="../static/images/logo2.jpg" alt=""/>
+                        </div>
+                        <form method="post" onSubmit={this.handleSubmit}>
+                            <label for="">帳號：</label>
+                            <input type="text" name="username" id="username" value={this.state.username}
+                                onChange={this.handleChange("username")}/><p/>
+                            <label for="">密碼：</label>
+                            <input type="password" name="password" id="password" value={this.state.password}
+                                onChange={this.handleChange("password")}/><p/>
+                            <input type="submit" value="登入"/>
+                        </form>
+                        <div className="flash">
+                        
+                        </div>
+                    </div>
+                )
+            }
+            handleChange=(dataType)=>{
+                return(eObj=>{
+                    // console.log(dataType);
+                    // console.log(eObj.target.value);
+                    this.setState({[dataType]:eObj.target.value});
+                })
+            }
+            handleSubmit=(eObj)=>{
+                eObj.preventDefault()
+                const {username, password} = this.state
+                if(username==="" || password===""){
+                    alert("登入資料皆不得為空值")
+                    return
+                }
+                const data = {username, password}
+                let p = userRequest("post", data)
+                p.then(resp=>{
+                    console.log(resp)
+                })
+            }
+        }
+        addEventListener("load", ()=>{
+            ReactDOM.render(<LoginForm/>, document.querySelector("main"));
+        })
+    </script>
+{% endblock %}

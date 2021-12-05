@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <script type="text/javascript" src={{ url_for("static", filename="js/user.js") }}></script>
+    <!--Load React and React DOM-->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <!-- Load Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+
+    {% endblock %}
+    <script>
+    userRequest("get").then(resp=>{
+        console.log(resp)
+    })
+    </script>
+</body>
+</html>

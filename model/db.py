@@ -56,16 +56,16 @@ class Mydb:
         start_date : String，格式yyyy-mm-dd
         end_date : String，格式yyyy-mm-dd
         '''
-        sql = f"""SELECT c.date, b.room_no, b.order_id, c.weekday, c.is_holiday, c.note 
-            FROM calendar AS c
-            LEFT JOIN booking AS b ON c.date=b.date
-            WHERE c.date<='{end_date}' AND c.date>='{start_date}'
-            ORDER BY c.date, b.room_no"""
+        sql = f"SELECT * FROM booking WHERE date<='{end_date}' AND date>='{start_date}'"
         self.cur.execute(sql)
         data = self.cur.fetchall()
-
-        print(f"搜尋{start_date}到{end_date}的預約")
         return data
+
+    def getSevenDays(self, start_date, end_date):
+        sql=f"SELECT * FROM calendar WHERE date<='{end_date}' AND date>='{start_date}'"
+        self.cur.execute(sql)
+        sevenDays = self.cur.fetchall()
+        return sevenDays
     
     def getRooms(self):
         sql = f"""SELECT r.room_no, r.name, r.room_type, 

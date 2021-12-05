@@ -3,6 +3,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Board</title>
+    <!--Load React and React DOM-->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <!-- Load Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <style>
         .holiday{
             background-color: pink;
@@ -14,94 +19,103 @@
             width: 88px;
             height: 115px;
         }
-        #date{
-            vertical-align:text-top;
-        }
     </style>
 </head>
 <body>
-    登入成功，{{ user }} 你好，
+    登入成功，{{user}} 你好，
     <p/>
     最新訂單訊息
     <p/>
-    {% if data %}
-    <table>
-        <thead>
-            <tr>
-                <th class="pre_page">
-                    {% if pre_page %}
-                    <a href={{ pre_page }}>上週</a>
-                    {% else %}
-                    <a href={{ pre_page }}>歷史訂單</a>
-                    {% endif %}
-                </th>
-                {% for d in data %}
-                    <th>{{ d }}</th>
-                {% endfor %}
-                <th class="next_page">
-                    <a href={{ next_page }}>下週</a>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr id="d001">
-                <td>海旅雙人套房1</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr id="d002">
-                <td>海旅雙人套房2</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr id="d003">
-                <td>海旅雙人套房3</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr id="d004">
-                <td>海旅雙人套房4</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr id="t001">
-                <td>星空雙人雅房1</td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-            </tr>
-        </tbody>
-    </table>
-    {% endif %}
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th class="pre_page">
+                        {% if pre_page %}
+                        <a href={{ pre_page }}>上週</a>
+                        {% else %}
+                        <a href={{ pre_page }}>歷史訂單</a>
+                        {% endif %}
+                    </th>
+                    {% for d in data %}
+                        {% if d[2] %}
+                        <th class="holiday">
+                        {% else %}
+                        <th>
+                        {% endif %}
+                            <p>{{ d[0] }}</p>
+                            <p>{{ d[1] }}</p>
+                            <p>{{ d[-1] }}</p>
+                        </th>
+                    {% endfor %}
+                    <th class="next_page">
+                        <a href={{ next_page }}>下週</a>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="d001">
+                    <td>海旅雙人套房1</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr id="d002">
+                    <td>海旅雙人套房2</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr id="d003">
+                    <td>海旅雙人套房3</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr id="d004">
+                    <td>海旅雙人套房4</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr id="t001">
+                    <td>星空雙人雅房1</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+    <script type="text/babel">
+        
+        
+    </script>
     <p/>
     <a href={{ url_for("admin.logout") }}>登出</a>
 </body>

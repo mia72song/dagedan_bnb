@@ -1,7 +1,6 @@
 from flask import *
 from flask_wtf import CSRFProtect
 import os
-from datetime import datetime
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
@@ -16,25 +15,17 @@ app.register_blueprint(admin, url_prefix = "/admin")
 from api_v1 import api
 app.register_blueprint(api, url_prefix = "/api")
 
-from api_v1.utils import dateFormatter
-
 # 前台頁面
 @app.route("/")
 def index():
-    return render_template("home.html")
+    return render_template("index.html")
 
 @app.route("/about")
 def about():
     return render_template("about.html")
 
 @app.route("/booking")
-def booking():
-    if request.args.get("checkin") or request.args.get("checkout"):
-        date = request.args.get("checkin") or request.args.get("checkout")
-        date = datetime.strptime(date, dateFormatter)
-        if date<datetime.today():
-            return redirect("/booking")
-    
+def booking():    
     return render_template("booking.html")
 
 app.run(debug=True)
