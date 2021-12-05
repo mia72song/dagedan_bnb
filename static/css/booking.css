@@ -1,14 +1,12 @@
-main{
-    width: 1000px;
-    margin: 0 auto;
-}
 .booking_wrap{
     padding-top: 20px;
 }
 #booking{
     width: 590px;
     margin: 20px auto;
-    border: 3.5px #1A1A1A double;
+    background-color: #FFFFFF;
+    border: 3.5px #FFFFFF solid;
+    opacity: 0.95;
     display: flex;
 }
 #booking:hover{
@@ -25,6 +23,8 @@ main{
     line-height: 3.2;
     width: 75px;
     font-weight: bolder;
+    background-color: #FFFFFF;
+    border: 2px #1A1A1A solid;
 }
 .submit>button:hover{
     background-color: #F39801;
@@ -32,7 +32,8 @@ main{
     color: #FFFFFF;
 }
 .calendar_wrap{
-    height: 450px;
+    height: 535px;
     background-color: aqua;
-
+    width: 1200px;
+    margin: 0 auto;
 }

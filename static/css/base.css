@@ -99,29 +99,33 @@ header{
 .nav_wrap{
     height: 90px;
 }
-
+/* Main */
+main{
+    height: 760px;
+    background-image: url('../images/index.jpg');
+}
+.mainbox{
+    height: 680px;
+}
 /* Footer */
 footer{
-    background-color: #FFFFFF;
-    padding-top: 10px;
+    height: 80px;
+    text-align: center;
+    background-color: whitesmoke;
+    opacity: 0.7;
+    margin-bottom: 0;
 }
-footer>div{
-    width: 650px;
+.icon{
     display: flex;
-    flex-wrap:wrap;
-    margin: 0 auto;
-    align-items: center;
-    justify-self: center;  
+    justify-content: center;
+    height: 50px;
+    line-height: 50px;
 }
-.contact{
-    padding: 20px;
-    line-height: 2.2;
+.icon img{
+    margin: 10px 5px;
+    height: 30px;
+    width: 30px;
 }
-.contact>h3{
-    color: #F39801;
-    font-size: 1.3em;
-}
-
 /*RWD*/
 @media (max-width:1200px){
     .nav{

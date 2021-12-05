@@ -34,23 +34,26 @@
         </div>
     </header>
     <div class="nav_wrap"></div>
-    {% block content %}
+    <main>
+        <div class="mainbox">
+            {% block content %}
 
-    {% endblock %}
-    <footer>
-        <div>
-            <div>
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5683.436265064969!2d120.96262041299455!3d22.532213062953314!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346fd238755907d9%3A0xd7080d5c3712b102!2z5omT5YCL6JuL5rW35peF!5e0!3m2!1szh-TW!2stw!4v1638271003790!5m2!1szh-TW!2stw" width="250" height="180" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
-            </div>
-            <div class="contact">
-                <h3>打個蛋海旅 Dagedan House B&B</h3>
-                <p>本館：台東縣太麻里鄉金崙村4鄰金崙128號​</p>
-                <p>Tel：089-771-551</p>
-                <p>E-Mail：dagedanhouse@gmail.com</p>
-                <p>COPYRIGHT © 2020 by Dagedan House B&B</p>
-            </div>
+            {% endblock %}
         </div>
-                 
-    </footer>
+        <footer>
+            <div class="icon">
+                <h2>Follow Us &thinsp;</h2>
+                <a href="https://www.facebook.com/Dagedanhouse">
+                    <img src={{ url_for("static", filename="images/icon-fb.png") }} alt="">
+                </a>
+                <a href="https://www.instagram.com/dagedanhouse/">
+                    <img src={{ url_for("static", filename="images/icon-ig.png") }} alt="">
+                </a>          
+            </div>
+            <div>
+                © 2020 by Dagedan House B&B
+            </div>
+        </footer>
+    </main>
 </body>
 </html>

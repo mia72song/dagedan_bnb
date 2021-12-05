@@ -1,13 +1,8 @@
-/* Main */
-main{
-    height: 770px;
-    background-image: url('../images/index.jpg');
-}
 #award{
     width: 1200px;
     margin: 0 auto;
-    padding-left: 34px;
-    padding-top: 34px;
+    padding-left: 20px;
+    padding-top: 30px;
 }
 #award>img{
     height: 180px;
@@ -23,15 +18,16 @@ main{
     font-size: 40px;
     color: #FFFFFF;
     font-weight: bold;
-    margin-top: 15px;
+    margin-top: 10px;
 }
 .title{
-    font-size: 38px;
+    font-size: 40px;
     color: #F39801;
-    font-weight: bolder;
     background-color: #FFFFFF;
+    border-radius: 40px;
     margin: 0 auto;
     margin-top: 10px;
+    font-family:fantasy;
 }
 .discribe{
     color: #FFFFFF;
@@ -41,7 +37,7 @@ main{
 }
 #booking{
     width: 590px;
-    margin: 50px auto;
+    margin: 50px auto 60px auto;
     background-color: #FFFFFF;
     opacity: 0.95;
     border: 5px #FFFFFF solid;

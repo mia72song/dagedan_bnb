@@ -2,24 +2,39 @@
     width: 1000px;
     text-align: center;
     margin: 0 auto;
-    
+    opacity: 0.95;
 }
 .about{
-    width: 750px;
-    line-height: 2;
-    margin: 0 auto;
-    padding: 30px;
+    width: 800px;
     background-color: whitesmoke;
+    margin: 0 auto;
+    line-height: 2;
 }
 .about>h3{
     font-size: 25px;
     font-weight: bold;
     color: #F39801;
+    padding-top: 25px;
 }
 .about>div{
     text-align: left;
-    margin: 20px;
+    padding: 20px 55px;
 }
-.ig{
+.contact{
+    width: 800px;
+    height: 290px;
+    margin: 0 auto;
+    background-color: whitesmoke;
     display: flex;
+}
+.contact>div{
+    margin-left: 20px;
+}
+.info{
+    text-align: left;
+    line-height: 2;
+}
+.info>h3{
+    color: #F39801;
+    margin: 10px 0;
 }

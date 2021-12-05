@@ -10,25 +10,23 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 {% endblock %}
 {% block content %}
-<main>
-    <div id="award">
-        <img src={{ url_for("static", filename="images/awards2020.jpg") }} alt="">
+<div id="award">
+    <img src={{ url_for("static", filename="images/awards2020.jpg") }} alt="">
+</div>
+<div class="box">
+    <div class="slogan">
+        FEEL AT HOME
     </div>
-    <div class="box">
-        <div class="slogan">
-            FEEL AT HOME
-        </div>
-        <div class="title">
-            - Dagedan House B&B -
-        </div>
-        <div class="discribe">
-            打個蛋 Dagedan 是排灣族語言「睡覺」的意思，希望大家藉由來台東渡假時，好好的休息、睡上一晚，能夠達到身心放鬆。
-        </div>
+    <div class="title">
+        - Dagedan House B&B -
     </div>
-    <div class="booking_wrap">
-        <!--由Booking組件渲染-->
+    <div class="discribe">
+        打個蛋 Dagedan 是排灣族語言「睡覺」的意思，希望大家藉由來台東渡假時，好好的休息、睡上一晚，能夠達到身心放鬆。
     </div>
-</main>
+</div>
+<div class="booking_wrap">
+    <!--由Booking組件渲染-->
+</div>
 <script type="text/babel">
     class Booking extends React.Component{
         state={
