@@ -49,5 +49,3 @@ def get_seven_days(start_date_string):
     resp = make_response(body, status_code)
     resp.headers["Content-Type"] = "application/json"
     return resp
-
-

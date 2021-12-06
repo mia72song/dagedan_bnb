@@ -1,0 +1,21 @@
+#banner>div{
+    display: flex;
+    margin: 20px 30px;
+}
+.title{
+    width: 80%;
+}
+.nav{
+    width: 20%;
+    text-align: right;
+}
+table, th, td {
+    border: 1px solid black;
+}
+thead{
+    color:green;
+}
+tbody{
+    color:blue;
+    height:50px;
+}

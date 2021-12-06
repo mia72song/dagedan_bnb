@@ -43,6 +43,7 @@ def login():
 def logout():
     if session.get("user"):
         del session["user"]
+    
     return jsonify({"ok": True}), 200
 
 @api.route("/user")

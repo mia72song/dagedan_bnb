@@ -2,9 +2,9 @@
 {% block title %}Board{% endblock %}
 {% block head %}
     {{ super() }}
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/board.css") }}>
+    <script type="text/javascript" src={{ url_for("static", filename="js/room.js") }}></script>
     <script type="text/javascript" src={{ url_for("static", filename="js/calendar.js") }}></script>
-    <script type="text/javascript" src={{ url_for("static", filename="js/calendar110.json") }}></script>
-    <script type="text/javascript" src={{ url_for("static", filename="js/calendar111.json") }}></script>
 {% endblock %}
 {% block content %}
     <main>
@@ -17,16 +17,13 @@
         </div>        
     </main>
     <script type="text/babel">
-        const calendar110 = JSON.parse(calendar110)
-        const calendar111 = JSON.parse(calendar111)
         class Banner extends React.Component{
-            state = {}
             render(){
-                console.log(this.props);
+                // console.log(this.props);
                 return(
                     <div>
-                        <div>登入成功，{this.props.name} 你好</div>
-                        <div className="logout"><a href="">登出</a></div>
+                        <div className="title">登入成功，{this.props.name} 你好</div>
+                        <div className="nav"><a href="">登出</a></div>
                     </div>
                 )
             }
@@ -39,24 +36,34 @@
                 room_list:[]
             }
             componentDidMount(){
-                
+                roomRequest().then(resp=>{
+                    this.setState({room_list: resp.data})
+                })
+                let date_string = getDateString(); // 預設值是今天
+                getCalendar(date_string).then(resp=>{
+                    this.setState({date_list: resp.data})
+                })
             }
             render(){
-                const today = new Date();
-                const tw_year = today.getFullYear()-1911;
-                const firstDayOfYear = new Date(today.getFullYear().toString()+"-01-01");
-                let start_index = parseInt((today.getTime()-firstDayOfYear.getTime())/1000/86400)+1
-                let end_index = start_index+6
-
-                console.log(calendar110[start_index])
-                console.log(calendar110[end_index])
                 return(
                     <table>
-                        
+                        <thead>
+                            <tr>
+                                <th>上週</th>
+                                <th>下週</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
                     </table>
                 )
             }
         }
+        
         addEventListener("load", ()=>{
             currentUserPromise.then(currentUser=>{
                 // console.log(currentUser)
