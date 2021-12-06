@@ -101,6 +101,6 @@ if __name__=="__main__":
     lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
     
     mydb = Mydb()
-    data = mydb.getRooms()
+    data = mydb.getUser("mia72song", "721015")
     print(data)
     del mydb

@@ -17,7 +17,12 @@
 
     {% endblock %}
     <script>
-
+        let currentUserPromise;
+        addEventListener("load", ()=>{
+            currentUserPromise = userRequest().then(resp=>{
+                return resp.data
+            })
+        })
     </script>
 </body>
 </html>

@@ -53,12 +53,24 @@
                 const data = {username, password}
                 let p = userRequest("post", data)
                 p.then(resp=>{
-                    console.log(resp)
+                    if(resp.ok){
+                        location.href = `${window.origin}/admin/board`
+                    }else if(resp.error){
+                        alert(resp.message)
+                        location.reload()
+                    }
                 })
             }
         }
         addEventListener("load", ()=>{
-            ReactDOM.render(<LoginForm/>, document.querySelector("main"));
+            currentUserPromise.then(currentUser=>{
+                console.log(currentUser);
+                if(currentUser==null){
+                    ReactDOM.render(<LoginForm/>, document.querySelector("main"));
+                }else{
+                    location.href = `${window.origin}/admin/board`
+                }                
+            })
         })
     </script>
 {% endblock %}

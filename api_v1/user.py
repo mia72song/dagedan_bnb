@@ -1,4 +1,3 @@
-import re
 from flask import session, make_response, jsonify, request
 
 from . import api
@@ -42,8 +41,12 @@ def login():
 
 @api.route("/user", methods=["DELETE"])
 def logout():
-    pass
+    if session.get("user"):
+        del session["user"]
+    return jsonify({"ok": True}), 200
 
 @api.route("/user")
 def get_current_user():
-    pass
+    return jsonify({
+        "data": session.get("user")
+    }), 200

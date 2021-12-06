@@ -1,122 +1,73 @@
-<!DOCTYPE html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Board</title>
-    <!--Load React and React DOM-->
-    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
-    <!-- Load Babel -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <style>
-        .holiday{
-            background-color: pink;
-        }
-        table, th, td{
-            border: 1px solid black;
-        }
-        th{
-            width: 88px;
-            height: 115px;
-        }
-    </style>
-</head>
-<body>
-    登入成功，{{user}} 你好，
-    <p/>
-    最新訂單訊息
-    <p/>
+{% extends "admin_base.html" %}
+{% block title %}Board{% endblock %}
+{% block head %}
+    {{ super() }}
+    <script type="text/javascript" src={{ url_for("static", filename="js/calendar.js") }}></script>
+    <script type="text/javascript" src={{ url_for("static", filename="js/calendar110.json") }}></script>
+    <script type="text/javascript" src={{ url_for("static", filename="js/calendar111.json") }}></script>
+{% endblock %}
+{% block content %}
     <main>
-        <table>
-            <thead>
-                <tr>
-                    <th class="pre_page">
-                        {% if pre_page %}
-                        <a href={{ pre_page }}>上週</a>
-                        {% else %}
-                        <a href={{ pre_page }}>歷史訂單</a>
-                        {% endif %}
-                    </th>
-                    {% for d in data %}
-                        {% if d[2] %}
-                        <th class="holiday">
-                        {% else %}
-                        <th>
-                        {% endif %}
-                            <p>{{ d[0] }}</p>
-                            <p>{{ d[1] }}</p>
-                            <p>{{ d[-1] }}</p>
-                        </th>
-                    {% endfor %}
-                    <th class="next_page">
-                        <a href={{ next_page }}>下週</a>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr id="d001">
-                    <td>海旅雙人套房1</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr id="d002">
-                    <td>海旅雙人套房2</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr id="d003">
-                    <td>海旅雙人套房3</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr id="d004">
-                    <td>海旅雙人套房4</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-                <tr id="t001">
-                    <td>星空雙人雅房1</td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+        <div id="banner">
+            <!--由Banner組件渲染-->
+        </div>
+        <hr>
+        <div id="board">
+            <!--由Board組件渲染-->
+        </div>        
     </main>
     <script type="text/babel">
-        
+        const calendar110 = JSON.parse(calendar110)
+        const calendar111 = JSON.parse(calendar111)
+        class Banner extends React.Component{
+            state = {}
+            render(){
+                console.log(this.props);
+                return(
+                    <div>
+                        <div>登入成功，{this.props.name} 你好</div>
+                        <div className="logout"><a href="">登出</a></div>
+                    </div>
+                )
+            }
+        }
+        class Board extends React.Component{
+            state = {
+                page:1,
+                start_index:0,
+                date_list:[],
+                room_list:[]
+            }
+            componentDidMount(){
+                
+            }
+            render(){
+                const today = new Date();
+                const tw_year = today.getFullYear()-1911;
+                const firstDayOfYear = new Date(today.getFullYear().toString()+"-01-01");
+                let start_index = parseInt((today.getTime()-firstDayOfYear.getTime())/1000/86400)+1
+                let end_index = start_index+6
+
+                console.log(calendar110[start_index])
+                console.log(calendar110[end_index])
+                return(
+                    <table>
+                        
+                    </table>
+                )
+            }
+        }
+        addEventListener("load", ()=>{
+            currentUserPromise.then(currentUser=>{
+                // console.log(currentUser)
+                if(currentUser==null){
+                    location.href = `${window.origin}/admin`
+                }else{
+                    ReactDOM.render(<Banner user={currentUser[0]} name={currentUser[1]}/>, document.querySelector("#banner"));
+                    ReactDOM.render(<Board/>, document.querySelector("#board"));
+                }
+            })
+        })
         
     </script>
-    <p/>
-    <a href={{ url_for("admin.logout") }}>登出</a>
-</body>
-</html>
+{% endblock %}
