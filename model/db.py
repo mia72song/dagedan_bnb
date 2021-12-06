@@ -61,15 +61,16 @@ class Mydb:
         data = self.cur.fetchall()
         return data
 
-    def getSevenDays(self, start_date, end_date):
+    def getCalendar(self, start_date, end_date):
         sql=f"SELECT * FROM calendar WHERE date<='{end_date}' AND date>='{start_date}'"
         self.cur.execute(sql)
-        sevenDays = self.cur.fetchall()
-        return sevenDays
+        data = self.cur.fetchall()
+        return data
     
     def getRooms(self):
         sql = f"""SELECT r.room_no, r.name, r.room_type, 
-            rt.accommodate, rt.rate_weekday, rt.rate_holiday, rt.single_discount
+            rt.accommodate, rt.rate_weekday, rt.rate_holiday, rt.single_discount,
+            rt.discribe, rt.images
             FROM rooms AS r
             INNER JOIN room_type AS rt ON rt.type=r.room_type
             WHERE is_available=1"""
@@ -101,6 +102,6 @@ if __name__=="__main__":
     lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
     
     mydb = Mydb()
-    data = mydb.getUser("mia72song", "721015")
+    data = mydb.getCalendar("2021-12-28", "2022-01-02")
     print(data)
     del mydb

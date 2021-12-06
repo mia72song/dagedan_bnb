@@ -1,4 +1,4 @@
-from flask import session, make_response, jsonify, request
+from flask import session, jsonify, request
 
 from . import api
 from model.db import Mydb
