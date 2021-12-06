@@ -21,6 +21,10 @@ th{
 .holiday{
     background-color: pink;
 }
+#note{
+    font-size: 8px;
+    color: black;
+}
 tbody{
     color:blue;
     height:50px;

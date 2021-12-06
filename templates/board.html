@@ -31,8 +31,7 @@
         class Board extends React.Component{
             state = {
                 room_list:[],
-                page:1,
-                start_index:0,
+                page:0,
                 date_list:[],
                 yyyy_mm:""
             }
@@ -50,28 +49,29 @@
             }
             render(){
                 let prv_page = "上週"; 
-                if(this.state.page===1){ prv_page = "歷史訂單" };
+                if(this.state.page===0){ prv_page = "歷史訂單" };
                 
                 const week = this.state.date_list;
                 const room = this.state.room_list;
                 let week_content = [];
                 let book_content = [];
                 if(week.length>0 & room.length>0){
-                    for(let r=0; r<room.length; r++){
-                        
-                        book_content.push(<tr>
+                    for(let r=0; r<room.length; r++){                        
+                        book_content.push(
+                            <tr>
                                 <td>{room[r].name}-{room[r].room_no}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>)
+                                <td onClick={this.handleClick} id={week[0].date+"-"+room[r].room_no}></td>
+                                <td onClick={this.handleClick} id={week[1].date+"-"+room[r].room_no}></td>
+                                <td onClick={this.handleClick} id={week[2].date+"-"+room[r].room_no}></td>
+                                <td onClick={this.handleClick} id={week[3].date+"-"+room[r].room_no}></td>
+                                <td onClick={this.handleClick} id={week[4].date+"-"+room[r].room_no}></td>
+                                <td onClick={this.handleClick} id={week[5].date+"-"+room[r].room_no}></td>
+                                <td onClick={this.handleClick} id={week[6].date+"-"+room[r].room_no}></td>
+                                <td>{room[r].name}-{room[r].room_no}</td>
+                            </tr>
+                        )
                     }
-                    for(let i=this.state.start_index; i<week.length; i++){
+                    for(let i=0; i<week.length; i++){
                         let holiday_class = null;
                         if(week[i].is_holiday){ holiday_class = "holiday" };
                         
@@ -79,7 +79,7 @@
                             <th className={holiday_class}>
                                 <h2>{week[i].date.slice(8, 11)}</h2>
                                 <p>{week[i].weekday}</p>
-                                <p>{week[i].note}</p>
+                                <p id="note">{week[i].note}</p>
                             </th>
                         )
                     }
@@ -88,15 +88,15 @@
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="9">{this.state.yyyy_mm}</th>
+                                <th colspan="9"><h1>{this.state.yyyy_mm}</h1></th>
                             </tr>
                             <tr>
-                                <th>
-                                    <a href="">{prv_page}</a>
+                                <th onClick={this.getPage(-1)}>
+                                    {prv_page}
                                 </th>
                                 {week_content}
-                                <th>
-                                    <a href="">下週</a>
+                                <th onClick={this.getPage(1)}>
+                                    下週
                                 </th>
                             </tr>
                         </thead>
@@ -105,6 +105,14 @@
                         </tbody>
                     </table>
                 )
+            }
+            handleClick=(eObj)=>{
+                console.log(eObj.target.id);
+            }
+            getPage=(number)=>{
+                return(eObj=>{
+                    console.log(number)
+                })
             }
         }
        
