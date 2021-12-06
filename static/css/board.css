@@ -15,6 +15,12 @@ table, th, td {
 thead{
     color:green;
 }
+th{
+    width: 100px;
+}
+.holiday{
+    background-color: pink;
+}
 tbody{
     color:blue;
     height:50px;

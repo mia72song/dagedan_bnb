@@ -30,40 +30,84 @@
         }
         class Board extends React.Component{
             state = {
+                room_list:[],
                 page:1,
                 start_index:0,
                 date_list:[],
-                room_list:[]
+                yyyy_mm:""
             }
             componentDidMount(){
                 roomRequest().then(resp=>{
                     this.setState({room_list: resp.data})
                 })
-                let date_string = getDateString(); // 預設值是今天
+                let date_string = getDateString(0); // 今天
                 getCalendar(date_string).then(resp=>{
-                    this.setState({date_list: resp.data})
+                    this.setState({
+                        date_list: resp.data,
+                        yyyy_mm: date_string.slice(0, 7)
+                    })
                 })
             }
             render(){
+                let prv_page = "上週"; 
+                if(this.state.page===1){ prv_page = "歷史訂單" };
+                
+                const week = this.state.date_list;
+                const room = this.state.room_list;
+                let week_content = [];
+                let book_content = [];
+                if(week.length>0 & room.length>0){
+                    for(let r=0; r<room.length; r++){
+                        
+                        book_content.push(<tr>
+                                <td>{room[r].name}-{room[r].room_no}</td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>)
+                    }
+                    for(let i=this.state.start_index; i<week.length; i++){
+                        let holiday_class = null;
+                        if(week[i].is_holiday){ holiday_class = "holiday" };
+                        
+                        week_content.push(
+                            <th className={holiday_class}>
+                                <h2>{week[i].date.slice(8, 11)}</h2>
+                                <p>{week[i].weekday}</p>
+                                <p>{week[i].note}</p>
+                            </th>
+                        )
+                    }
+                }
                 return(
                     <table>
                         <thead>
                             <tr>
-                                <th>上週</th>
-                                <th>下週</th>
+                                <th colspan="9">{this.state.yyyy_mm}</th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <a href="">{prv_page}</a>
+                                </th>
+                                {week_content}
+                                <th>
+                                    <a href="">下週</a>
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                            </tr>
+                            {book_content}
                         </tbody>
                     </table>
                 )
             }
         }
-        
+       
         addEventListener("load", ()=>{
             currentUserPromise.then(currentUser=>{
                 // console.log(currentUser)
