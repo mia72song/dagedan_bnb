@@ -1,14 +1,10 @@
-from flask import make_response
+from flask import make_response, session
 from datetime import datetime, timedelta
 import json
 
 from . import api
 from model.db import Mydb
 from .utils import dateFormatter
-
-@api.route("/bookings")
-def get_booking_list():
-    pass
 
 @api.route("/booking/start=<start_date_string>&end=<end_date_string>")
 def get_booking_by_date(start_date_string, end_date_string):
@@ -22,6 +18,10 @@ def get_booking_by_date(start_date_string, end_date_string):
             for i in range(len(data)):
                 d = list(data[i])
                 d[0] = datetime.strftime(d[0], dateFormatter)
+                
+                if not session.get("user"):
+                    del d[2]
+                
                 data[i] = d
         
         body = json.dumps({
@@ -39,3 +39,7 @@ def get_booking_by_date(start_date_string, end_date_string):
     resp = make_response(body, status_code)
     resp.headers["Content-Type"] = "application/json"
     return resp
+
+@api.route("/boking", methods=["POST"])
+def create_new_booking():
+    pass

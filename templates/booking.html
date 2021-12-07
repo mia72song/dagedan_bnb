@@ -3,6 +3,8 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/booking.css") }}>
+    <script type="text/javascript" src={{ url_for("static", filename="js/room.js") }}></script>
+    <script type="text/javascript" src={{ url_for("static", filename="js/calendar.js") }}></script>
     <!--Load React and React DOM-->
     <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
@@ -10,15 +12,14 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 {% endblock %}
 {% block content %}
-<div class="booking_wrap">
-    <!--由Booking組件渲染-->
+<div class="search_wrap">
+    <!--由Search組件渲染-->
 </div>
 <div class="calendar_wrap">
     <!--由Calendar組件渲染-->
 </div>
 <script type="text/babel">
-    let p;
-    class Booking extends React.Component{
+    class Search extends React.Component{
         state={
             check_in_date: "",
             check_out_date: "",
@@ -32,16 +33,12 @@
                     check_out_date: getDateString(2)
                 })
             }else{
-                let search_sting = (location.search).replace("?", "")
-                let slist = search_sting.split("&")
-                p = getCalendar(search_sting).then(data=>{
-                    console.log(data)
-                    this.setState({
-                        check_in_date: (slist[0].split("="))[1],
-                        check_out_date: (slist[1].split("="))[1],
-                        adults: parseInt((slist[2].split("="))[1]),
-                        kids: parseInt((slist[3].split("="))[1])
-                    })
+                let search_sting = (location.search).replace("?", "").split("&");
+                this.setState({
+                    check_in_date: (search_sting[0].split("="))[1],
+                    check_out_date: (search_sting[1].split("="))[1],
+                    adults: (search_sting[2].split("="))[1],
+                    kids: (search_sting[3].split("="))[1]
                 })
             }
         }
@@ -110,11 +107,58 @@
         }
     }
 
+    class Calendar extends React.Component{
+        state = {
+            page: 1,
+            yyyy_mm: "",
+            week: [],
+            booking_list: []
+        }
+        componentDidMount(){
+            let search_sting = (location.search).replace("?", "").split("&");
+            let check_in_date = (search_sting[0].split("="))[1];
+            let check_out_date = (search_sting[1].split("="))[1];
+            getCalendar(check_in_date).then(respC=>{
+                // console.log(respC.data);
+                this.setState({
+                    yyyy_mm: check_in_date.slice(0, 7),
+                    week: respC.data
+                })
+                getBookingList(check_in_date, check_out_date).then(respB=>{
+                    // console.log(respB.data);
+                    if(respB.data){
+                        this.setState({booking_list: respB.data})
+                    }
+                })
+            })
+        }
+        render(){
+            console.log(this.props.rooms);
+            console.log(this.state.week);
+            console.log(this.state.booking_list);
+            return(
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="9"><h1>{this.state.yyyy_mm}</h1></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    
+                    </tbody>
+                </table>
+            )
+        }
+    }
     addEventListener("load", ()=>{
-        ReactDOM.render(<Booking/>, document.querySelector(".booking_wrap"))
-        getRooms().then(data=>{
-            console.log(data.list)
-        })
+        ReactDOM.render(<Search/>, document.querySelector(".search_wrap"))
     })
+    if(window.location.search!==""){
+        roomRequest().then(resp=>{
+            if(resp.data){
+                ReactDOM.render(<Calendar rooms={resp.data}/>, document.querySelector(".calendar_wrap"))
+            }
+        })
+    }
 </script>
 {% endblock %}

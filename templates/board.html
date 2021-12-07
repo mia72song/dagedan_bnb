@@ -55,14 +55,14 @@
                             <td onClick={this.handleClick} id={week[4].date+"-"+r.room_no} className="bdate"></td>
                             <td onClick={this.handleClick} id={week[5].date+"-"+r.room_no} className="bdate"></td>
                             <td onClick={this.handleClick} id={week[6].date+"-"+r.room_no} className="bdate"></td>
-                            
+                            <td><a href="">修改</a></td>
                         </tr>
                     )
                 })
                 return book_content
             }
             render(){
-                let prv_page = "上週"; 
+                let prv_page = "< 上週"; 
                 if(this.state.page===0){ prv_page = "歷史訂單" };
                 
                 const week = this.state.date_list;
@@ -92,12 +92,12 @@
                                 <th colspan="9"><h1>{this.state.yyyy_mm}</h1></th>
                             </tr>
                             <tr>
-                                <th onClick={this.getPage(-1)}>
-                                    {prv_page}
+                                <th id="page">
+                                    <a href="javascript: void(0)" onClick={this.getPage(-1)}>{prv_page}</a>
                                 </th>
                                 {week_content}
-                                <th onClick={this.getPage(1)}>
-                                    下週
+                                <th id="page">
+                                    <a href="javascript: void(0)" onClick={this.getPage(1)}>下週 ></a>
                                 </th>
                             </tr>
                         </thead>
@@ -136,6 +136,7 @@
                         let th = document.getElementById(id);
                         let item = document.createElement("a");
                         item.setAttribute("class", "item");
+                        // item.setAttribute("href", "javascript: void(0)");
                         item.textContent = b[2];
                         th.appendChild(item);
                     })

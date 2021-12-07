@@ -21,6 +21,10 @@ thead{
 th{
     width: 100px;
 }
+td{
+    text-align: center;
+    vertical-align: middle;
+}
 .holiday{
     background-color: pink;
 }
@@ -32,8 +36,4 @@ th{
 tbody{
     color:blue;
     height:50px;
-}
-.bdate{
-    text-align: center;
-    vertical-align: middle;
 }

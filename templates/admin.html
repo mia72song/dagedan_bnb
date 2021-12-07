@@ -64,7 +64,7 @@
         }
         addEventListener("load", ()=>{
             currentUserPromise.then(currentUser=>{
-                console.log(currentUser);
+                // console.log(currentUser);
                 if(currentUser==null){
                     ReactDOM.render(<LoginForm/>, document.querySelector("main"));
                 }else{
