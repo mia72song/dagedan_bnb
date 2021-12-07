@@ -23,7 +23,7 @@
                 return(
                     <div>
                         <div className="title">登入成功，{this.props.name} 你好</div>
-                        <div className="nav"><a href="">登出</a></div>
+                        <div className="menu"><a href="">登出</a></div>
                     </div>
                 )
             }
@@ -33,56 +33,57 @@
                 room_list:[],
                 page:0,
                 date_list:[],
-                yyyy_mm:""
+                yyyy_mm:"",
+                booking_list:[]
             }
             componentDidMount(){
                 roomRequest().then(resp=>{
                     this.setState({room_list: resp.data})
                 })
-                let date_string = getDateString(0); // 今天
-                getCalendar(date_string).then(resp=>{
-                    this.setState({
-                        date_list: resp.data,
-                        yyyy_mm: date_string.slice(0, 7)
-                    })
+                this.updateDateList(this.state.page);
+            }
+            createBookingElement=(room, week)=>{
+                let book_content = [];
+                room.forEach(r=>{
+                    book_content.push(
+                        <tr>
+                            <td>{r.name}-{r.room_no}</td>
+                            <td onClick={this.handleClick} id={week[0].date+"-"+r.room_no} className="bdate"></td>
+                            <td onClick={this.handleClick} id={week[1].date+"-"+r.room_no} className="bdate"></td>
+                            <td onClick={this.handleClick} id={week[2].date+"-"+r.room_no} className="bdate"></td>
+                            <td onClick={this.handleClick} id={week[3].date+"-"+r.room_no} className="bdate"></td>
+                            <td onClick={this.handleClick} id={week[4].date+"-"+r.room_no} className="bdate"></td>
+                            <td onClick={this.handleClick} id={week[5].date+"-"+r.room_no} className="bdate"></td>
+                            <td onClick={this.handleClick} id={week[6].date+"-"+r.room_no} className="bdate"></td>
+                            
+                        </tr>
+                    )
                 })
+                return book_content
             }
             render(){
                 let prv_page = "上週"; 
                 if(this.state.page===0){ prv_page = "歷史訂單" };
                 
                 const week = this.state.date_list;
-                const room = this.state.room_list;
+                const room = this.state.room_list;               
                 let week_content = [];
                 let book_content = [];
                 if(week.length>0 & room.length>0){
-                    for(let r=0; r<room.length; r++){                        
-                        book_content.push(
-                            <tr>
-                                <td>{room[r].name}-{room[r].room_no}</td>
-                                <td onClick={this.handleClick} id={week[0].date+"-"+room[r].room_no}></td>
-                                <td onClick={this.handleClick} id={week[1].date+"-"+room[r].room_no}></td>
-                                <td onClick={this.handleClick} id={week[2].date+"-"+room[r].room_no}></td>
-                                <td onClick={this.handleClick} id={week[3].date+"-"+room[r].room_no}></td>
-                                <td onClick={this.handleClick} id={week[4].date+"-"+room[r].room_no}></td>
-                                <td onClick={this.handleClick} id={week[5].date+"-"+room[r].room_no}></td>
-                                <td onClick={this.handleClick} id={week[6].date+"-"+room[r].room_no}></td>
-                                <td>{room[r].name}-{room[r].room_no}</td>
-                            </tr>
-                        )
-                    }
-                    for(let i=0; i<week.length; i++){
+                    book_content = this.createBookingElement(room, week);
+                    
+                    week.forEach(date=>{
                         let holiday_class = null;
-                        if(week[i].is_holiday){ holiday_class = "holiday" };
-                        
+                        if(date.is_holiday){ holiday_class="holiday" };
+
                         week_content.push(
                             <th className={holiday_class}>
-                                <h2>{week[i].date.slice(8, 11)}</h2>
-                                <p>{week[i].weekday}</p>
-                                <p id="note">{week[i].note}</p>
+                                <h2>{date.date.slice(8, 11)}</h2>
+                                <p>{date.weekday}</p>
+                                <p id="note">{date.note}</p>
                             </th>
                         )
-                    }
+                    })
                 }
                 return(
                     <table>
@@ -106,12 +107,53 @@
                     </table>
                 )
             }
+            updateDateList=(page)=>{
+                let start_date_string = getDateString(page*7);
+                let end_date_string = getDateString(page*7+6);
+                getCalendar(start_date_string).then(respC=>{
+                    getBookingList(start_date_string, end_date_string).then(respB=>{
+                        this.setState({
+                            date_list: respC.data,
+                            yyyy_mm: start_date_string.slice(0, 7),
+                            booking_list: respB.data
+                        })
+                        this.updateBooking();
+                    })
+                })
+            }
+            updateBooking=()=>{
+                let items = document.querySelectorAll(".item");
+                if(items){
+                    items.forEach(i=>{
+                        i.remove();
+                    })
+                }
+                const booking_list = this.state.booking_list;
+                let id;
+                if(booking_list.length>0){
+                    booking_list.forEach(b=>{
+                        id = b[0]+"-"+b[1]
+                        let th = document.getElementById(id);
+                        let item = document.createElement("a");
+                        item.setAttribute("class", "item");
+                        item.textContent = b[2];
+                        th.appendChild(item);
+                    })
+                }                
+            }
             handleClick=(eObj)=>{
                 console.log(eObj.target.id);
             }
+            
             getPage=(number)=>{
                 return(eObj=>{
-                    console.log(number)
+                    const page = this.state.page;
+                    if(page+number<0){
+                        location.href = `${window.origin}/admin/booking`
+                    }else{
+                        this.setState({page:page+number})
+                        this.updateDateList(page+number)
+                    }
                 })
             }
         }

@@ -4,8 +4,7 @@ import json
 
 from . import api
 from model.db import Mydb
-
-dateFormatter = "%Y-%m-%d"
+from .utils import dateFormatter
 
 # 將由資料庫取得的日曆資料，整理成dict格式
 def calendarFormatter(result):

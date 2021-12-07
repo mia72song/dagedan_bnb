@@ -5,9 +5,12 @@
 .title{
     width: 80%;
 }
-.nav{
+.menu{
     width: 20%;
     text-align: right;
+}
+table{
+    margin: 0 auto;
 }
 table, th, td {
     border: 1px solid black;
@@ -24,8 +27,13 @@ th{
 #note{
     font-size: 8px;
     color: black;
+    height: 10px;
 }
 tbody{
     color:blue;
     height:50px;
+}
+.bdate{
+    text-align: center;
+    vertical-align: middle;
 }

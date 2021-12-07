@@ -28,3 +28,14 @@ function getCalendar(start_date_string){
     })
     return p
 }
+function getBookingList(start_date_string, end_date_string){
+    const url = `${window.origin}/api/booking/start=${start_date_string}&end=${end_date_string}`;
+    let p = fetch(url).then(response=>{
+        if(response.status===200){
+            return response.json();
+        }else{
+            console.log(response.json());
+        }
+    })
+    return p
+}
