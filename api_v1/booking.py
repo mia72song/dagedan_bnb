@@ -6,6 +6,19 @@ from . import api
 from model.db import Mydb
 from .utils import dateFormatter
 
+# 將由資料庫取得的預約日曆資料，整理成dict格式
+def calendarFormatter(result):
+    cols = ["date", "booked", "weekday", "is_holiday", "note"]
+    data_dict = dict(zip(cols, result))
+    data_dict["date"] = datetime.strftime(data_dict["date"], dateFormatter)
+
+    is_holiday = False
+    if data_dict["is_holiday"]:
+        is_holiday = True
+    data_dict["is_holiday"] = is_holiday
+
+    return data_dict
+
 @api.route("/booking/start=<start_date_string>&end=<end_date_string>")
 def get_booking_by_date(start_date_string, end_date_string):
     body = ""
@@ -13,17 +26,14 @@ def get_booking_by_date(start_date_string, end_date_string):
     try:
         mydb = Mydb()
         data = mydb.getBookingByDate(start_date_string, end_date_string)
-        if data:
-            data = list(data)
-            for i in range(len(data)):
-                d = list(data[i])
-                d[0] = datetime.strftime(d[0], dateFormatter)
-                del d[2]
-                
-                data[i] = d
-        
+        booked_calendar = []
+        for d in data:
+            if d:
+                date_dict = calendarFormatter(d)
+                booked_calendar.append(date_dict)
+
         body = json.dumps({
-            "data": data
+            "data": booked_calendar
         }, ensure_ascii=False, indent=2)
         status_code = 200
 
@@ -33,7 +43,7 @@ def get_booking_by_date(start_date_string, end_date_string):
             "message": f"伺服器內部錯誤：{e}"
         }, ensure_ascii=False, indent=2)
         status_code = 500
-    
+
     resp = make_response(body, status_code)
     resp.headers["Content-Type"] = "application/json"
     return resp

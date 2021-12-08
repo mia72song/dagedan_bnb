@@ -54,26 +54,22 @@ class Mydb:
             data[i] = list(data[i])
             d = data[i]
             booked = []
-            d[0] = datetime.strftime(d[0], dateFormatter)
             if d[0]==data[i-1][0]:
                 booked = data[i-1][1]
                 booked.append(d[1])
                 d[1] = booked
                 data[i-1] = None
                 continue
-
-            del d[2]
-
+            
             if d[1] :                
                 booked.append(d[1])
-                d[1] = booked         
-                          
-            is_holiday = False
-            if d[-2] : is_holiday = True
-            d[-2] = is_holiday        
+                d[1] = booked   
+            
+            del d[2]      
+                                
         return data
 
-    def getBookingByDate(self, start_date, end_date, formated=True):
+    def getBookingByDate(self, start_date, end_date, opendata=True):
         '''
         Parameters
         ----------
@@ -88,7 +84,7 @@ class Mydb:
             """
         self.cur.execute(sql)
         data = self.cur.fetchall()
-        if formated:
+        if opendata:
             return self.__getBookedList(data)
         else:
             return data
@@ -140,6 +136,3 @@ if __name__=="__main__":
     del mydb
     
     print(data)
-
-            
-
