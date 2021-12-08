@@ -23,9 +23,18 @@
                 return(
                     <div>
                         <div className="title">登入成功，{this.props.name} 你好</div>
-                        <div className="menu"><a href="">登出</a></div>
+                        <div className="menu"><a href="" onClick={this.logout}>登出</a></div>
                     </div>
                 )
+            }
+            logout=(eObj)=>{
+                eObj.preventDefault();
+                userRequest("DELETE").then(resp=>{
+                    // console.log(resp)
+                    if(resp.ok){
+                        location.href = `${window.origin}/admin/`
+                    }
+                })
             }
         }
         class Board extends React.Component{

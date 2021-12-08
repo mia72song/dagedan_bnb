@@ -2,4 +2,4 @@ from flask import Blueprint
 
 admin = Blueprint("admin", __name__)
 
-from . import auth, order
+from . import auth, order, view

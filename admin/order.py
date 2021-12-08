@@ -1,26 +1,23 @@
 from flask import make_response, session
 from datetime import datetime, timedelta
 import json
-import functools
+from flask_jwt_extended import jwt_required
 
 from . import admin
 from model.db import Mydb
 from flask import session
 
-def login_required(func):
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        if session.get("user"):
-            result = func(*args, **kwargs)
-            return result
-    return wrapper
-
-@login_required
+@jwt_required()
 @admin.route("/order/<int:order_id>")
 def get_order_by_id(order_id):
     pass
 
-@login_required
+@jwt_required()
 @admin.route("/orders")
 def get_orders():
+    pass
+
+@jwt_required()
+@admin.route("/orders/start=<start_date_string>&end=<end_date_string>")
+def get_orders_by_date(start_date_string, end_date_string):
     pass
