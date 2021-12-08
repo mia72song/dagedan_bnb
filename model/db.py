@@ -48,24 +48,58 @@ class Mydb:
         self.conn.commit()
         print("密碼已更新")
     '''
-    
-    def getBookingByDate(self, start_date, end_date):
+    def __getBookedList(self, data):
+        data = list(data)
+        for i in range(len(data)):
+            data[i] = list(data[i])
+            d = data[i]
+            booked = []
+            d[0] = datetime.strftime(d[0], dateFormatter)
+            if d[0]==data[i-1][0]:
+                booked = data[i-1][1]
+                booked.append(d[1])
+                d[1] = booked
+                data[i-1] = None
+                continue
+
+            del d[2]
+
+            if d[1] :                
+                booked.append(d[1])
+                d[1] = booked         
+                          
+            is_holiday = False
+            if d[-2] : is_holiday = True
+            d[-2] = is_holiday        
+        return data
+
+    def getBookingByDate(self, start_date, end_date, formated=True):
         '''
         Parameters
         ----------
         start_date : String，格式yyyy-mm-dd
         end_date : String，格式yyyy-mm-dd
         '''
-        sql = f"SELECT * FROM booking WHERE date<='{end_date}' AND date>='{start_date}'"
+        sql = f"""
+            SELECT c.date, b.room_no, b.order_id, c.weekday, c.is_holiday, c.note FROM calendar AS c
+            LEFT JOIN booking AS b ON b.date=c.date
+            WHERE c.date<='{end_date}' AND c.date>='{start_date}'
+            ORDER BY c.date, b.room_no
+            """
         self.cur.execute(sql)
         data = self.cur.fetchall()
-        return data
+        if formated:
+            return self.__getBookedList(data)
+        else:
+            return data
 
+    '''
     def getCalendar(self, start_date, end_date):
         sql=f"SELECT * FROM calendar WHERE date<='{end_date}' AND date>='{start_date}'"
         self.cur.execute(sql)
         data = self.cur.fetchall()
         return data
+    '''
     
     def getRooms(self):
         sql = f"""SELECT r.room_no, r.name, r.room_type, 
@@ -102,6 +136,10 @@ if __name__=="__main__":
     lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
     
     mydb = Mydb()
-    data = mydb.getCalendar("2021-12-28", "2022-01-02")
-    print(data)
+    data = mydb.getBookingByDate("2021-12-28", "2022-01-02")
     del mydb
+    
+    print(data)
+
+            
+
