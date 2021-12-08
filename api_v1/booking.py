@@ -18,9 +18,7 @@ def get_booking_by_date(start_date_string, end_date_string):
             for i in range(len(data)):
                 d = list(data[i])
                 d[0] = datetime.strftime(d[0], dateFormatter)
-                
-                if not session.get("user"):
-                    del d[2]
+                del d[2]
                 
                 data[i] = d
         
