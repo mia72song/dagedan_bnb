@@ -2,8 +2,11 @@ import pymysql
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import csv
+
 from dotenv import load_dotenv
 load_dotenv()
+
+from utils import dateFormatter
 
 db_info = {
     "host": os.getenv("DB_HOST", default="localhost"),
@@ -136,26 +139,6 @@ class Mydb:
         self.conn.close()
         print("資料庫已關閉!!")
 
-# 將由資料庫取得的預約日曆資料，整理成dict格式
-def calendarFormatter(result):
-    from datetime import datetime, timedelta
-
-    data_dict = {}
-    dateFormatter = "%Y-%m-%d"
-    date = datetime.strftime(result[0], dateFormatter)
-    bid = date+"-"+result[1]
-    order_data = list(result[2:])
-    cols = ["order_id", "booker_name", "gender", "phone"]    
-    order_dict = dict(zip(cols, order_data))
-
-    gender = "先生"
-    if order_dict["gender"]=="F":
-        gender = "小姐"
-    order_dict["gender"] = gender
-
-    data_dict[bid] = order_dict
-
-    return data_dict
 
 if __name__=="__main__":
     # 中華民國政府行政機關辦公日曆表(csv檔)：https://data.gov.tw/dataset/14718
@@ -164,9 +147,5 @@ if __name__=="__main__":
     mydb = Mydb()
     data = mydb.getOrdersByDate("2021-12-28", "2022-01-02")
     del mydb
-
-    for d in data:
-        d = calendarFormatter(d)
-        print(d)
 
     print(data)

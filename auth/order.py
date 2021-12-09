@@ -6,10 +6,11 @@ from flask_jwt_extended import jwt_required
 from . import auth
 from model.db import Mydb
 
+from utils import dateFormatter
+
 # 將由資料庫取得的預約日曆資料，整理成dict格式
 def calendarFormatter(result):
     data_dict = {}
-    dateFormatter = "%Y-%m-%d"
     date = datetime.strftime(result[0], dateFormatter)
     bid = date+"-"+result[1]
     order_data = list(result[2:])

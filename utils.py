@@ -1,2 +1,1 @@
-
 dateFormatter = "%Y-%m-%d"
