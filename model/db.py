@@ -53,6 +53,7 @@ class Mydb:
         for i in range(len(data)):
             data[i] = list(data[i])
             d = data[i]
+            del d[2]
             booked = []
             if d[0]==data[i-1][0]:
                 booked = data[i-1][1]
@@ -63,9 +64,7 @@ class Mydb:
             
             if d[1] :                
                 booked.append(d[1])
-                d[1] = booked   
-            
-            del d[2]      
+                d[1] = booked         
                                 
         return data
 
@@ -89,13 +88,23 @@ class Mydb:
         else:
             return data
 
-    '''
-    def getCalendar(self, start_date, end_date):
-        sql=f"SELECT * FROM calendar WHERE date<='{end_date}' AND date>='{start_date}'"
+    def getOrdersByDate(self, start_date, end_date):
+        sql = f"""
+            SELECT b.date, b.room_no, b.order_id, o.name, o.gender, o.phone
+            FROM booking AS b
+            INNER JOIN orders AS o ON b.order_id=o.order_id
+            WHERE b.date<='{end_date}' AND b.date>='{start_date}'
+            ORDER BY b.date, b.room_no
+            """
         self.cur.execute(sql)
         data = self.cur.fetchall()
         return data
-    '''
+
+    def getCalendar(self, start_date, end_date):
+        sql = f"SELECT * FROM calendar WHERE date<='{end_date}' AND date>='{start_date}'"
+        self.cur.execute(sql)
+        data = self.cur.fetchall()
+        return data
     
     def getRooms(self):
         sql = f"""SELECT r.room_no, r.name, r.room_type, 
@@ -127,12 +136,37 @@ class Mydb:
         self.conn.close()
         print("資料庫已關閉!!")
 
+# 將由資料庫取得的預約日曆資料，整理成dict格式
+def calendarFormatter(result):
+    from datetime import datetime, timedelta
+
+    data_dict = {}
+    dateFormatter = "%Y-%m-%d"
+    date = datetime.strftime(result[0], dateFormatter)
+    bid = date+"-"+result[1]
+    order_data = list(result[2:])
+    cols = ["order_id", "booker_name", "gender", "phone"]    
+    order_dict = dict(zip(cols, order_data))
+
+    gender = "先生"
+    if order_dict["gender"]=="F":
+        gender = "小姐"
+    order_dict["gender"] = gender
+
+    data_dict[bid] = order_dict
+
+    return data_dict
+
 if __name__=="__main__":
     # 中華民國政府行政機關辦公日曆表(csv檔)：https://data.gov.tw/dataset/14718
     lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
     
     mydb = Mydb()
-    data = mydb.getBookingByDate("2021-12-28", "2022-01-02")
+    data = mydb.getOrdersByDate("2021-12-28", "2022-01-02")
     del mydb
-    
+
+    for d in data:
+        d = calendarFormatter(d)
+        print(d)
+
     print(data)

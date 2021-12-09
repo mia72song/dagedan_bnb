@@ -1,6 +1,5 @@
 function userRequest(method, data=null){
     const url = `${window.origin}/admin/user`;
-    let token;
     let body;
     if(data){
         body=JSON.stringify(data)

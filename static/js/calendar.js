@@ -17,8 +17,8 @@ function getDateString(n=1){
     return (date_obj.getFullYear().toString()+"-"+m+"-"+d)
 }
 
-function getCalendar(start_date_string){
-    const url = `${window.origin}/api/calendar/start=${start_date_string}`;
+function getBookingList(start_date_string){
+    const url = `${window.origin}/api/booking/start=${start_date_string}`;
     let p = fetch(url).then(response=>{
         if(response.status===200){
             return response.json();
@@ -28,8 +28,21 @@ function getCalendar(start_date_string){
     })
     return p
 }
-function getBookingList(start_date_string, end_date_string){
-    const url = `${window.origin}/api/booking/start=${start_date_string}&end=${end_date_string}`;
+
+function getWeeklyCalendar(start_date_string){
+    const url = `${window.origin}/api/weekly_calendar/start=${start_date_string}`;
+    let p = fetch(url).then(response=>{
+        if(response.status===200){
+            return response.json();
+        }else{
+            console.log(response.json());
+        }
+    })
+    return p
+}
+
+function getBookingListWithAuth(start_date_string, end_date_string){
+    const url = `${window.origin}/admin/orders/start=${start_date_string}&end=${end_date_string}`
     let p = fetch(url).then(response=>{
         if(response.status===200){
             return response.json();

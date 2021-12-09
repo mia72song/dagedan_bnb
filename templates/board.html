@@ -39,135 +39,148 @@
         }
         class Board extends React.Component{
             state = {
-                room_list:[],
-                page:0,
-                date_list:[],
-                yyyy_mm:"",
-                booking_list:[]
+                rooms: [],
+                page: 0,
+                y: "2021",
+                m: "12",
+                week: [],
+                booked: []
             }
             componentDidMount(){
                 roomRequest().then(resp=>{
-                    this.setState({room_list: resp.data})
+                    this.setState({rooms: resp.data});
+                    this.updateWeeklyCalendar(0);
                 })
-                this.updateDateList(this.state.page);
-            }
-            createBookingElement=(room, week)=>{
-                let book_content = [];
-                room.forEach(r=>{
-                    book_content.push(
-                        <tr>
-                            <td>{r.name}-{r.room_no}</td>
-                            <td onClick={this.handleClick} id={week[0].date+"-"+r.room_no} className="bdate"></td>
-                            <td onClick={this.handleClick} id={week[1].date+"-"+r.room_no} className="bdate"></td>
-                            <td onClick={this.handleClick} id={week[2].date+"-"+r.room_no} className="bdate"></td>
-                            <td onClick={this.handleClick} id={week[3].date+"-"+r.room_no} className="bdate"></td>
-                            <td onClick={this.handleClick} id={week[4].date+"-"+r.room_no} className="bdate"></td>
-                            <td onClick={this.handleClick} id={week[5].date+"-"+r.room_no} className="bdate"></td>
-                            <td onClick={this.handleClick} id={week[6].date+"-"+r.room_no} className="bdate"></td>
-                            <td><a href="">修改</a></td>
-                        </tr>
-                    )
-                })
-                return book_content
             }
             render(){
-                let prv_page = "< 上週"; 
-                if(this.state.page===0){ prv_page = "歷史訂單" };
-                
-                const week = this.state.date_list;
-                const room = this.state.room_list;               
-                let week_content = [];
-                let book_content = [];
-                if(week.length>0 & room.length>0){
-                    book_content = this.createBookingElement(room, week);
-                    
-                    week.forEach(date=>{
-                        let holiday_class = null;
-                        if(date.is_holiday){ holiday_class="holiday" };
-
-                        week_content.push(
-                            <th className={holiday_class}>
-                                <h2>{date.date.slice(8, 11)}</h2>
-                                <p>{date.weekday}</p>
-                                <p id="note">{date.note}</p>
-                            </th>
-                        )
-                    })
+                let prvPage = <a href="#">歷史訂單</a>;
+                if(this.state.page!==0){
+                    prvPage = <a href="javascript: void(0)" onClick={this.toNextPage(-1)}>上週</a>;
                 }
+                const week = this.state.week;
+                const rooms = this.state.rooms;
+                const booked = this.state.booked;
+                let calendar_content = [];
+                let row_content = [];
+                if(week.length>0 && rooms.length>0){
+                    calendar_content = week.map(day=><Day key={day.date} data={day} />)
+                    row_content = rooms.map(r=><Row key={r.room_no} room={r} week={week} booked={booked}/>)
+                    if(booked.length>0){
+                        booked.forEach(b=>{
+                            ReactDOM.render(<OrderLink id={b.oid} info={b}/>, document.getElementById(b.bid));
+                            console.log("渲染OrderLink");
+                        })
+                    }
+                }
+                console.log("渲染Board");
                 return(
                     <table>
                         <thead>
                             <tr>
-                                <th colspan="9"><h1>{this.state.yyyy_mm}</h1></th>
+                                <th colspan="9"><h1>{this.state.y} 年 - {this.state.m} 月</h1></th>
                             </tr>
                             <tr>
                                 <th id="page">
-                                    <a href="javascript: void(0)" onClick={this.getPage(-1)}>{prv_page}</a>
+                                    {prvPage}
                                 </th>
-                                {week_content}
+                                { calendar_content }
                                 <th id="page">
-                                    <a href="javascript: void(0)" onClick={this.getPage(1)}>下週 ></a>
+                                    <a href="javascript: void(0)" onClick={this.toNextPage(1)}>下週</a>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            {book_content}
+                            { row_content }
                         </tbody>
                     </table>
                 )
+            }            
+            toNextPage=(number)=>{
+                return(eObj=>{
+                    let page = this.state.page+number;
+                    this.updateWeeklyCalendar(page);
+                })
             }
-            updateDateList=(page)=>{
-                let start_date_string = getDateString(page*7);
-                let end_date_string = getDateString(page*7+6);
-                getCalendar(start_date_string).then(respC=>{
-                    getBookingList(start_date_string, end_date_string).then(respB=>{
-                        this.setState({
-                            date_list: respC.data,
-                            yyyy_mm: start_date_string.slice(0, 7),
-                            booking_list: respB.data
-                        })
-                        this.updateBooking();
+            updateWeeklyCalendar=(page)=>{
+                let start_date_string = getDateString(page*7)
+                let end_date_string = getDateString(page*7+6)
+                getWeeklyCalendar(start_date_string).then(respC=>{
+                    let week = respC.data;
+                    let y = week[0].date.substring(0,4)
+                    let m = week[0].date.substring(5,7)
+                    this.setState({
+                        page,
+                        y,
+                        m,
+                        week
+                    })
+                    getBookingListWithAuth(start_date_string, end_date_string).then(respB=>{
+                        if(respB.data){
+                            const booked = respB.data;
+                            this.setState({booked});
+                        }
                     })
                 })
             }
-            updateBooking=()=>{
-                let items = document.querySelectorAll(".item");
-                if(items){
-                    items.forEach(i=>{
-                        i.remove();
-                    })
+        }
+        class Day extends React.Component{
+            render(){
+                let holiday_class = null;
+                if(this.props.data.is_holiday){
+                    holiday_class = "holiday"
                 }
-                const booking_list = this.state.booking_list;
-                let id;
-                if(booking_list.length>0){
-                    booking_list.forEach(b=>{
-                        id = b[0]+"-"+b[1]
-                        let th = document.getElementById(id);
-                        let item = document.createElement("a");
-                        item.setAttribute("class", "item");
-                        // item.setAttribute("href", "javascript: void(0)");
-                        item.textContent = b[2];
-                        th.appendChild(item);
-                    })
-                }                
+                let d = ((this.props.data.date).split("-"))[2]
+                return(
+                    <th className={holiday_class}>
+                        <h2>{d}</h2>
+                        <p>{this.props.data.weekday}</p>
+                        <p id="note">{this.props.data.note}</p>
+                    </th>
+                )
+
+            }
+        }
+        class Row extends React.Component{
+            render(){                
+                const room = this.props.room;
+                const week = this.props.week;
+                let week_content = [];
+                week.forEach(d => {
+                    let a_tag = document.querySelector(".order_link");
+                    if(a_tag){
+                        console.log("移除a tag")
+                        a_tag.remove();
+                    }
+                    let id = d.date+"-"+room.room_no
+                    let td = <td id={id} onClick={this.handleClick}></td>
+                    week_content.push(td);               
+                });
+                console.log("Row渲染");
+                return(
+                    <tr className="row">
+                        <td>{room.name}-{room.room_no}</td>
+                        { week_content }
+                        <td><button>修改</button></td>
+                    </tr>
+                )
             }
             handleClick=(eObj)=>{
                 console.log(eObj.target.id);
             }
-            
-            getPage=(number)=>{
-                return(eObj=>{
-                    const page = this.state.page;
-                    if(page+number<0){
-                        location.href = `${window.origin}/admin/booking`
-                    }else{
-                        this.setState({page:page+number})
-                        this.updateDateList(page+number)
-                    }
-                })
+        }
+        class OrderLink extends React.Component{
+            render(){
+                // console.log(this.props.info);
+                const b = this.props.info;
+                console.log("OrderLink組件渲染");
+                return(
+                    <a href="#" className="order_link">
+                        <p>{b.booker_name}{b.gender}</p>
+                        <p>{b.phone}</p>
+                    </a>
+                )
             }
         }
-       
         addEventListener("load", ()=>{
             currentUserPromise.then(currentUser=>{
                 // console.log(currentUser)
@@ -179,6 +192,6 @@
                 }
             })
         })
-        
+                
     </script>
 {% endblock %}

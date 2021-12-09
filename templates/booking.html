@@ -109,38 +109,33 @@
 
     class Calendar extends React.Component{
         state = {
-            page: 1,
-            yyyy_mm: "",
-            week: [],
-            booking_list: []
+            y: "",
+            m: "",
+            week: []
         }
         componentDidMount(){
             let search_sting = (location.search).replace("?", "").split("&");
             let check_in_date = (search_sting[0].split("="))[1];
-            let check_out_date = (search_sting[1].split("="))[1];
-            getCalendar(check_in_date).then(respC=>{
-                // console.log(respC.data);
+            getBookingList(check_in_date).then(resp=>{
+                let week = resp.data;
+                let y = week[0].date.substring(0,4)
+                let m = week[0].date.substring(5,7)
                 this.setState({
-                    yyyy_mm: check_in_date.slice(0, 7),
-                    week: respC.data
+                    y,
+                    m,
+                    week
                 })
-                getBookingList(check_in_date, check_out_date).then(respB=>{
-                    // console.log(respB.data);
-                    if(respB.data){
-                        this.setState({booking_list: respB.data})
-                    }
-                })
-            })
+                
+            })      
         }
         render(){
             console.log(this.props.rooms);
             console.log(this.state.week);
-            console.log(this.state.booking_list);
             return(
                 <table>
                     <thead>
                         <tr>
-                            <th colspan="9"><h1>{this.state.yyyy_mm}</h1></th>
+                            <th colspan="9"><h1>西元 {this.state.y} 年 - {this.state.m} 月</h1></th>
                         </tr>
                     </thead>
                     <tbody>

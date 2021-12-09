@@ -1,3 +1,7 @@
+a{
+    text-decoration: none;
+    cursor: pointer;
+}
 #banner>div{
     display: flex;
     margin: 20px 30px;
@@ -8,6 +12,7 @@
 .menu{
     width: 20%;
     text-align: right;
+    font-weight: bold;
 }
 table{
     margin: 0 auto;
@@ -36,4 +41,12 @@ td{
 tbody{
     color:blue;
     height:50px;
+}
+.order_link{
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+}
+.order_link>p{
+    margin: 0 5px;
 }
