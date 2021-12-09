@@ -1,4 +1,4 @@
-from flask import make_response, session
+from flask import make_response
 from datetime import datetime, timedelta
 import json
 

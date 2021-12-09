@@ -1,4 +1,4 @@
-from flask import make_response, session
+from flask import make_response
 from datetime import datetime, timedelta
 import json
 
@@ -7,7 +7,7 @@ from model.db import Mydb
 from .utils import dateFormatter
 
 # 將由資料庫取得的預約日曆資料，整理成dict格式
-def calendarFormatter(result, booked=True):
+def calendarFormatter(result):
     cols = ["date", "booked", "weekday", "is_holiday", "note"]
     data_dict = dict(zip(cols, result))
     data_dict["date"] = datetime.strftime(data_dict["date"], dateFormatter)

@@ -1,12 +1,10 @@
-from os import access
-from flask import make_response, session, request
-from datetime import datetime, timedelta
+from flask import make_response
+from datetime import datetime
 import json
 from flask_jwt_extended import jwt_required
 
-from . import admin
+from . import auth
 from model.db import Mydb
-from flask import session
 
 # 將由資料庫取得的預約日曆資料，整理成dict格式
 def calendarFormatter(result):
@@ -29,7 +27,7 @@ def calendarFormatter(result):
     return data_dict
 
 
-@admin.route("/orders/start=<start_date_string>&end=<end_date_string>")
+@auth.route("/orders/start=<start_date_string>&end=<end_date_string>")
 @jwt_required()
 def get_orders_by_date(start_date_string, end_date_string):
     body = ""
@@ -57,12 +55,12 @@ def get_orders_by_date(start_date_string, end_date_string):
     resp.headers["Content-Type"] = "application/json"
     return resp
 
-@admin.route("/order/<int:order_id>")
+@auth.route("/order/<int:order_id>")
 @jwt_required()
 def get_order_by_id(order_id):
     pass
 
-@admin.route("/orders")
+@auth.route("/orders")
 @jwt_required()
 def get_orders():
     pass

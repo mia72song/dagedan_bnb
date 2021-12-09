@@ -17,8 +17,10 @@ app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies', 'query_string']
 app.config['JWT_BLACKLIST_ENABLED'] = True
 app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access']
 
-from admin import admin
+from cms import admin
 app.register_blueprint(admin, url_prefix = "/admin")
+from auth import auth
+app.register_blueprint(auth, url_prefix = "/auth")
 from api_v1 import api
 app.register_blueprint(api, url_prefix = "/api")
 

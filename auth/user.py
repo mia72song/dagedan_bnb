@@ -1,11 +1,11 @@
-from flask import render_template, session, jsonify, request
+from flask import session, jsonify, request
 from flask.helpers import make_response
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 
-from . import admin
+from . import auth
 from model.db import Mydb
 
-@admin.route("/user", methods=["POST"])
+@auth.route("/user", methods=["POST"])
 def login():
     login_data = request.get_json()
     if login_data:
@@ -47,7 +47,7 @@ def login():
             "message": "無資料"
         }), 500
 
-@admin.route("/user", methods=["DELETE"])
+@auth.route("/user", methods=["DELETE"])
 def logout():
     if session.get("user"):
         del session["user"]
@@ -57,7 +57,7 @@ def logout():
     
     return resp
 
-@admin.route("/user")
+@auth.route("/user")
 def get_current_user():
     return jsonify({
         "data": session.get("user")

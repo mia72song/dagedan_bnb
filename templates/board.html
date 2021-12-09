@@ -54,7 +54,7 @@
                 })
             }
             render(){
-                let prvPage = <a href="#">歷史訂單</a>;
+                let prvPage = <a href="/admin/">歷史訂單</a>;
                 if(this.state.page!==0){
                     prvPage = <a href="javascript: void(0)" onClick={this.toNextPage(-1)}>上週</a>;
                 }
@@ -170,7 +170,7 @@
                 const id =this.props.id;
                 const booked = this.state.booked;
                 let a_content = null;
-                let href = "#"
+                let href = "#";
                 if(booked.length>0){
                     booked.forEach(b=>{
                         if(b.bid===id){
