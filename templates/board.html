@@ -5,6 +5,8 @@
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/board.css") }}>
     <script type="text/javascript" src={{ url_for("static", filename="js/room.js") }}></script>
     <script type="text/javascript" src={{ url_for("static", filename="js/calendar.js") }}></script>
+    <!-- Load Pubsub-js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pubsub-js/1.9.3/pubsub.min.js" integrity="sha512-ASNLdxh5Knd0ESqUQE2hvUbXxOmu0y27vVVibROAKRomo+R6ocykvh0m8tE9qMEfmeVbEyNL1M6FvvyRKyZIoQ==" crossorigin="anonymous"></script>
 {% endblock %}
 {% block content %}
     <main>
@@ -43,8 +45,7 @@
                 page: 0,
                 y: "2021",
                 m: "12",
-                week: [],
-                booked: []
+                week: []
             }
             componentDidMount(){
                 roomRequest().then(resp=>{
@@ -59,20 +60,12 @@
                 }
                 const week = this.state.week;
                 const rooms = this.state.rooms;
-                const booked = this.state.booked;
                 let calendar_content = [];
                 let row_content = [];
                 if(week.length>0 && rooms.length>0){
-                    calendar_content = week.map(day=><Day key={day.date} data={day} />)
-                    row_content = rooms.map(r=><Row key={r.room_no} room={r} week={week} booked={booked}/>)
-                    if(booked.length>0){
-                        booked.forEach(b=>{
-                            ReactDOM.render(<OrderLink id={b.oid} info={b}/>, document.getElementById(b.bid));
-                            console.log("渲染OrderLink");
-                        })
-                    }
+                    calendar_content = week.map(day=><DayColumn key={day.date} data={day} />)
+                    row_content = rooms.map(r=><Row key={r.room_no} room={r} week={week} />)
                 }
-                console.log("渲染Board");
                 return(
                     <table>
                         <thead>
@@ -102,28 +95,23 @@
                 })
             }
             updateWeeklyCalendar=(page)=>{
-                let start_date_string = getDateString(page*7)
-                let end_date_string = getDateString(page*7+6)
+                let start_date_string = getDateString(page*7);
                 getWeeklyCalendar(start_date_string).then(respC=>{
                     let week = respC.data;
-                    let y = week[0].date.substring(0,4)
-                    let m = week[0].date.substring(5,7)
-                    this.setState({
-                        page,
-                        y,
-                        m,
-                        week
-                    })
+                    let end_date_string = week[6].date;
                     getBookingListWithAuth(start_date_string, end_date_string).then(respB=>{
-                        if(respB.data){
-                            const booked = respB.data;
-                            this.setState({booked});
-                        }
+                        this.setState({
+                            page,
+                            y: week[0].date.substring(0,4),
+                            m: week[0].date.substring(5,7),
+                            week
+                        })
+                        PubSub.publish('BOOKED', respB.data);
                     })
                 })
             }
         }
-        class Day extends React.Component{
+        class DayColumn extends React.Component{
             render(){
                 let holiday_class = null;
                 if(this.props.data.is_holiday){
@@ -146,39 +134,59 @@
                 const week = this.props.week;
                 let week_content = [];
                 week.forEach(d => {
-                    let a_tag = document.querySelector(".order_link");
-                    if(a_tag){
-                        console.log("移除a tag")
-                        a_tag.remove();
-                    }
                     let id = d.date+"-"+room.room_no
-                    let td = <td id={id} onClick={this.handleClick}></td>
+                    let td = (
+                        <td className="order_td">
+                            <OrderLink id={id} />
+                        </td>
+                    )
                     week_content.push(td);               
                 });
-                console.log("Row渲染");
+                let btn_id = room.room_no+"_btn";
                 return(
                     <tr className="row">
                         <td>{room.name}-{room.room_no}</td>
                         { week_content }
-                        <td><button>修改</button></td>
+                        <td><button onClick={this.handleClickBtn(room.room_no)}>修改房間</button></td>
                     </tr>
                 )
             }
-            handleClick=(eObj)=>{
-                console.log(eObj.target.id);
+            handleClickBtn=(room_no)=>{
+                return(eObj=>{
+                    console.log(room_no);
+                })
             }
         }
         class OrderLink extends React.Component{
+            state = {
+                booked: []
+            }
+            componentDidMount(){
+                this.token=PubSub.subscribe("BOOKED", (_, booked)=>{
+                    this.setState({booked})
+                })
+            }
             render(){
-                // console.log(this.props.info);
-                const b = this.props.info;
-                console.log("OrderLink組件渲染");
-                return(
-                    <a href="#" className="order_link">
-                        <p>{b.booker_name}{b.gender}</p>
-                        <p>{b.phone}</p>
+                const id =this.props.id;
+                const booked = this.state.booked;
+                let a_content = null;
+                let href = "#"
+                if(booked.length>0){
+                    booked.forEach(b=>{
+                        if(b.bid===id){
+                            a_content = <p>{b.booker_name}{b.gender} {b.phone}</p>
+                            href = `#${b.order_id}`
+                        }
+                    })
+                }
+                return (
+                    <a href={href} className="order_link">
+                        { a_content }
                     </a>
                 )
+            }
+            componentWillUnmount(){
+                PubSub.unsubscribe(this.token);
             }
         }
         addEventListener("load", ()=>{
