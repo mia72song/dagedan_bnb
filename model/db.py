@@ -2,6 +2,8 @@ import pymysql
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
 import csv
+import sys
+sys.path.append("..")
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -103,6 +105,12 @@ class Mydb:
         data = self.cur.fetchall()
         return data
 
+    def getOrdersById(self, order_id):
+        sql = f"SELECT * FROM orders WHERE order_id={order_id}"
+        self.cur.execute(sql)
+        data = self.cur.fetchone()
+        return data
+
     def getCalendar(self, start_date, end_date):
         sql = f"SELECT * FROM calendar WHERE date<='{end_date}' AND date>='{start_date}'"
         self.cur.execute(sql)
@@ -145,7 +153,7 @@ if __name__=="__main__":
     lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
     
     mydb = Mydb()
-    data = mydb.getOrdersByDate("2021-12-28", "2022-01-02")
+    data = mydb.getOrdersById(1)
     del mydb
 
     print(data)

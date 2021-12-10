@@ -1,21 +1,15 @@
 from flask import *
-from flask_jwt_extended import JWTManager
-import os
+from config import envs
 
+from flask_jwt_extended import JWTManager
 jwt = JWTManager()
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = os.urandom(24)
-app.config["PERMANENT_SESSION_LIFETIME"] = 86400
-app.config["JSON_AS_ASCII"] = False
-app.config["TEMPLATES_AUTO_RELOAD"] = True
 
-# JWT設置
+# 先載入config 再 init_app(app)
+env_config = envs.get("dev")  #dev, pro, test
+app.config.from_object(env_config)
 jwt.init_app(app)
-app.config['JWT_SECRET_KEY'] = os.urandom(24).hex()
-app.config['JWT_TOKEN_LOCATION'] = ['headers', 'cookies', 'query_string']
-app.config['JWT_BLACKLIST_ENABLED'] = True
-app.config['JWT_BLACKLIST_TOKEN_CHECKS'] = ['access']
 
 from cms import admin
 app.register_blueprint(admin, url_prefix = "/admin")
@@ -37,4 +31,7 @@ def about():
 def booking():    
     return render_template("booking.html")
 
-app.run(debug=True)
+#Rroduction Environment：app.run(host="0.0.0.0", port=3000)
+
+#Development Environment:
+app.run() #default port=5000

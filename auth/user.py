@@ -17,15 +17,13 @@ def login():
         
         try:
             mydb = Mydb()
-            user_info = mydb.getUser(login_data["username"], login_data["password"])
-            
+            user_info = mydb.getUser(login_data["username"], login_data["password"])            
             if user_info:
                 session["user"] = user_info
                 access_token = create_access_token(identity=user_info[0])
                 resp = make_response(jsonify({
                     "ok": True
-                }), 200)
-                
+                }), 200)                
                 set_access_cookies(resp, access_token)
 
                 return resp
@@ -41,6 +39,7 @@ def login():
                 "error": True,
                 "message": f"伺服器內部錯誤：{e}"
             }), 500
+    
     else:
         return jsonify({
             "error": True,
