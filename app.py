@@ -7,7 +7,7 @@ jwt = JWTManager()
 app = Flask(__name__)
 
 # 先載入config 再 init_app(app)
-env_config = envs.get("dev")  #dev, pro, test
+env_config = envs.get("test")  #dev, pro, test，配置文件因運行環境而異
 app.config.from_object(env_config)
 jwt.init_app(app)
 
@@ -34,4 +34,4 @@ def booking():
 #Rroduction Environment：app.run(host="0.0.0.0", port=3000)
 
 #Development Environment:
-app.run() #default port=5000
+app.run() #default host="127.0.0.1" port=5000

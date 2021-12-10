@@ -1,6 +1,6 @@
 import secrets
 
-class Config(object):
+class Config:
     SECRET_KEY = secrets.token_hex()
     PERMANENT_SESSION_LIFETIME = 86400
     TEMPLATES_AUTO_RELOAD = True
