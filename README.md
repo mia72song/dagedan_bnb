@@ -1,1 +1,1 @@
-# 打個蛋 線上訂房及後台管理系統
+# Online booking & administration service for Dangedan B&B website
