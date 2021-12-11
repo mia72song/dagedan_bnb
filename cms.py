@@ -11,14 +11,14 @@ def index():
 def board():
     return render_template("board.html")
 
-@admin.route("/rooms")
+@admin.route("/room")
 def get_room_list():
     return render_template("admin_room.html")
 
-@admin.route("/orders")
+@admin.route("/order")
 def get_order_list():
     return render_template("admin_order.html")
 
-@admin.route("/guests")
+@admin.route("/guest")
 def get_guest_list():
     return render_template("admin_guest.html")
