@@ -1,0 +1,35 @@
+main{
+    width: 1000px;
+    margin: 0 auto;
+}
+nav{
+    text-align: center;
+    margin-top: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+nav>div{
+    line-height: 2;
+    height: 50px;
+    line-height: 50px;
+    margin-left: 20px;
+}
+#status_wrap{
+    width: 30%;
+}
+#keyword_wrap{
+    width: 70%;
+}
+select, input{
+    width: 150px;
+}
+select{
+    line-height: 1.8;
+    margin: 10px;
+    border-radius: 5px;
+    border: 1.5px black solid;
+    outline-style: none;
+    padding: 2px;
+    height: 31px;
+}

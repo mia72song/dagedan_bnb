@@ -42,3 +42,6 @@ tbody{
 .order_link>p{
     margin: 0 5px;
 }
+button{
+    width: 75px;
+}
