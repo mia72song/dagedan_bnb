@@ -19,20 +19,21 @@
                 return(
                     <div id="box">
                         <div id="logo">
-                            <img src="../static/images/logo2.jpg" alt=""/>
+                            <img src="../static/images/logo1.jpg" alt=""/>
                         </div>
                         <form method="post" onSubmit={this.handleSubmit}>
-                            <label for="">帳號：</label>
-                            <input type="text" name="username" id="username" value={this.state.username}
-                                onChange={this.handleChange("username")}/><p/>
-                            <label for="">密碼：</label>
-                            <input type="password" name="password" id="password" value={this.state.password}
-                                onChange={this.handleChange("password")}/><p/>
-                            <input type="submit" value="登入"/>
-                        </form>
-                        <div className="flash">
-                        
+                        <div className="mb-3">
+                            <label for="" className="form-label">帳號</label>
+                            <input type="text" className="form-control" name="username" id="username"
+                                value={this.state.username} onChange={this.handleChange("username")}/>
                         </div>
+                        <div className="mb-3">
+                            <label for="" className="form-label">密碼</label>
+                            <input type="password" className="form-control" name="password" id="password"
+                                value={this.state.password} onChange={this.handleChange("password")}/>
+                        </div>
+                        <button type="submit" className="btn btn-primary">登入</button>
+                        </form>
                     </div>
                 )
             }
