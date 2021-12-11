@@ -158,7 +158,7 @@
                     booked.forEach(b=>{
                         if(b.bid===id){
                             a_content = <p>{b.booker_name}{b.gender} {b.phone}</p>
-                            href = `#${b.order_id}`
+                            href = `/admin/order?id=${b.order_id}`
                         }
                     })
                 }
