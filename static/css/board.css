@@ -1,27 +1,8 @@
-a{
-    text-decoration: none;
-    cursor: pointer;
-}
-#banner>div{
-    display: flex;
-    margin: 20px 30px;
-}
-.title{
-    width: 80%;
-}
-.menu{
-    width: 20%;
-    text-align: right;
-    font-weight: bold;
-}
 table{
     margin: 0 auto;
 }
 table, th, td {
     border: 1px solid black;
-}
-thead{
-    color:green;
 }
 th{
     width: 100px;
@@ -29,15 +10,25 @@ th{
 td{
     text-align: center;
     vertical-align: middle;
+    height: 60px;
+}
+/*thead*/
+.calendar_tr{
+    height: 100px;
+}
+#prv_page>p{
+    line-height: 3;
 }
 .holiday{
     background-color: pink;
 }
 #note{
     font-size: 8px;
-    color: black;
-    height: 10px;
+    color: gray;
+    margin-top: 3px;
+    height: 12px;
 }
+/*tbody*/
 tbody{
     color:blue;
     height:50px;
