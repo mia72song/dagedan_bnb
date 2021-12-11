@@ -18,6 +18,7 @@
     <header>
         <!--由Banner組件渲染 if login-->
     </header>
+    <div class="nav_wrap"></div>    
     {% block content %}
 
     {% endblock %}
@@ -26,17 +27,28 @@
             return resp.data
         })
         class Banner extends React.Component{
-            render(){
-                // console.log(this.props);
+            state = {
+                hover: "board"
+            }
+            componentDidMount(){
+                this.setState({
+                    hover: location.pathname.split("/")[2]
+                });
+            }
+            render(){               
+                let aHover = document.getElementById(this.state.hover+"_nav");
+                if(aHover){
+                    aHover.setAttribute("class", "menu_checked")
+                }
                 return(
                     <div id="banner">
                         <div className="title">登入成功，{this.props.name} 你好</div>
                         <div className="menu">
-                            <a href="" id="board_nav">儀表板</a>
-                            <a href="" id="order_nav">訂單</a>
-                            <a href="" id="guest_nav">住客</a>
-                            <a href="" id="room_nav">房間</a>
-                            <a href="" onClick={this.logout}>登出</a>
+                            <a href="" id="board_nav" className="menu_not_checked">儀表板</a>
+                            <a href="" id="order_nav" className="menu_not_checked">訂單</a>
+                            <a href="" id="guest_nav" className="menu_not_checked">住客</a>
+                            <a href="" id="room_nav" className="menu_not_checked">房間</a>
+                            <a href="" onClick={this.logout} className="menu_not_checked" id="logout">登出</a>
                         </div>
                     </div>
                 )

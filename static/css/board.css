@@ -6,6 +6,7 @@ table, th, td {
 }
 th{
     width: 100px;
+    color: green;
 }
 td{
     text-align: center;

@@ -7,7 +7,7 @@ jwt = JWTManager()
 app = Flask(__name__)
 
 # 先載入config 再 init_app(app)
-env_config = envs.get("test")  #dev, pro, test，配置文件因運行環境而異
+env_config = envs.get("dev")  #dev, pro, test，配置文件因運行環境而異
 app.config.from_object(env_config)
 jwt.init_app(app)
 
