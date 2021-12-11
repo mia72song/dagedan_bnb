@@ -1,0 +1,24 @@
+{% extends "admin_base.html" %}
+{% block title %}Room List{% endblock %}
+{% block head %}
+    {{ super() }}
+
+{% endblock %}
+{% block content %}
+    <main>
+        This is Room List
+    </main>
+    <script type="text/babel">
+        addEventListener("load", ()=>{
+            currentUserPromise.then(currentUser=>{
+                // console.log(currentUser)
+                if(currentUser!==null){
+
+                }else{
+                    location.href = `${window.origin}/admin/`
+                }
+            })
+        })
+                
+    </script>
+{% endblock %}

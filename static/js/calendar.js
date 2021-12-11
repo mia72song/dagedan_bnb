@@ -50,7 +50,6 @@ function getBookingListWithAuth(start_date_string, end_date_string){
             console.log(response.json());
         }else{
             userRequest("DELETE").then(resp=>{
-                // console.log(resp)
                 if(resp.ok){
                     location.href = `${window.origin}/admin/`
                 }
