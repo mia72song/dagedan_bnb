@@ -27,27 +27,15 @@
             return resp.data
         })
         class Banner extends React.Component{
-            state = {
-                hover: "board"
-            }
-            componentDidMount(){
-                this.setState({
-                    hover: location.pathname.split("/")[2]
-                });
-            }
-            render(){               
-                let aHover = document.getElementById(this.state.hover+"_nav");
-                if(aHover){
-                    aHover.setAttribute("class", "menu_checked")
-                }
+            render(){   
                 return(
                     <div id="banner">
                         <div className="title">登入成功，{this.props.name} 你好</div>
                         <div className="menu">
-                            <a href="/admin/board" id="board_nav" className="menu_not_checked">儀表板</a>
-                            <a href="/admin/order" id="order_nav" className="menu_not_checked">訂單</a>
-                            <a href="/admin/guest" id="guest_nav" className="menu_not_checked">住客</a>
-                            <a href="/admin/room" id="room_nav" className="menu_not_checked">房間</a>
+                            <a href="/admin/board" className={location.pathname=="/admin/board" ? "menu_checked" : "menu_not_checked"}>儀表板</a>
+                            <a href="/admin/order" className={location.pathname=="/admin/order" ? "menu_checked" : "menu_not_checked"}>訂單</a>
+                            <a href="/admin/guest" className={location.pathname=="/admin/guest" ? "menu_checked" : "menu_not_checked"}>住客</a>
+                            <a href="/admin/room" className={location.pathname=="/admin/room" ? "menu_checked" : "menu_not_checked"}>房間</a>
                             <a href="javascript: void(0)" onClick={this.logout} className="menu_not_checked" id="logout">登出</a>
                         </div>
                     </div>
