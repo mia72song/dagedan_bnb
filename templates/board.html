@@ -94,7 +94,7 @@
         class DayColumn extends React.Component{
             render(){
                 return(
-                    <th className={this.props.data.is_holiday ? "holiday" : null}>
+                    <th className={this.props.data.is_holiday && "holiday"}>
                         <h2>{((this.props.data.date).split("-"))[2]}</h2>
                         <p>{this.props.data.weekday}</p>
                         <p id="note">{this.props.data.note}</p>
@@ -143,21 +143,19 @@
             render(){
                 const id =this.props.id;
                 const booked = this.state.booked;
-                let a_content = null;
-                let href = "#";
+                let a_tag = null;
                 if(booked.length>0){
                     booked.forEach(b=>{
                         if(b.bid===id){
-                            a_content = <p>{b.booker_gender=="F" ? "Miss" : "Mr."} {b.booker_name} {b.booker_phone}</p>;
-                            href = `/admin/order?id=${b.order_id}`;
+                            a_tag = (
+                                <a href={`/admin/order?id=${b.order_id}`} className="order_link">
+                                    {b.booker_gender=="F" ? "Miss" : "Mr."} {b.booker_name} {b.booker_phone}
+                                </a>
+                            )
                         }
                     })
                 }
-                return (
-                    <a href={href} className="order_link">
-                        { a_content }
-                    </a>
-                )
+                return a_tag
             }
             componentWillUnmount(){
                 PubSub.unsubscribe(this.token);
