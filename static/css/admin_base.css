@@ -91,6 +91,7 @@ input{
     border: 1.5px black solid;
     outline-style: none;
     padding: 2px;
+    padding-left: 7px;
 }
 input:focus{
     border: 1.5px #0d6efd solid;

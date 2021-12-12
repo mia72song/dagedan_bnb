@@ -1,3 +1,4 @@
+from datetime import datetime
 import pymysql
 import os
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -52,12 +53,54 @@ class Mydb:
         print("密碼已更新")
     '''
 
+    def getOrderById(self, order_id):
+        sql = f"""
+            SELECT o.order_id,  o.create_datetime, 
+            g.last_name, g.gender, g.phone,
+            o.check_in_date, o.check_out_date, o.nights, o.guests,
+            o.amount, o.status,
+            o.add_on_order_id
+            FROM orders AS o
+            INNER JOIN guests AS g ON o.guest_id=g.guest_id 
+            WHERE order_id={order_id}
+        """
+        self.cur.execute(sql)
+        data = self.cur.fetchone()
+        return data
+
+    def getOrdersByDataType(self, search_list=None):
+        '''
+        search_list = [data_type, keyword]
+        None則，調用所有訂單
+        '''
+        sql = f"""
+            SELECT o.order_id,  o.create_datetime, 
+            g.last_name, g.gender, g.phone AS phone,
+            o.check_in_date, o.check_out_date, o.nights, o.guests,
+            o.amount, o.status,
+            o.add_on_order_id
+            FROM orders AS o
+            INNER JOIN guests AS g ON o.guest_id=g.guest_id
+        """
+        if search_list:
+            sql += f" WHERE {search_list[0]}='{search_list[1]}'"
+
+        # 訂單建立時間 由近到遠
+        sql += f" ORDER BY o.create_datetime DESC"
+        
+        self.cur.execute(sql)
+        data = self.cur.fetchall()
+        return data
+
     def getBookingListByDate(self, start_date_string, end_date_string, filter_none=True):
+        cols = [
+            "date", "room_no", "order_id", "weekday", "is_holiday", "holiday_note", 
+            "booker_name", "booker_gender", "booker_phone"
+        ]
         filter_string = "INNER"
         
         if not filter_none:
             filter_string = "LEFT"
-        cols = ["date", "room_no", "order_id", "weekday", "is_holiday", "holiday_note", "booker_name", "booker_gender", "booker_phone"]
         sql = f"""
             SELECT c.date, b.room_no, b.order_id, 
             c.weekday, c.is_holiday, c.note, 
@@ -118,7 +161,6 @@ class Mydb:
 
 if __name__=="__main__": 
     mydb = Mydb()
-    data = mydb.getBookingListByDate("2021-12-28", "2022-01-02")[0]
-    del mydb
+    data = mydb.getOrders(order_status="NEW")
 
     print(data)

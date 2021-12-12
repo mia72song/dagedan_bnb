@@ -1,20 +1,97 @@
-from flask import make_response
+from flask import make_response, jsonify
 from datetime import datetime
 import json
 from flask_jwt_extended import jwt_required
 
 from . import auth
 from model.db import Mydb
-from constants import DATE_FORMATTER
+from constants import DATE_FORMATTER, DATETIME_FORMATTER
 
+def orderFormatter(result):
+    cols = [
+            "order_id", "create_datetime", "booker_name", "booker_gender", "booker_phone",
+            "check_in_date", "check_out_date", "nights", "guests", "amount", "order_status",
+            "add_on_order_id"
+        ]
+    data_dict = dict(zip(cols, result))
+    data_dict["create_datetime"] = datetime.strftime(data_dict["create_datetime"], DATETIME_FORMATTER)
+    data_dict["check_in_date"] = datetime.strftime(data_dict["check_in_date"], DATE_FORMATTER)
+    data_dict["check_out_date"] = datetime.strftime(data_dict["check_out_date"], DATE_FORMATTER)
+    data_dict["amount"] = float(data_dict["amount"])
+    return data_dict
 
 @auth.route("/order/<int:order_id>")
 @jwt_required()
 def get_order_by_id(order_id):
-    pass
+    body = ""
+    status_code = 0
+    try:
+        mydb = Mydb()
+        data = mydb.getOrderById(order_id)
+        data_dict = None
+        if data:
+            data_dict = orderFormatter(data)
+
+        body = jsonify({"data": data_dict})
+        status_code = 200
+
+    except Exception as e:
+        body = jsonify({
+            "error": True,
+            "message": f"伺服器內部錯誤：{e}"
+        })
+        status_code = 500
+
+    return body, status_code
+
+@auth.route("/orders/<data_type>=<keyword>")
+@jwt_required()
+def get_orders_by_keyword(data_type, keyword):
+    # data_type: status, phone, check_in_date
+    body = ""
+    status_code = 0
+    try:
+        mydb = Mydb()
+        data = mydb.getOrdersByDataType([data_type, keyword.upper()])
+        data_list = []
+        if data:
+            for d in data:
+                data_list.append(orderFormatter(d))
+
+        body = jsonify({"data": data_list})
+        status_code = 200
+
+    except Exception as e:
+        body = jsonify({
+            "error": True,
+            "message": f"伺服器內部錯誤：{e}"
+        })
+        status_code = 500
+
+    return body, status_code
 
 @auth.route("/orders")
 @jwt_required()
 def get_orders():
-    pass
+    body = ""
+    status_code = 0
+    try:
+        mydb = Mydb()
+        data = mydb.getOrdersByDataType()
+        data_list = []
+        if data:
+            for d in data:
+                data_list.append(orderFormatter(d))
+
+        body = jsonify({"data": data_list})
+        status_code = 200
+
+    except Exception as e:
+        body = jsonify({
+            "error": True,
+            "message": f"伺服器內部錯誤：{e}"
+        })
+        status_code = 500
+
+    return body, status_code
 

@@ -7,69 +7,96 @@
 {% block content %}
     <main>
         <nav>
-            <div id="status_wrap">
-                <!--由StatusSearch組件渲染-->
-            </div>
-            <div id="keyword_wrap">
-                <!--由SearchNav組件渲染-->
-            </div>
+            <!--由Search組件渲染-->
         </nav>
         <div id="databox">
-
+            <!--由DataBox組件渲染-->
         </div>
     </main>
     <script type="text/babel">
-        class StatusSearch extends React.Component{
+        class DataBox extends React.Component{
             state = {
-                order_status: "new"
+                cols: []
+            }
+            componentDidMount(){
+
             }
             render(){
                 return(
-                    <div>
-                        <label for="">訂單狀態</label>
-                        <select value={this.state.order_status} onChange={this.handleChange}>
-                            <option value="new">新訂單</option>
-                            <option value="all">全部訂單</option>
-                            <option value="paid">已付款</option>
-                            <option value="cancel">取消</option>
-                        </select>
-                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 )
             }
-            handleChange=(eObj)=>{
-                this.setState({
-                    order_status: eObj.target.value
-                })
+            componentWillUnmount(){
+
             }
         }
-        class KeywordSearch extends React.Component{
+        class Search extends React.Component{
             state = {
-                select: "order_id",
+                order_status: "new",
+                select: "",
                 keyword: ""
+            }
+            componentDidMount(){
+                if(location.search){
+                    this.setState({
+                        order_status: "all",
+                        select: "order_id",
+                        keyword: location.search.split("=")[1]
+                    })
+                }else{
+
+                }
             }
             render(){
                 return(
-                    <div>
-                        <label for="">搜尋項目</label>
-                        <select value={this.state.select} onChange={this.handleChange("select")}>
-                            <option value="order_id">訂單編號</option>
-                            <option value="phone">聯絡電話</option>
-                            <option value="checkin_date">入住日期</option>
-                            <option value="create_date">訂房日期</option>
-                        </select>
-                        <input type="text" name="keyword" id="keyword" placeholder="請輸入關鍵字"
-                            value={this.state.keyword} onChange={this.handleChange("keyword")}/>
-                        <button type="submit" onClick={this.handleSubmit}>搜尋</button>
+                    <div id="wrap">
+                        <div id="status_wrap">
+                            <label for="">訂單狀態</label>
+                            <select value={this.state.order_status} onChange={this.handleChange("order_status")}>
+                                <option value="new">新訂單</option>
+                                <option value="all">全部訂單</option>
+                                <option value="paid">已付款</option>
+                                <option value="cancel">取消</option>
+                            </select>
+                        </div>
+                        <div id="keyword_wrap">
+                            <label for="">搜尋項目</label>
+                            <select value={this.state.select} onChange={this.handleChange("select")}>
+                                <option value="">請選取搜尋項目</option>
+                                <option value="order_id">訂單編號</option>
+                                <option value="phone">聯絡電話</option>
+                                <option value="checkin_date">入住日期</option>
+                            </select>
+                            <input type="text" name="keyword" id="keyword" placeholder="請輸入關鍵字"
+                                value={this.state.keyword} onChange={this.handleChange("keyword")}/>
+                            <button type="submit" onClick={this.handleSubmit}>搜尋</button>
+                        </div>
                     </div>
                 )
-            }
-            handleSubmit=(eObj)=>{
-                console.log(eObj);
             }
             handleChange=(dataType)=>{
                 return(eObj=>{
                     this.setState({[dataType]: eObj.target.value});
                 })
+            }
+            handleSubmit=(eObj)=>{
+                if(this.state.select=="" || this.state.keyword==""){
+                    alert("搜尋項目及關鍵字皆不得為空")
+                    return
+                }else{
+                    console.log(this.state);
+                }
             }
         }
         addEventListener("load", ()=>{
@@ -77,8 +104,7 @@
                 // console.log(currentUser)
                 if(currentUser!==null){
                     ReactDOM.render(<Banner id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
-                    ReactDOM.render(<StatusSearch />, document.querySelector("#status_wrap"));
-                    ReactDOM.render(<KeywordSearch />, document.querySelector("#keyword_wrap"));
+                    ReactDOM.render(<Search />, document.querySelector("nav"));
                 }else{
                     location.href = `${window.origin}/admin/`
                 }
