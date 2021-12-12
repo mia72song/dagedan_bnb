@@ -117,15 +117,9 @@
             let search_sting = (location.search).replace("?", "").split("&");
             let check_in_date = (search_sting[0].split("="))[1];
             getBookingList(check_in_date).then(resp=>{
-                let week = resp.data;
-                let y = week[0].date.substring(0,4)
-                let m = week[0].date.substring(5,7)
-                this.setState({
-                    y,
-                    m,
-                    week
-                })
-                
+                if(resp.data){
+                    console.log(resp.data);
+                }
             })      
         }
         render(){

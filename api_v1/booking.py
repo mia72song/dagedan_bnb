@@ -4,13 +4,12 @@ import json
 
 from . import api
 from model.db import Mydb
-from utils import dateFormatter
+from constants import DATE_FORMATTER
 
-# 將由資料庫取得的預約日曆資料，整理成dict格式
-def calendarFormatter(result):
-    cols = ["date", "booked", "weekday", "is_holiday", "note"]
-    data_dict = dict(zip(cols, result))
-    data_dict["date"] = datetime.strftime(data_dict["date"], dateFormatter)
+# 將由資料庫取得的已預約日曆資料，整理成dict格式
+def calendarFormatter(result, cols):
+    data_dict = dict(zip(cols[:5], result[:5]))
+    data_dict["date"] = datetime.strftime(data_dict["date"], DATE_FORMATTER)
 
     is_holiday = False
     if data_dict["is_holiday"]:
@@ -21,19 +20,20 @@ def calendarFormatter(result):
 
 @api.route("/booking/start=<start_date_string>")
 def get_booking_by_weekly_calendar(start_date_string):
-    start_date = datetime.strptime(start_date_string, dateFormatter)
+    start_date = datetime.strptime(start_date_string, DATE_FORMATTER)
     end_date = start_date+timedelta(days=6)
-    end_date_string = datetime.strftime(end_date, dateFormatter)
+    end_date_string = datetime.strftime(end_date, DATE_FORMATTER)
     body = ""
     status_code = 0
     try:
         mydb = Mydb()
-        data = mydb.getBookingByDate(start_date_string, end_date_string)
-        booked_calendar = []
-        for d in data:
-            if d:
-                date_dict = calendarFormatter(d)
-                booked_calendar.append(date_dict)
+        data, cols = mydb.getBookingListByDate(start_date_string, end_date_string)
+        booked_calendar = None
+        if data:
+            booked_calendar = []
+            for d in data:
+                data_dict = calendarFormatter(d, cols)
+                booked_calendar.append(data_dict)
 
         body = json.dumps({
             "data": booked_calendar

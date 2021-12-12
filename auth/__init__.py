@@ -2,4 +2,4 @@ from flask import Blueprint
 
 auth = Blueprint("auth", __name__)
 
-from . import order, user
+from . import order, user, booking

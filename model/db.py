@@ -52,44 +52,27 @@ class Mydb:
         print("密碼已更新")
     '''
 
-    def getBookingByDate(self, start_date_string, end_date_string, formatter=True):
+    def getBookingListByDate(self, start_date_string, end_date_string, filter_none=True):
+        filter_string = "INNER"
+        
+        if not filter_none:
+            filter_string = "LEFT"
+        cols = ["date", "room_no", "order_id", "weekday", "is_holiday", "holiday_note", "booker_name", "booker_gender", "booker_phone"]
         sql = f"""
-            SELECT c.date, b.room_no, b.order_id, c.weekday, c.is_holiday, c.note FROM calendar AS c
-            LEFT JOIN booking AS b ON b.date=c.date
+            SELECT c.date, b.room_no, b.order_id, 
+            c.weekday, c.is_holiday, c.note, 
+            g.last_name, g.gender, g.phone 
+            FROM calendar AS c
+            {filter_string} JOIN booking AS b ON b.date=c.date
+            {filter_string} JOIN orders AS o ON o.order_id=b.order_id
+            {filter_string} JOIN guests AS g ON g.guest_id=o.guest_id
             WHERE c.date<='{end_date_string}' AND c.date>='{start_date_string}'
             ORDER BY c.date, b.room_no
-            """
+        """
         self.cur.execute(sql)
         data = self.cur.fetchall()
-        
-        return data
+        return data, cols
 
-    def getOrdersByDate(self, start_date_string, end_date_string):
-        sql = f"""
-            SELECT b.date, b.room_no, b.order_id, o.name, o.gender, o.phone
-            FROM booking AS b
-            INNER JOIN orders AS o ON b.order_id=o.order_id
-            WHERE b.date<='{end_date_string}' AND b.date>='{start_date_string}'
-            ORDER BY b.date, b.room_no
-            """
-        self.cur.execute(sql)
-        data = self.cur.fetchall()
-        return data
-
-    def getOrderByStatus(self, status):
-        sql = f"SELECT * FROM orders WHERE status"
-
-    def getOrderByKeyword(self, data_type, keyword):
-        # data_type：order_id, check_in_date, phone
-        if data_type=="order_id":
-            sql = f"SELECT * FROM orders WHERE order_id={keyword}"
-        else:
-            sql = f"SELECT * FROM orders WHERE {data_type}='{keyword}'"
-        
-        self.cur.execute(sql)
-        data = self.cur.fetchone()
-        return data
-    
     def getRooms(self, type=None, room_no=None):
         sql = f"""SELECT r.room_no, r.name, r.room_type, 
             rt.accommodate, rt.rate_weekday, rt.rate_holiday, rt.single_discount,
@@ -126,17 +109,16 @@ class Mydb:
                 sql = f"INSERT INTO calendar VALUES ('{date}', '{row['星期']}',{is_holiday}, '{row['備註']}')"
                 self.cur.execute(sql)
                 self.conn.commit()
-            print(f"{csv_file_mane}已寫入資料庫")
-
+            
     def __del__(self):
         self.cur.close()
         self.conn.close()
         print("資料庫已關閉!!")
 
 
-if __name__=="__main__":    
+if __name__=="__main__": 
     mydb = Mydb()
-    data = mydb.getOrderByKeyword(data_type="check_in_date", keyword="2021-12-29")
+    data = mydb.getBookingListByDate("2021-12-28", "2022-01-02")[0]
     del mydb
 
     print(data)
