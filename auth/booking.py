@@ -5,7 +5,6 @@ from flask_jwt_extended import jwt_required
 
 from . import auth
 from model.db import Mydb
-
 from constants import DATE_FORMATTER
 
 # 將由資料庫取得的預約日曆資料，整理成dict格式

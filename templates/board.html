@@ -31,19 +31,6 @@
                 })
             }
             render(){
-                let prvPage = (
-                    <th id="prv_page">
-                        <a href="">歷史訂單</a>
-                    </th>
-                );
-                if(this.state.page!==0){
-                    prvPage = (
-                        <th id="prv_page">
-                            <a href="/admin/board">回本週</a>
-                            <p><a href="javascript: void(0)" onClick={this.toNextPage(-1)}>上週</a></p>                            
-                        </th>
-                    )
-                }
                 const week = this.state.week;
                 const rooms = this.state.rooms;
                 let calendar_content = [];
@@ -59,7 +46,16 @@
                                 <th colspan="9"><h1>{this.state.y} 年 - {this.state.m} 月</h1></th>
                             </tr>
                             <tr className="calendar_tr">
-                                {prvPage}
+                                {this.state.page!==0 ? (
+                                    <th id="prv_page">
+                                        <a href="/admin/board">回本週</a>
+                                        <p><a href="javascript: void(0)" onClick={this.toNextPage(-1)}>上週</a></p>                            
+                                    </th>
+                                ) : (
+                                    <th id="prv_page">
+                                        <a href="">歷史訂單</a>
+                                    </th>
+                                )}
                                 { calendar_content }
                                 <th id="next_page">
                                     <a href="javascript: void(0)" onClick={this.toNextPage(1)}>下週</a>
@@ -97,14 +93,9 @@
         }
         class DayColumn extends React.Component{
             render(){
-                let holiday_class = null;
-                if(this.props.data.is_holiday){
-                    holiday_class = "holiday"
-                }
-                let d = ((this.props.data.date).split("-"))[2]
                 return(
-                    <th className={holiday_class}>
-                        <h2>{d}</h2>
+                    <th className={this.props.data.is_holiday ? "holiday" : null}>
+                        <h2>{((this.props.data.date).split("-"))[2]}</h2>
                         <p>{this.props.data.weekday}</p>
                         <p id="note">{this.props.data.note}</p>
                     </th>
@@ -126,7 +117,6 @@
                     )
                     week_content.push(td);               
                 });
-                let btn_id = room.room_no+"_btn";
                 return(
                     <tr className="row">
                         <th>{room.name}-{room.room_no}</th>
@@ -157,10 +147,8 @@
                 let href = "#";
                 if(booked.length>0){
                     booked.forEach(b=>{
-                        let gender = "Mr.";
-                        if(b.booker_gender=="F"){ gender = "Miss"; }
                         if(b.bid===id){
-                            a_content = <p>{gender} {b.booker_name} {b.booker_phone}</p>;
+                            a_content = <p>{b.booker_gender=="F" ? "Miss" : "Mr."} {b.booker_name} {b.booker_phone}</p>;
                             href = `/admin/order?id=${b.order_id}`;
                         }
                     })
@@ -185,7 +173,6 @@
                     location.href = `${window.origin}/admin/`
                 }
             })
-        })
-                
+        })       
     </script>
 {% endblock %}

@@ -4,7 +4,6 @@ import json
 
 from . import api
 from model.db import Mydb
-
 from constants import DATE_FORMATTER
 
 # 將由資料庫取得的預約日曆資料，整理成dict格式
