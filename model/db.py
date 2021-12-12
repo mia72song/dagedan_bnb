@@ -8,8 +8,6 @@ sys.path.append("..")
 from dotenv import load_dotenv
 load_dotenv()
 
-from utils import dateFormatter
-
 db_info = {
     "host": os.getenv("DB_HOST", default="localhost"),
     "port": 3306,
@@ -53,77 +51,65 @@ class Mydb:
         self.conn.commit()
         print("密碼已更新")
     '''
-    def __getBookedList(self, data):
-        data = list(data)
-        for i in range(len(data)):
-            data[i] = list(data[i])
-            d = data[i]
-            del d[2]
-            booked = []
-            if d[0]==data[i-1][0]:
-                booked = data[i-1][1]
-                booked.append(d[1])
-                d[1] = booked
-                data[i-1] = None
-                continue
-            
-            if d[1] :                
-                booked.append(d[1])
-                d[1] = booked         
-                                
-        return data
 
-    def getBookingByDate(self, start_date, end_date, opendata=True):
-        '''
-        Parameters
-        ----------
-        start_date : String，格式yyyy-mm-dd
-        end_date : String，格式yyyy-mm-dd
-        '''
+    def getBookingByDate(self, start_date_string, end_date_string, formatter=True):
         sql = f"""
             SELECT c.date, b.room_no, b.order_id, c.weekday, c.is_holiday, c.note FROM calendar AS c
             LEFT JOIN booking AS b ON b.date=c.date
-            WHERE c.date<='{end_date}' AND c.date>='{start_date}'
+            WHERE c.date<='{end_date_string}' AND c.date>='{start_date_string}'
             ORDER BY c.date, b.room_no
             """
         self.cur.execute(sql)
         data = self.cur.fetchall()
-        if opendata:
-            return self.__getBookedList(data)
-        else:
-            return data
+        
+        return data
 
-    def getOrdersByDate(self, start_date, end_date):
+    def getOrdersByDate(self, start_date_string, end_date_string):
         sql = f"""
             SELECT b.date, b.room_no, b.order_id, o.name, o.gender, o.phone
             FROM booking AS b
             INNER JOIN orders AS o ON b.order_id=o.order_id
-            WHERE b.date<='{end_date}' AND b.date>='{start_date}'
+            WHERE b.date<='{end_date_string}' AND b.date>='{start_date_string}'
             ORDER BY b.date, b.room_no
             """
         self.cur.execute(sql)
         data = self.cur.fetchall()
         return data
 
-    def getOrdersById(self, order_id):
-        sql = f"SELECT * FROM orders WHERE order_id={order_id}"
+    def getOrderByStatus(self, status):
+        sql = f"SELECT * FROM orders WHERE status"
+
+    def getOrderByKeyword(self, data_type, keyword):
+        # data_type：order_id, check_in_date, phone
+        if data_type=="order_id":
+            sql = f"SELECT * FROM orders WHERE order_id={keyword}"
+        else:
+            sql = f"SELECT * FROM orders WHERE {data_type}='{keyword}'"
+        
         self.cur.execute(sql)
         data = self.cur.fetchone()
         return data
-
-    def getCalendar(self, start_date, end_date):
-        sql = f"SELECT * FROM calendar WHERE date<='{end_date}' AND date>='{start_date}'"
-        self.cur.execute(sql)
-        data = self.cur.fetchall()
-        return data
     
-    def getRooms(self):
+    def getRooms(self, type=None, room_no=None):
         sql = f"""SELECT r.room_no, r.name, r.room_type, 
             rt.accommodate, rt.rate_weekday, rt.rate_holiday, rt.single_discount,
             rt.discribe, rt.images
             FROM rooms AS r
             INNER JOIN room_type AS rt ON rt.type=r.room_type
-            WHERE is_available=1"""
+            WHERE r.is_available=1"""
+
+        if type:
+            sql += f" AND r.room_type='{type}'"
+        
+        if room_no:
+            sql += f" AND r.room_no='{room_no}'"
+        
+        self.cur.execute(sql)
+        data = self.cur.fetchall()
+        return data
+
+    def getCalendar(self, start_date_string, end_date_string):
+        sql = f"SELECT * FROM calendar WHERE date<='{end_date_string}' AND date>='{start_date_string}'"
         self.cur.execute(sql)
         data = self.cur.fetchall()
         return data
@@ -148,12 +134,9 @@ class Mydb:
         print("資料庫已關閉!!")
 
 
-if __name__=="__main__":
-    # 中華民國政府行政機關辦公日曆表(csv檔)：https://data.gov.tw/dataset/14718
-    lastest_csv = "111年中華民國政府行政機關辦公日曆表.csv"
-    
+if __name__=="__main__":    
     mydb = Mydb()
-    data = mydb.getOrdersById(1)
+    data = mydb.getOrderByKeyword(data_type="check_in_date", keyword="2021-12-29")
     del mydb
 
     print(data)
