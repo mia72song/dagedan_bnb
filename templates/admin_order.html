@@ -3,6 +3,7 @@
 {% block head %}
     {{ super() }}
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/order.css") }}>
+    <script type="text/javascript" src={{ url_for("static", filename="js/order.js") }}></script>
 {% endblock %}
 {% block content %}
     <main>
@@ -15,30 +16,72 @@
     </main>
     <script type="text/babel">
         class DataBox extends React.Component{
-            state = {
-                cols: []
-            }
-            componentDidMount(){
-
-            }
             render(){
+                let content;
+                if(this.props.data.length>0){
+                    content = this.props.data.map(d=><DataRow key={d.order_id} data={d}/>)
+                }
                 return(
                     <table>
                         <thead>
-                            <tr>
-                                <th></th>
-                            </tr>
+                            <Thead />
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                            </tr>
+                            { content }
                         </tbody>
                     </table>
                 )
             }
-            componentWillUnmount(){
-
+        }
+        class Thead extends React.Component{
+            state = {
+                cols: [
+                    {id: "order_id_col", name: "訂單編號"},
+                    {id: "create_datetime_col", name: "建立時間"},
+                    {id: "date_col", name: "入住 / 退房日期"},
+                    {id: "nights_col", name: "天數"},
+                    {id: "room_type_col", name: "房型"},
+                    {id: "guests_col", name: "人數"},
+                    {id: "amount_col", name: "總金額"},
+                    {id: "booker_info_col", name: "聯絡資訊"},
+                    {id: "add_on_service_col", name: "附加服務"},
+                    {id: "order_status_col", name: "訂單狀態"},
+                    {id: "note_col", name: "備註"}
+                ]
+            }
+            render(){
+                return(
+                    <tr>
+                        { this.state.cols.map(col=><th id={col.id}>{col.name}</th>) }
+                    </tr>
+                )
+            }
+        }
+        class DataRow extends React.Component{
+            render(){
+                const data = this.props.data;
+                console.log(data)
+                return(
+                    <tr>
+                        <td>{data.order_id}</td>
+                        <td>{data.create_datetime}</td>
+                        <td>
+                            <p>{data.check_in_date}/</p>
+                            <p>{data.check_out_date}</p>
+                        </td>
+                        <td>{data.nights}</td>
+                        <td>海旅雙人套房</td>
+                        <td>{data.guests}</td>
+                        <td>{data.amount}</td>
+                        <td>
+                            <p>{data.booker_name} {data.booker_gender=="F"? "小姐" : "先生"}</p>
+                            <p>{data.booker_phone}</p>
+                        </td>
+                        <td>{data.add_on_order_id}</td>
+                        <td>{data.order_status}</td>
+                        <td>備註</td>
+                    </tr>
+                )
             }
         }
         class Search extends React.Component{
@@ -48,15 +91,20 @@
                 keyword: ""
             }
             componentDidMount(){
-                if(location.search){
+                let p;
+                if(location.pathname.split("/")[3]){
+                    p = getOrderById(location.pathname.split("/")[3])
                     this.setState({
                         order_status: "all",
                         select: "order_id",
-                        keyword: location.search.split("=")[1]
+                        keyword: location.pathname.split("/")[3]
                     })
-                }else{
-
+                }else if(location.pathname=="/admin/orders"){
+                    p = getOrdersByStatus(this.state.order_status)
                 }
+                p.then(data=>{
+                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
+                })
             }
             render(){
                 return(
@@ -76,9 +124,9 @@
                                 <option value="">請選取搜尋項目</option>
                                 <option value="order_id">訂單編號</option>
                                 <option value="phone">聯絡電話</option>
-                                <option value="checkin_date">入住日期</option>
+                                <option value="check_in_date">入住日期</option>
                             </select>
-                            <input type="text" name="keyword" id="keyword" placeholder="請輸入關鍵字"
+                            <input type={this.state.select=="check_in_date" ? "date" : "text"} name="keyword" id="keyword" placeholder="請輸入關鍵字"
                                 value={this.state.keyword} onChange={this.handleChange("keyword")}/>
                             <button type="submit" onClick={this.handleSubmit}>搜尋</button>
                         </div>
@@ -87,7 +135,18 @@
             }
             handleChange=(dataType)=>{
                 return(eObj=>{
-                    this.setState({[dataType]: eObj.target.value});
+                    if(dataType=="order_status"){
+                        getOrdersByStatus(eObj.target.value).then(data=>{
+                            ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
+                            this.setState({
+                                order_status: eObj.target.value,
+                                select: "",
+                                keyword: ""
+                            })
+                        })
+                    }else{
+                        this.setState({[dataType]: eObj.target.value});
+                    }
                 })
             }
             handleSubmit=(eObj)=>{
@@ -95,7 +154,19 @@
                     alert("搜尋項目及關鍵字皆不得為空")
                     return
                 }else{
-                    console.log(this.state);
+                    const {order_status, select, keyword} = this.state;
+                    if(select=="order_id"){
+                        location.href = `/admin/order/${keyword}`
+                    }else{
+                        let p = getOrdersByKeyword(select, keyword).then(data=>{
+                            ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
+                            this.setState({
+                                order_status: "all",
+                                select,
+                                keyword
+                            })
+                        })
+                    }                    
                 }
             }
         }

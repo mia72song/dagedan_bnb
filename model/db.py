@@ -68,7 +68,7 @@ class Mydb:
         data = self.cur.fetchone()
         return data
 
-    def getOrdersByDataType(self, search_list=None):
+    def getOrdersByDataType(self, search_list=[]):
         '''
         search_list = [data_type, keyword]
         None則，調用所有訂單
@@ -161,6 +161,6 @@ class Mydb:
 
 if __name__=="__main__": 
     mydb = Mydb()
-    data = mydb.getOrders(order_status="NEW")
+    data = mydb.getOrdersByDataType("order_id", 1)
 
     print(data)

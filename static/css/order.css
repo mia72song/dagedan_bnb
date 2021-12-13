@@ -6,6 +6,7 @@ main{
     text-align: center;
     margin-top: 25px;
     display: flex;
+    height: 60px;
 }
 #wrap>div{
     line-height: 2;
@@ -31,4 +32,26 @@ select{
     outline-style: none;
     padding: 2px;
     height: 31px;
+}
+#databox{
+    margin: 0 auto;
+    
+}
+#order_id_col, #create_datetime_col, #date_col, #booker_info_col, #order_status_col, #note_col{
+    width: 120px;
+}
+#nights_col, #guests_col{
+    width: 20px;
+}
+#room_type_col, #amount_col, #add_on_service_col{
+    width: 40px;
+}
+thead{
+    background-color: lightblue;
+}
+th{
+    padding: 1px 4px;
+}
+td{
+    padding: 3px 8px;
 }

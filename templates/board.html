@@ -148,7 +148,7 @@
                     booked.forEach(b=>{
                         if(b.bid===id){
                             a_tag = (
-                                <a href={`/admin/order?id=${b.order_id}`} className="order_link">
+                                <a href={`/admin/order/${b.order_id}`} className="order_link">
                                     {b.booker_gender=="F" ? "Miss" : "Mr."} {b.booker_name} {b.booker_phone}
                                 </a>
                             )

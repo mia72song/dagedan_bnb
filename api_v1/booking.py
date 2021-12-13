@@ -6,7 +6,7 @@ from . import api
 from model.db import Mydb
 from constants import DATE_FORMATTER
 
-# 將由資料庫取得的已預約日曆資料，整理成dict格式
+# 將由資料庫取得的已預約日曆，整理成dict格式
 def calendarFormatter(result, cols):
     data_dict = dict(zip(cols[:5], result[:5]))
     data_dict["date"] = datetime.strftime(data_dict["date"], DATE_FORMATTER)

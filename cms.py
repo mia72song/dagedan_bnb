@@ -15,8 +15,12 @@ def board():
 def get_room_list():
     return render_template("admin_room.html")
 
-@admin.route("/order")
+@admin.route("/orders")
 def get_order_list():
+    return render_template("admin_order.html")
+
+@admin.route("/order/<int:order_id>")
+def get_order_list_by_id(order_id):
     return render_template("admin_order.html")
 
 @admin.route("/guest")

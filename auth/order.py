@@ -1,12 +1,12 @@
-from flask import make_response, jsonify
+from flask import jsonify
 from datetime import datetime
-import json
 from flask_jwt_extended import jwt_required
 
 from . import auth
 from model.db import Mydb
 from constants import DATE_FORMATTER, DATETIME_FORMATTER
 
+# 將由資料庫取得的訂單，整理成dict格式
 def orderFormatter(result):
     cols = [
             "order_id", "create_datetime", "booker_name", "booker_gender", "booker_phone",
@@ -21,16 +21,16 @@ def orderFormatter(result):
     return data_dict
 
 @auth.route("/order/<int:order_id>")
-@jwt_required()
+#@jwt_required()
 def get_order_by_id(order_id):
     body = ""
     status_code = 0
     try:
         mydb = Mydb()
         data = mydb.getOrderById(order_id)
-        data_dict = None
+        data_dict = []
         if data:
-            data_dict = orderFormatter(data)
+            data_dict.append(orderFormatter(data))
 
         body = jsonify({"data": data_dict})
         status_code = 200
@@ -45,7 +45,7 @@ def get_order_by_id(order_id):
     return body, status_code
 
 @auth.route("/orders/<data_type>=<keyword>")
-@jwt_required()
+#@jwt_required()
 def get_orders_by_keyword(data_type, keyword):
     # data_type: status, phone, check_in_date
     body = ""
@@ -71,7 +71,7 @@ def get_orders_by_keyword(data_type, keyword):
     return body, status_code
 
 @auth.route("/orders")
-@jwt_required()
+#@jwt_required()
 def get_orders():
     body = ""
     status_code = 0

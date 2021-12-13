@@ -6,7 +6,7 @@ from . import api
 from model.db import Mydb
 from constants import DATE_FORMATTER
 
-# 將由資料庫取得的預約日曆資料，整理成dict格式
+# 將由資料庫取得的預約日曆，整理成dict格式
 def calendarFormatter(result):
     cols = ["date", "weekday", "is_holiday", "note"]
     data_dict = dict(zip(cols, result))
