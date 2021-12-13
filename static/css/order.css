@@ -3,55 +3,56 @@ main{
     margin: 0 auto;
 }
 #wrap{
-    text-align: center;
-    margin-top: 25px;
-    display: flex;
+    margin-top: 20px;
     height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 #wrap>div{
-    line-height: 2;
-    height: 50px;
-    line-height: 50px;
+    margin: 0 auto;
 }
-#status_wrap{
-    width: 40%;
-    text-align: center;
-}
-#keyword_wrap{
-    width: 60%;
-    text-align: left;
-}
-select, input{
+input, select{
     width: 150px;
+    margin-left: 10px;
+    height: 35px;
+    padding-left: 5px;
+    vertical-align:middle;
 }
-select{
-    line-height: 1.8;
-    margin: 10px;
-    border-radius: 5px;
-    border: 1.5px black solid;
-    outline-style: none;
-    padding: 2px;
-    height: 31px;
+.btn{
+    margin: 0 10px;
+    border-radius: 8px;
 }
+
+
 #databox{
     margin: 0 auto;
-    
+    margin-top: 15px;
 }
-#order_id_col, #create_datetime_col, #date_col, #booker_info_col, #order_status_col, #note_col{
-    width: 120px;
+
+thead, th{
+    text-align: center;
+    vertical-align: middle;
 }
-#nights_col, #guests_col{
-    width: 20px;
+
+#order_status_col{
+    width: 75px;
 }
 #room_type_col, #amount_col, #add_on_service_col{
-    width: 40px;
+    width: 50px;
 }
-thead{
-    background-color: lightblue;
+#nights_col, #guests_col{
+    width: 25px;
 }
-th{
-    padding: 1px 4px;
+#paid_btn, #pay_btn{
+    margin-left: 20px;
+    border-radius: 3px;
 }
-td{
-    padding: 3px 8px;
+#paid_btn{
+    border: 2px green solid;
+    color: green;
+    background-color: white;
+}
+td>select{
+    width: inherit;
 }

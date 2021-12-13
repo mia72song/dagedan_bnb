@@ -1,50 +1,35 @@
-table{
+#board{
+    width: 1000px;
     margin: 0 auto;
 }
-table, th, td {
-    border: 1px solid black;
+.calendar_tr{
+    height: 55px;
 }
 th{
-    width: 100px;
-    color: green;
+    text-align: center;
+    width: 110px;
 }
-td{
+#prv_page, #next_page{
     text-align: center;
     vertical-align: middle;
-    height: 60px;
-}
-/*thead*/
-.calendar_tr{
-    height: 100px;
-}
-#prv_page>p{
-    line-height: 3;
+    color: lightskyblue;
 }
 .holiday{
-    background-color: pink;
+    color: red;
 }
-#note{
+#date_note{
     font-size: 8px;
-    color: gray;
-    margin-top: 3px;
-    height: 12px;
+    height: 8px;
 }
-/*tbody*/
-tbody{
-    color:blue;
-    height:50px;
+.room_type{
+    color: #0d6efd;
 }
-.order_link{
-    text-align: left;
-    font-size: 14px;
-    font-weight: bold;
+.btn-light{
+    border: 1.5px black solid;
+    font-weight: lighter;
+    background-color: whitesmoke;
 }
-.order_link>p{
-    margin: 0 5px;
-}
-button{
-    width: 75px;
-}
-#check_in_date_input{
-    
+td>a{
+    color: green;
+    font-weight: 550;
 }

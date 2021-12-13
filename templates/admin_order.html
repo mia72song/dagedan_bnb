@@ -22,7 +22,7 @@
                     content = this.props.data.map(d=><DataRow key={d.order_id} data={d}/>)
                 }
                 return(
-                    <table>
+                    <table className="table">
                         <thead>
                             <Thead />
                         </thead>
@@ -43,10 +43,9 @@
                     {id: "room_type_col", name: "房型"},
                     {id: "guests_col", name: "人數"},
                     {id: "amount_col", name: "總金額"},
-                    {id: "booker_info_col", name: "聯絡資訊"},
+                    {id: "booker_info_col", name: "訂房人"},
                     {id: "add_on_service_col", name: "附加服務"},
-                    {id: "order_status_col", name: "訂單狀態"},
-                    {id: "note_col", name: "備註"}
+                    {id: "order_status_col", name: "訂單狀態"}
                 ]
             }
             render(){
@@ -58,9 +57,16 @@
             }
         }
         class DataRow extends React.Component{
+            state = {
+                status: "new"
+            }
+            componentDidMount(){
+                this.setState({
+                    status: this.props.data.order_status
+                })
+            }
             render(){
                 const data = this.props.data;
-                console.log(data)
                 return(
                     <tr>
                         <td>{data.order_id}</td>
@@ -74,16 +80,34 @@
                         <td>{data.guests}</td>
                         <td>{data.amount}</td>
                         <td>
-                            <p>{data.booker_name} {data.booker_gender=="F"? "小姐" : "先生"}</p>
-                            <p>{data.booker_phone}</p>
+                            <p>{data.booker_name} {data.booker_gender=="F"? "小姐" : "先生"} {data.booker_phone}</p>
+                            <p>付款：<span id="payment_method">待確認(ATM)</span>
+                                {this.state.status=="paid" ? (
+                                    <button id="paid_btn">付款資料</button>
+                                ):(
+                                    <button id="pay_btn">確認轉帳</button>
+                                )}
+                                
+                            </p>
                         </td>
                         <td>{data.add_on_order_id}</td>
-                        <td>{data.order_status}</td>
-                        <td>備註</td>
+                        <td>
+                            <select value={this.state.status} onChange={this.changeStatus}>
+                                <option value="new">新訂單</option>
+                                <option value="paid">已付款</option>
+                                <option value="cancel">取消</option>
+                            </select>
+                        </td>
                     </tr>
                 )
             }
+            changeStatus=(eObj)=>{
+                this.setState({
+                    status: eObj.target.value
+                })
+            }
         }
+
         class Search extends React.Component{
             state = {
                 order_status: "new",
@@ -128,7 +152,7 @@
                             </select>
                             <input type={this.state.select=="check_in_date" ? "date" : "text"} name="keyword" id="keyword" placeholder="請輸入關鍵字"
                                 value={this.state.keyword} onChange={this.handleChange("keyword")}/>
-                            <button type="submit" onClick={this.handleSubmit}>搜尋</button>
+                            <button type="submit" className="btn btn-dark" onClick={this.handleSubmit}>搜尋</button>
                         </div>
                     </div>
                 )

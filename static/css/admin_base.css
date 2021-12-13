@@ -8,15 +8,11 @@ body{
     color: #1A1A1A;
 }
 a{
-    text-decoration: none;
+    text-decoration:none;
     cursor: pointer;
 }
 a:hover{
     text-decoration:underline;
-}
-button{
-    cursor: pointer;
-    line-height: 2;
 }
 /*header*/
 header{
@@ -36,7 +32,7 @@ header{
 
 /*main*/
 main{
-    margin-top: 25px;
+    margin-top: 20px;
 }
 #banner{
     display: flex;
@@ -51,60 +47,26 @@ main{
     margin-top: 13px;
 }
 .menu>a{
-    font-weight: bold;
     margin-left: 15px;
-    padding: 2px 10px;
+    padding: 3px 10px;
     padding-bottom: 20px;
     border-radius: 13px;
-    letter-spacing: 1.5px;
+    font-weight: 600;
 }
 .menu_checked{
     background-color: #0d6efd;    
     color: white;
 }
+.menu_checked:hover{
+    text-decoration:none;
+    color: white;
+}
 .menu_not_checked{
-    background-color: white;    
     color: #0d6efd;
 }
 .menu_not_checked:hover{
     text-decoration:underline;
 }
-.menu_checked:hover{
-    text-decoration:none;
-}
 #logout:hover{
     color: crimson;
-}
-/*form*/
-form{
-    margin: 15px 33px;
-}
-label{
-    letter-spacing: 2px;
-}
-input, button{
-    line-height: 1.8;
-    margin: 10px;
-}
-input{
-    border-radius: 5px;
-    border: 1.5px black solid;
-    outline-style: none;
-    padding: 2px;
-    padding-left: 7px;
-}
-input:focus{
-    border: 1.5px #0d6efd solid;
-}
-button{
-    background-color: #0d6efd; 
-    color: white;
-    width: 60px;
-    border: 2px #0d6efd solid;
-    border-radius: 10px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-button:hover{
-    
 }

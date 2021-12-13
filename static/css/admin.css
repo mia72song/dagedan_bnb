@@ -11,34 +11,3 @@ main{
     display: block;
     margin: auto;
 }
-form{
-    margin: 15px 33px;
-}
-label{
-    letter-spacing: 2px;
-}
-input, button{
-    line-height: 1.8;
-    margin: 10px;
-}
-input{
-    border-radius: 5px;
-    border: 1.5px black solid;
-    outline-style: none;
-    padding: 2px;
-}
-input:focus{
-    border: 1.5px #0d6efd solid;
-}
-button{
-    background-color: #0d6efd; 
-    color: white;
-    width: 60px;
-    border: 2px #0d6efd solid;
-    border-radius: 10px;
-    font-weight: bold;
-    letter-spacing: 1px;
-}
-button:hover{
-    
-}
