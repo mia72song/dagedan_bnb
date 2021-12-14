@@ -11,7 +11,7 @@ def index():
 def board():
     return render_template("board.html")
 
-@admin.route("/room")
+@admin.route("/rooms")
 def get_room_list():
     return render_template("admin_room.html")
 
@@ -23,6 +23,6 @@ def get_orders():
 def get_order_by_id(order_id):
     return render_template("admin_order.html")
 
-@admin.route("/guest")
+@admin.route("/guests")
 def get_guest_list():
     return render_template("admin_guest.html")
