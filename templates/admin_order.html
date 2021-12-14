@@ -4,6 +4,7 @@
     {{ super() }}
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/order.css") }}>
     <script type="text/javascript" src={{ url_for("static", filename="js/order.js") }}></script>
+    <script type="text/javascript" src={{ url_for("static", filename="js/payment.js") }}></script>
 {% endblock %}
 {% block content %}
     <main>
@@ -141,7 +142,15 @@
             }
             componentDidMount(){
                 if(this.props.pid!==null){
-                    console.log(this.props.pid);
+                    getPaymentRequest(this.props.pid).then(resp=>{
+                        this.setState({
+                            bank: resp.data.bank,
+                            account_no_last_5_digits: resp.data.account_no,
+                            name: resp.data.name,
+                            amount: resp.data.amount,
+                            date: resp.data.transfer_date
+                        })
+                    })
                 }
             }
             render(){
@@ -197,7 +206,7 @@
                     alert("匯款帳號缺碼，請確認!!")
                     return
                 }else{
-                    let msg = `銀行：${bank}\n帳號末五碼：${account_no_last_5_digits}\n戶名：${name}\n請再次確認?`
+                    let msg = `銀行：${bank}\n帳號末五碼：${account_no_last_5_digits}\n戶名：${name}\n金額：${amount}\n匯款日期：${date}\n請再次確認?`
                     check_ok = confirm(msg);
                 }
                 if(check_ok){

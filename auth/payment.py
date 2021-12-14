@@ -20,6 +20,7 @@ def paymentFormatter(result):
     cols = ["pid", "bank", "account_no", "name", "amount", "update_datetime", "current_user", "transfer_date"]
     data_dict = dict(zip(cols, result))
     data_dict["amount"] = float(data_dict["amount"])
+    data_dict["transfer_date"] = datetime.strftime(data_dict["transfer_date"], DATE_FORMATTER)
     del data_dict["update_datetime"]
     del data_dict["current_user"]
 
@@ -44,12 +45,12 @@ def getPayment(pid):
 
     return body, status_code
 
-@auth.route("/payment/<pid>", methods=["POST"])
+@auth.route("/payment", methods=["POST"])
 #@jwt_required()
-def createPayment(pid):
+def createPayment():
     pass
 
-@auth.route("/payment/<pid>", methods=["PUT"])
+@auth.route("/payment", methods=["PUT"])
 #@jwt_required()
-def updatePayment(pid):
+def updatePayment():
     pass
