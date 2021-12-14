@@ -56,7 +56,7 @@
                                     </th>
                                 ) : (
                                     <th id="prv_page">
-                                        <a href="">歷史訂單</a>
+                                        <a href="/admin/orders">歷史訂單</a>
                                     </th>
                                 )}
                                 { calendar_content }
@@ -121,7 +121,7 @@
                 });
                 return(
                     <tr>
-                        <th scope="row" className="room_type">{room.name}-{room.room_no}</th>
+                        <td scope="row" className="room_type">{room.name}-{room.room_no}</td>
                         { week_content }
                         <td>
                             <button type="button" class="btn btn-light" onClick={this.handleClickBtn(room.room_no)}>修改房間</button>

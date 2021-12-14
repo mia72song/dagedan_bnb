@@ -40,12 +40,11 @@
                     {id: "create_datetime_col", name: "建立時間"},
                     {id: "date_col", name: "入住 / 退房日期"},
                     {id: "nights_col", name: "天數"},
-                    {id: "room_type_col", name: "房型"},
                     {id: "guests_col", name: "人數"},
                     {id: "amount_col", name: "總金額"},
                     {id: "booker_info_col", name: "訂房人"},
                     {id: "add_on_service_col", name: "附加服務"},
-                    {id: "order_status_col", name: "訂單狀態"}
+                    {id: "order_status_col", name: "狀態"}
                 ]
             }
             render(){
@@ -58,7 +57,11 @@
         }
         class DataRow extends React.Component{
             state = {
-                status: "new"
+                status_list: {
+                    NEW: "新訂單",
+                    PAID: "已付款",
+                    CANCEL: "取消"
+                }
             }
             componentDidMount(){
                 this.setState({
@@ -67,59 +70,161 @@
             }
             render(){
                 const data = this.props.data;
+                const status = this.state.status;
                 return(
                     <tr>
                         <td>{data.order_id}</td>
                         <td>{data.create_datetime}</td>
-                        <td>
-                            <p>{data.check_in_date}/</p>
-                            <p>{data.check_out_date}</p>
+                        <td className="left_td">
+                            <div>{data.check_in_date} / </div>
+                            <div>{data.check_out_date}</div>
+                            <div className="booking_detail">
+                                <a href="#">🔽房間明細🔼</a>
+                            </div>
                         </td>
                         <td>{data.nights}</td>
-                        <td>海旅雙人套房</td>
                         <td>{data.guests}</td>
                         <td>{data.amount}</td>
-                        <td>
+                        <td className="left_td">
                             <p>{data.booker_name} {data.booker_gender=="F"? "小姐" : "先生"} {data.booker_phone}</p>
-                            <p>付款：<span id="payment_method">待確認(ATM)</span>
-                                {this.state.status=="paid" ? (
-                                    <button id="paid_btn">付款資料</button>
-                                ):(
-                                    <button id="pay_btn">確認轉帳</button>
-                                )}
-                                
-                            </p>
+                            <PaymentInfo status={status} oid={data.order_id} pid={data.payment_id}/>
                         </td>
                         <td>{data.add_on_order_id}</td>
                         <td>
-                            <select value={this.state.status} onChange={this.changeStatus}>
-                                <option value="new">新訂單</option>
-                                <option value="paid">已付款</option>
-                                <option value="cancel">取消</option>
-                            </select>
+                            {this.state.status_list[status]}
                         </td>
                     </tr>
                 )
             }
-            changeStatus=(eObj)=>{
-                this.setState({
-                    status: eObj.target.value
-                })
+
+        }
+        class PaymentInfo extends React.Component{
+            state = {
+                payment_status: {
+                    NEW: "待確認(ATM)",
+                    PAID:  "轉帳完成",
+                    CANCEL: "取消"
+                },
+                switchOn: false
+            }
+            render(){
+                const status = this.props.status;
+                return(
+                    <div className="payment_div">
+                        訂金：
+                        <span>
+                            {this.state.payment_status[status]}
+                        </span>
+                        <button className={status=="PAID" && "paid_btn"} 
+                            onClick={this.getPaymentDetail}>
+                            {status=="PAID"? "付款資料" : "確認轉帳"}
+                        </button>
+                        {this.state.switchOn && (
+                            <div className="payment_detail" id={`payment_detail_${this.props.oid}`}>
+                                <PaidForm oid={this.props.oid} pid={this.props.pid}/>
+                            </div>
+                        )}
+                    </div>
+                )
+            }
+            getPaymentDetail=()=>{
+                this.setState({switchOn: !this.state.switchOn})
             }
         }
-
+        class PaidForm extends React.Component{
+            state = {
+                bank: "", // 銀行
+                account_no_last_5_digits: "", //帳號末五碼
+                name: "", // 戶名
+                amount: 0,
+                date: ""
+            }
+            componentDidMount(){
+                if(this.props.pid!==null){
+                    console.log(this.props.pid);
+                }
+            }
+            render(){
+                return(
+                    <form className="payment_form" id={`payment_form_${this.props.id}`}
+                        onSubmit={this.handleSubmit}>
+                        <div>
+                            <label for="">匯款銀行：</label>
+                            <input type="text" value={this.state.bank} 
+                                onChange={this.handleChange("bank")}/>
+                        </div>
+                        <div>
+                            <label for="">帳號末五碼：</label>
+                            <input type="text" value={this.state.account_no_last_5_digits} 
+                                onChange={this.handleChange("account_no_last_5_digits")}/>
+                        </div>
+                        <div>
+                            <label for="">匯款戶名：</label>
+                            <input type="text" value={this.state.name} 
+                                onChange={this.handleChange("name")}/>
+                        </div>
+                        <div>
+                            <label for="">金額：</label>
+                            <input type="text" value={this.state.amount} 
+                                onChange={this.handleChange("amount")}/>
+                        </div>
+                        <div>
+                            <label for="">匯款日期：</label>
+                            <input id="transfer_date_input" type="date" value={this.state.date} 
+                                onChange={this.handleChange("date")}/>
+                        </div>
+                        {this.props.pid==null? (
+                            <input type="submit" value="提交"/>
+                        ):(
+                            <input className="update_btn" type="submit" value="修改"/>
+                        )}
+                    </form>
+                )
+            }
+            handleChange=(dataType)=>{
+                return(eObj=>{
+                    this.setState({[dataType]: eObj.target.value})
+                })
+            }
+            handleSubmit=(eObj)=>{
+                eObj.preventDefault();
+                const {bank, account_no_last_5_digits, name, amount, date} = this.state;
+                let check_ok;
+                if(bank=="" || account_no_last_5_digits=="" || name=="" || amount=="" || date==""){
+                    alert("匯款資料皆不得為空")
+                    return
+                }else if(account_no_last_5_digits.length<5){
+                    alert("匯款帳號缺碼，請確認!!")
+                    return
+                }else{
+                    let msg = `銀行：${bank}\n帳號末五碼：${account_no_last_5_digits}\n戶名：${name}\n請再次確認?`
+                    check_ok = confirm(msg);
+                }
+                if(check_ok){
+                    console.log(this.state);
+                }
+            }
+        }
         class Search extends React.Component{
             state = {
-                order_status: "new",
+                order_status: "NEW", // NEW, ALL, PAID, CANCEL
                 select: "",
                 keyword: ""
             }
             componentDidMount(){
                 let p;
-                if(location.pathname.split("/")[3]){
+                if(location.search){
+                    const query_string = location.search.replace("?", "");
+                    p = getOrdersByKeyword(query_string.split("=")[0], query_string.split("=")[1])
+                    this.setState({
+                        order_status: "ALL",
+                        select: query_string.split("=")[0],
+                        keyword: query_string.split("=")[1]
+                    })
+                }else if(location.pathname.split("/")[3]){
                     p = getOrderById(location.pathname.split("/")[3])
                     this.setState({
-                        order_status: "all",
+                        order_status: "ALL",
                         select: "order_id",
                         keyword: location.pathname.split("/")[3]
                     })
@@ -135,7 +240,7 @@
                     <div id="wrap">
                         <div id="status_wrap">
                             <label for="">訂單狀態</label>
-                            <select value={this.state.order_status} onChange={this.handleChange("order_status")}>
+                            <select value={this.state.order_status} onChange={this.filterStatus}>
                                 <option value="new">新訂單</option>
                                 <option value="all">全部訂單</option>
                                 <option value="paid">已付款</option>
@@ -157,20 +262,21 @@
                     </div>
                 )
             }
+            filterStatus=(eObj)=>{
+                getOrdersByStatus(eObj.target.value).then(data=>{
+                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
+                })
+                this.setState({
+                    order_status: eObj.target.value,
+                    select: "",
+                    keyword: ""
+                })
+            }
             handleChange=(dataType)=>{
                 return(eObj=>{
-                    if(dataType=="order_status"){
-                        getOrdersByStatus(eObj.target.value).then(data=>{
-                            ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
-                            this.setState({
-                                order_status: eObj.target.value,
-                                select: "",
-                                keyword: ""
-                            })
-                        })
-                    }else{
-                        this.setState({[dataType]: eObj.target.value});
-                    }
+                    this.setState({
+                        [dataType]: eObj.target.value
+                    });
                 })
             }
             handleSubmit=(eObj)=>{
@@ -178,18 +284,12 @@
                     alert("搜尋項目及關鍵字皆不得為空")
                     return
                 }else{
-                    const {order_status, select, keyword} = this.state;
-                    if(select=="order_id"){
+                    const data_type = this.state.select;
+                    const keyword = this.state.keyword
+                    if(data_type=="order_id"){
                         location.href = `/admin/order/${keyword}`
                     }else{
-                        let p = getOrdersByKeyword(select, keyword).then(data=>{
-                            ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
-                            this.setState({
-                                order_status: "all",
-                                select,
-                                keyword
-                            })
-                        })
+                        location.href = `/admin/orders?${data_type}=${keyword}`
                     }                    
                 }
             }

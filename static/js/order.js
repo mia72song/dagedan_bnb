@@ -8,7 +8,6 @@ function orderRequestWithAuth(url){
     })
     return p
 }
-
 function getOrdersByStatus(status){
     // status = new, all, paid, cancel
     let url;

@@ -24,7 +24,6 @@ input, select{
     border-radius: 8px;
 }
 
-
 #databox{
     margin: 0 auto;
     margin-top: 15px;
@@ -34,25 +33,67 @@ thead, th{
     text-align: center;
     vertical-align: middle;
 }
-
-#order_status_col{
-    width: 75px;
+#date_col{
+    width: 130px;
 }
-#room_type_col, #amount_col, #add_on_service_col{
+#amount_col, #add_on_service_col{
     width: 50px;
 }
 #nights_col, #guests_col{
     width: 25px;
 }
-#paid_btn, #pay_btn{
+td>select{
+    width: inherit;
+}
+td{
+    text-align: center;
+}
+.left_td{
+    text-align: left;
+    margin-left: 5px;
+}
+/*booker_info_col*/
+#booker_info_col{
+    width: 260px;
+}
+.payment_div>span{
+    color: red;
+}
+.payment_div>button{
     margin-left: 20px;
     border-radius: 3px;
 }
-#paid_btn{
+.paid_btn{
     border: 2px green solid;
     color: green;
     background-color: white;
 }
-td>select{
-    width: inherit;
+.payment_detail{
+    background-color: blanchedalmond;
+    margin-top: 10px;
+}
+.payment_form{
+    padding: 5px 0;
+    margin-left: 10px;
+}
+.payment_form input{
+    height: 30px;
+    width: 125px;
+    margin-left: 5px;
+}
+.payment_form>div{
+    margin-top: 4px;
+}
+.payment_form>input{
+    margin-top: 5px;
+    margin-left: 0;
+    width: 100px;
+}
+.update_btn{
+    color: red;
+    background-color: white;
+    border: 2px red solid;
+}
+#transfer_date_input{
+    width: 140px;
 }

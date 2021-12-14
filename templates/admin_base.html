@@ -39,13 +39,12 @@
                 ]
             }
             render(){
-                const pages = this.state.pages;
                 return(
                     <div id="banner">
                         <div className="title">登入成功，{this.props.name} 你好</div>
                         <div className="menu">
                             {
-                                pages.map(p=>{
+                                this.state.pages.map(p=>{
                                     let condition = location.pathname.includes(`/admin/${p.href}`);
                                     let href = `/admin/${p.href}`;
                                     if(p.href!=="board"){

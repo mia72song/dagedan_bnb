@@ -11,7 +11,7 @@ def orderFormatter(result):
     cols = [
             "order_id", "create_datetime", "booker_name", "booker_gender", "booker_phone",
             "check_in_date", "check_out_date", "nights", "guests", "amount", "order_status",
-            "add_on_order_id"
+            "add_on_order_id", "payment_id"
         ]
     data_dict = dict(zip(cols, result))
     data_dict["create_datetime"] = datetime.strftime(data_dict["create_datetime"], DATETIME_FORMATTER)

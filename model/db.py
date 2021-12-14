@@ -52,6 +52,38 @@ class Mydb:
         self.conn.commit()
         print("密碼已更新")
     '''
+    def __orderIsNull(self, order_id, col_name):
+        sql = f"SELECT * FROM orders WHERE order_id={order_id} AND {col_name} IS NULL"
+        self.cur.execute(sql)
+        data = self.cur.fetchone()
+        return data
+
+    def createPayment(self, order_id,  payment_dict):
+        #是則該筆訂單沒有付款資料，表示未付款過
+        if self.__orderIsNull(order_id, "payment_id"): 
+            pid = "A" + str(int(datetime.now().timestamp()))
+            now = datetime.now()
+            sql_p = f'''
+                INSERT INTO payment_atm VALUES ("{pid}", 
+                "{payment_dict['bank']}", "{payment_dict['account_no']}", "{payment_dict['name']}", "{payment_dict['amount']}", 
+                "{now}", "{payment_dict['current_user']}", "{payment_dict['transfer_date']}")
+            '''
+            sql_o = f'''
+                UPDATE orders 
+                SET payment_id="{pid}", update_datetime="{now}", update_user="{payment_dict['current_user']}", status="PAID"
+                WHERE order_id={order_id} AND payment_id IS NULL
+            '''
+            self.cur.execute(sql_p)
+            self.cur.execute(sql_o)
+            self.conn.commit()
+        else:
+            print(f"Payment_id已存在於訂單編號：{order_id}表單中")
+
+    def getPaymentById(self, pid):
+        sql = f"SELECT * FROM payment_atm WHERE id='{pid}'"
+        self.cur.execute(sql)
+        data = self.cur.fetchone()
+        return data
 
     def getOrderById(self, order_id):
         sql = f"""
@@ -59,7 +91,7 @@ class Mydb:
             g.last_name, g.gender, g.phone,
             o.check_in_date, o.check_out_date, o.nights, o.guests,
             o.amount, o.status,
-            o.add_on_order_id
+            o.add_on_order_id, payment_id
             FROM orders AS o
             INNER JOIN guests AS g ON o.guest_id=g.guest_id 
             WHERE order_id={order_id}
@@ -78,7 +110,7 @@ class Mydb:
             g.last_name, g.gender, g.phone AS phone,
             o.check_in_date, o.check_out_date, o.nights, o.guests,
             o.amount, o.status,
-            o.add_on_order_id
+            o.add_on_order_id, payment_id
             FROM orders AS o
             INNER JOIN guests AS g ON o.guest_id=g.guest_id
         """
@@ -161,6 +193,11 @@ class Mydb:
 
 if __name__=="__main__": 
     mydb = Mydb()
-    data = mydb.getOrdersByDataType("order_id", 1)
+    data_dict = {
+        "bank": "合作金庫", 
+        "account_no": "00432", 
+        "name": "王艾咪", 
+        "amount": 1000, 
+        "current_user": "mia72song"}
 
-    print(data)
+    mydb.createPayment(2, data_dict)
