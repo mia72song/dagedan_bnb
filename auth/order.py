@@ -25,7 +25,7 @@ def orderFormatter(result):
     return data_dict
 
 @auth.route("/order/<int:order_id>")
-#@jwt_required()
+@jwt_required()
 def get_order_by_id(order_id):
     try:
         mydb = Mydb()
@@ -47,7 +47,7 @@ def get_order_by_id(order_id):
     return body, status_code
 
 @auth.route("/orders/<data_type>=<keyword>")
-#@jwt_required()
+@jwt_required()
 def get_orders_by_keyword(data_type, keyword):
     # data_type: status, phone, check_in_date
     try:
@@ -71,7 +71,7 @@ def get_orders_by_keyword(data_type, keyword):
     return body, status_code
 
 @auth.route("/orders")
-#@jwt_required()
+@jwt_required()
 def get_all_orders():
     try:
         mydb = Mydb()

@@ -65,6 +65,7 @@
                 userRequest("DELETE").then(resp=>{
                     // console.log(resp)
                     if(resp.ok){
+                        localStorage.removeItem('jwt');
                         location.href = `${window.origin}/admin/`
                     }
                 })

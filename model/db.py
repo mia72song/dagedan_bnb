@@ -185,6 +185,18 @@ class Mydb:
         data = self.cur.fetchall()
         return data, cols
 
+    def getBookingListByOrderId(self, order_id):
+        cols = ["date", "room_no", "room_name", "room_type"]
+        sql = f'''
+            SELECT b.date, b.room_no, r.name, r.room_type FROM booking AS b 
+            INNER JOIN rooms AS r ON r.room_no=b.room_no
+            INNER JOIN room_type AS rt ON rt.type=r.room_type
+            WHERE order_id={order_id}
+        '''
+        self.cur.execute(sql)
+        data = self.cur.fetchall()
+        return data, cols
+
     def getRooms(self, type=None, room_no=None):
         sql = f"""SELECT r.room_no, r.name, r.room_type, 
             rt.accommodate, rt.rate_weekday, rt.rate_holiday, rt.single_discount,
@@ -235,6 +247,7 @@ if __name__=="__main__":
         "name" :"王艾旻"
     }
     
-    mydb.updatePayment(payment_dict, "administrator")
+    data = mydb.getBookingListByOrderId(2)
+    print(data)
     del mydb
 

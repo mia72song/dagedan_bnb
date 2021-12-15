@@ -16,6 +16,7 @@ class Config:
     JWT_TOKEN_LOCATION = ["headers", "cookies"]
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ["access"]
+    PROPAGATE_EXCEPTIONS = True
 
 class DevConfig(Config):
     ENV = "development"

@@ -1,6 +1,7 @@
 main{
     width: 1000px;
     margin: 0 auto;
+    height: 800px;
 }
 #wrap{
     margin-top: 20px;
@@ -33,11 +34,17 @@ thead, th{
     text-align: center;
     vertical-align: middle;
 }
-#date_col{
-    width: 130px;
+#order_id_col, #create_datetime_col{
+    width: 90px;
 }
-#amount_col, #add_on_service_col{
-    width: 50px;
+#date_col, #booker_info_col{
+    width: 180px;
+}
+#amount_col, #order_status_col{
+    width: 60px;
+}
+#add_on_service_col{
+    width: 80px;
 }
 #nights_col, #guests_col{
     width: 25px;
@@ -51,6 +58,15 @@ td{
 .left_td{
     text-align: left;
     margin-left: 5px;
+}
+.booking_list_btn:hover{
+    text-decoration:none;
+}
+.booking_detail{
+    text-align: left;
+    width: inherit;
+    font-size: 15px;
+    margin-top: 10px;
 }
 /*booker_info_col*/
 #booker_info_col{
@@ -69,8 +85,10 @@ td{
     background-color: white;
 }
 .payment_detail{
-    background-color: blanchedalmond;
     margin-top: 10px;
+    border-radius: 2px;
+    border: 1.5px grey solid;
+    background-color: blanchedalmond;
 }
 .payment_form{
     padding: 5px 0;
@@ -92,8 +110,8 @@ td{
 .update_btn{
     color: red;
     background-color: white;
-    border: 2px red solid;
+    border: 1.5px red solid;
 }
 #transfer_date_input{
-    width: 140px;
+    width: 150px;
 }

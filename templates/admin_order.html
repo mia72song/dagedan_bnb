@@ -4,6 +4,7 @@
     {{ super() }}
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/order.css") }}>
     <script type="text/javascript" src={{ url_for("static", filename="js/order.js") }}></script>
+    <script type="text/javascript" src={{ url_for("static", filename="js/booking.js") }}></script>
     <script type="text/javascript" src={{ url_for("static", filename="js/payment.js") }}></script>
 {% endblock %}
 {% block content %}
@@ -58,11 +59,13 @@
         }
         class DataRow extends React.Component{
             state = {
+                status: "",
                 status_list: {
                     NEW: "新訂單",
                     PAID: "已付款",
                     CANCEL: "取消"
-                }
+                },
+                booking_list: false
             }
             componentDidMount(){
                 this.setState({
@@ -75,13 +78,16 @@
                 return(
                     <tr>
                         <td>{data.order_id}</td>
-                        <td>{data.create_datetime}</td>
-                        <td className="left_td">
-                            <div>{data.check_in_date} / </div>
-                            <div>{data.check_out_date}</div>
+                        <td><p>{data.create_datetime}</p>                               
+                        </td>
+                        <td>
+                            <div>{data.check_in_date} / {data.check_out_date}</div>
                             <div className="booking_detail">
-                                <a href="#">🔽房間明細🔼</a>
-                            </div>
+                                <a href="javascript: void(0)" onClick={this.getBookingList} className="booking_list_btn">
+                                    {this.state.booking_list? "房間明細🔼" : "🔽房間明細" }
+                                </a>
+                                {this.state.booking_list && <BookingList oid={data.order_id}/>}
+                            </div> 
                         </td>
                         <td>{data.nights}</td>
                         <td>{data.guests}</td>
@@ -97,7 +103,33 @@
                     </tr>
                 )
             }
-
+            getBookingList=()=>{
+                this.setState({
+                    booking_list: !this.state.booking_list
+                })
+            }
+        }
+        class BookingList extends React.Component{
+            state = {
+                booking_list: []
+            }
+            componentDidMount(){
+                getBookingListByOrderId(this.props.oid).then(resp=>{
+                    this.setState({booking_list : resp.data})
+                })
+            }
+            render(){
+                let booking_content = []
+                this.state.booking_list.forEach(b=>{
+                    let item = <div>{b.date} {b.room_name}</div>
+                    booking_content.push(item)
+                })
+                return(
+                    <div className="booking_list_detail">
+                        { booking_content }
+                    </div>
+                )
+            }
         }
         class PaymentInfo extends React.Component{
             state = {
@@ -257,7 +289,7 @@
         }
         class Search extends React.Component{
             state = {
-                order_status: "new", // new, all, paid, cancel
+                order_status: "NEW", // NEW, ALL, PAID, CANCEL
                 select: "",
                 keyword: ""
             }
@@ -267,14 +299,14 @@
                     const query_string = location.search.replace("?", "");
                     p = getOrdersByKeyword(query_string.split("=")[0], query_string.split("=")[1])
                     this.setState({
-                        order_status: "all",
+                        order_status: "ALL",
                         select: query_string.split("=")[0],
                         keyword: query_string.split("=")[1]
                     })
                 }else if(location.pathname.split("/")[3]){
                     p = getOrderById(location.pathname.split("/")[3])
                     this.setState({
-                        order_status: "all",
+                        order_status: "ALL",
                         select: "order_id",
                         keyword: location.pathname.split("/")[3]
                     })
@@ -286,16 +318,15 @@
                 })
             }
             render(){
-                console.log(this.state.order_status);
                 return(
                     <div id="wrap">
                         <div id="status_wrap">
                             <label for="">訂單狀態</label>
                             <select value={this.state.order_status} onChange={this.filterStatus}>
-                                <option value="new">新訂單</option>
-                                <option value="all">全部訂單</option>
-                                <option value="paid">已付款</option>
-                                <option value="cancel">取消</option>
+                                <option value="NEW">新訂單</option>
+                                <option value="ALL">全部訂單</option>
+                                <option value="PAID">已付款</option>
+                                <option value="CANCEL">取消</option>
                             </select>
                         </div>
                         <div id="keyword_wrap">

@@ -21,8 +21,10 @@ def login():
             if user_info:
                 session["user"] = user_info
                 access_token = create_access_token(identity=user_info[0])
+                print(access_token)
                 resp = make_response(jsonify({
-                    "ok": True
+                    "ok": True,
+                    "access_token": access_token
                 }), 200)                
                 set_access_cookies(resp, access_token)
 

@@ -55,6 +55,7 @@
                 let p = userRequest("post", data)
                 p.then(resp=>{
                     if(resp.ok){
+                        localStorage.setItem("jwt", resp.access_token)
                         location.href = `${window.origin}/admin/board`
                     }else if(resp.error){
                         alert(resp.message)

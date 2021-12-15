@@ -9,9 +9,9 @@ function orderRequestWithAuth(url){
     return p
 }
 function getOrdersByStatus(status){
-    // status = new, all, paid, cancel
+    // status = NEW, ALL, PAID, CANCEL
     let url;
-    if(status=="all"){
+    if(status=="ALL"){
         url = `${window.origin}/auth/orders`
     }else{
         url = `${window.origin}/auth/orders/status=${status}`

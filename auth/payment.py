@@ -10,16 +10,6 @@ from constants import DATE_FORMATTER
 body = "" #json
 status_code = 0
 
-payment_dict = {
-    "pid": "", 
-    "bank": "",
-    "account_no": "",
-    "name": "",
-    "amount": 0,
-    "transfer_date": "",
-    "current_user": ""
-}
-
 # 將由db取得的付款資料，整理成dict格式
 def paymentFormatter(result):
     cols = ["pid", "bank", "account_no", "name", "amount", "update_datetime", "current_user", "transfer_date"]
@@ -32,7 +22,7 @@ def paymentFormatter(result):
     return data_dict    
 
 @auth.route("/payment/<pid>")
-#@jwt_required()
+@jwt_required()
 def get_payment(pid):
     try:
         mydb = Mydb()
@@ -49,9 +39,10 @@ def get_payment(pid):
     return body, status_code
 
 @auth.route("/payment", methods=["POST"])
-#@jwt_required()
+@jwt_required()
 def create_payment():
-    if session.get("user"):
+    current_user = get_jwt_identity()
+    if current_user:
         current_username = session.get("user")[0]
         create_data = request.get_json()
     else:
@@ -93,7 +84,7 @@ def create_payment():
     return body, status_code
 
 @auth.route("/payment", methods=["PUT"])
-#@jwt_required()
+@jwt_required()
 def update_payment():
     if session.get("user"):
         current_username = session.get("user")[0]
