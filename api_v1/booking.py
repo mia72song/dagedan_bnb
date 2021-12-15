@@ -6,7 +6,11 @@ from . import api
 from model.db import Mydb
 from constants import DATE_FORMATTER
 
-# 將由資料庫取得的已預約日曆，整理成dict格式
+# 初始化response content
+body = "" #json
+status_code = 0
+
+# 將由db取得的已預約日曆，整理成dict格式
 def calendarFormatter(result, cols):
     data_dict = dict(zip(cols[:5], result[:5]))
     data_dict["date"] = datetime.strftime(data_dict["date"], DATE_FORMATTER)
@@ -23,8 +27,6 @@ def get_booking_by_weekly_calendar(start_date_string):
     start_date = datetime.strptime(start_date_string, DATE_FORMATTER)
     end_date = start_date+timedelta(days=6)
     end_date_string = datetime.strftime(end_date, DATE_FORMATTER)
-    body = ""
-    status_code = 0
     try:
         mydb = Mydb()
         data, cols = mydb.getBookingListByDate(start_date_string, end_date_string)

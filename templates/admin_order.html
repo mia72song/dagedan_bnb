@@ -135,53 +135,50 @@
         class PaidForm extends React.Component{
             state = {
                 bank: "", // 銀行
-                account_no_last_5_digits: "", //帳號末五碼
+                account_no: "", //帳號至先五碼
                 name: "", // 戶名
-                amount: 0,
-                date: ""
+                amount: "",
+                transfer_date: "",
+                past_data: {}, // 存放原始資料，以追蹤修改項目
+                labels: {
+                    bank: "匯款銀行", // 銀行
+                    account_no: "帳號末五碼", //帳號至先五碼
+                    name: "匯款戶名", // 戶名
+                    amount: "金額",
+                    transfer_date: "匯款日期",
+                }
             }
             componentDidMount(){
                 if(this.props.pid!==null){
                     getPaymentRequest(this.props.pid).then(resp=>{
                         this.setState({
                             bank: resp.data.bank,
-                            account_no_last_5_digits: resp.data.account_no,
+                            account_no: resp.data.account_no,
                             name: resp.data.name,
                             amount: resp.data.amount,
-                            date: resp.data.transfer_date
+                            transfer_date: resp.data.transfer_date,
+                            past_data: resp.data
                         })
                     })
                 }
             }
             render(){
+                const labels = this.state.labels;
+                let payment_content = []
+                Object.keys(labels).forEach(col=>{
+                    let item = (
+                        <div>
+                            <label for="">{labels[col]}：</label>
+                            <input type={col=="transfer_date"? "date" : "text"} id={`${col}_input`} value={this.state[col]} 
+                                onChange={this.handleChange(col)}/>
+                        </div>
+                    )
+                    payment_content.push(item)
+                })
                 return(
-                    <form className="payment_form" id={`payment_form_${this.props.id}`}
-                        onSubmit={this.handleSubmit}>
-                        <div>
-                            <label for="">匯款銀行：</label>
-                            <input type="text" value={this.state.bank} 
-                                onChange={this.handleChange("bank")}/>
-                        </div>
-                        <div>
-                            <label for="">帳號末五碼：</label>
-                            <input type="text" value={this.state.account_no_last_5_digits} 
-                                onChange={this.handleChange("account_no_last_5_digits")}/>
-                        </div>
-                        <div>
-                            <label for="">匯款戶名：</label>
-                            <input type="text" value={this.state.name} 
-                                onChange={this.handleChange("name")}/>
-                        </div>
-                        <div>
-                            <label for="">金額：</label>
-                            <input type="text" value={this.state.amount} 
-                                onChange={this.handleChange("amount")}/>
-                        </div>
-                        <div>
-                            <label for="">匯款日期：</label>
-                            <input id="transfer_date_input" type="date" value={this.state.date} 
-                                onChange={this.handleChange("date")}/>
-                        </div>
+                    <form className="payment_form" id={`payment_form_${this.props.oid}`}
+                        onSubmit={this.props.pid!==null? this.handleUpdate : this.handleCreate}>
+                        { payment_content }
                         {this.props.pid==null? (
                             <input type="submit" value="提交"/>
                         ):(
@@ -195,28 +192,72 @@
                     this.setState({[dataType]: eObj.target.value})
                 })
             }
-            handleSubmit=(eObj)=>{
-                eObj.preventDefault();
-                const {bank, account_no_last_5_digits, name, amount, date} = this.state;
-                let check_ok;
-                if(bank=="" || account_no_last_5_digits=="" || name=="" || amount=="" || date==""){
+            checkInputValue=(msg)=>{
+                const {bank, account_no, name, amount, transfer_date} = this.state;
+                if(bank=="" || account_no=="" || name=="" || amount=="" || transfer_date==""){
                     alert("匯款資料皆不得為空")
-                    return
-                }else if(account_no_last_5_digits.length<5){
+                    return false
+                }else if(account_no.length<5){
                     alert("匯款帳號缺碼，請確認!!")
-                    return
+                    return false
+                }else if(parseInt(amount)<=0){
+                    alert("請輸入阿拉伯數字")
+                    return false
                 }else{
-                    let msg = `銀行：${bank}\n帳號末五碼：${account_no_last_5_digits}\n戶名：${name}\n金額：${amount}\n匯款日期：${date}\n請再次確認?`
-                    check_ok = confirm(msg);
+                    let check = confirm(msg)
+                    return check
                 }
-                if(check_ok){
-                    console.log(this.state);
+            }
+            handleCreate=(eObj)=>{
+                eObj.preventDefault();
+                const state = this.state;
+                let msg = "";
+                Object.keys(state.labels).forEach(col=>{
+                    msg = msg+ `${state.labels[col]}:${state[col]}\n`
+                })
+                msg = msg +`再次確認?`
+                const check = this.checkInputValue(msg);
+                if(check){
+                    delete state.past_data;
+                    delete state.labels;
+                    state["oid"] = this.props.oid;
+                    paymentRequestWithData("POST", state).then(resp=>{
+                        if(resp.ok){
+                            alert("新增完成")
+                            location.href = `/admin/order/${this.props.oid}`
+                        }
+                    })
+                }
+            }
+            handleUpdate=(eObj)=>{
+                eObj.preventDefault();
+                const state = this.state;
+                let msg = "";
+                let data = {};
+                Object.keys(state.labels).forEach(col=>{
+                    if(state[col]!==state.past_data[col]){
+                        msg = msg+ `${state.labels[col]}：${state[col]}\n`
+                        data[col] = state[col]
+                    }
+                })
+                if(msg!=="" && data!=={} && this.props.pid!==null){
+                    data["pid"] = this.props.pid;
+                    msg = msg +`是否確定修改?`
+                    const check = this.checkInputValue(msg);
+                    if(check){
+                        paymentRequestWithData("PUT", data).then(resp=>{
+                            if(resp.ok){
+                                alert("修改完成")
+                                location.href = `/admin/order/${this.props.oid}`
+                            }
+                        })
+                    }
                 }
             }
         }
         class Search extends React.Component{
             state = {
-                order_status: "NEW", // NEW, ALL, PAID, CANCEL
+                order_status: "new", // new, all, paid, cancel
                 select: "",
                 keyword: ""
             }
@@ -226,14 +267,14 @@
                     const query_string = location.search.replace("?", "");
                     p = getOrdersByKeyword(query_string.split("=")[0], query_string.split("=")[1])
                     this.setState({
-                        order_status: "ALL",
+                        order_status: "all",
                         select: query_string.split("=")[0],
                         keyword: query_string.split("=")[1]
                     })
                 }else if(location.pathname.split("/")[3]){
                     p = getOrderById(location.pathname.split("/")[3])
                     this.setState({
-                        order_status: "ALL",
+                        order_status: "all",
                         select: "order_id",
                         keyword: location.pathname.split("/")[3]
                     })
@@ -245,6 +286,7 @@
                 })
             }
             render(){
+                console.log(this.state.order_status);
                 return(
                     <div id="wrap">
                         <div id="status_wrap">

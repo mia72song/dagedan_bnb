@@ -4,7 +4,11 @@ import json
 from . import api
 from model.db import Mydb
 
-# 將由資料庫取得的房間，整理成dict格式
+# 初始化response content
+body = "" #json
+status_code = 0
+
+# 將由db取得的房間資料，整理成dict格式
 def roomFormatter(result):
     cols = ["room_no", "name", "type", "accommodate", "rate_weekday", "rate_holiday", "single_discount", "discribe", "images"]
     data_dict = dict(zip(cols, result))
@@ -14,8 +18,6 @@ def roomFormatter(result):
 
 @api.route("/rooms")
 def get_all_rooms():
-    body = ""
-    status_code = 0
     try:
         mydb = Mydb()
         data = mydb.getRooms()

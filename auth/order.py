@@ -6,7 +6,11 @@ from . import auth
 from model.db import Mydb
 from constants import DATE_FORMATTER, DATETIME_FORMATTER
 
-# 將由資料庫取得的訂單，整理成dict格式
+# 初始化response content
+body = "" #json
+status_code = 0
+
+# 將由db取得的訂單資料，整理成dict格式
 def orderFormatter(result):
     cols = [
             "order_id", "create_datetime", "booker_name", "booker_gender", "booker_phone",
@@ -23,8 +27,6 @@ def orderFormatter(result):
 @auth.route("/order/<int:order_id>")
 #@jwt_required()
 def get_order_by_id(order_id):
-    body = ""
-    status_code = 0
     try:
         mydb = Mydb()
         data = mydb.getOrderById(order_id)
@@ -48,8 +50,6 @@ def get_order_by_id(order_id):
 #@jwt_required()
 def get_orders_by_keyword(data_type, keyword):
     # data_type: status, phone, check_in_date
-    body = ""
-    status_code = 0
     try:
         mydb = Mydb()
         data = mydb.getOrdersByDataType([data_type, keyword.upper()])
@@ -72,9 +72,7 @@ def get_orders_by_keyword(data_type, keyword):
 
 @auth.route("/orders")
 #@jwt_required()
-def get_orders():
-    body = ""
-    status_code = 0
+def get_all_orders():
     try:
         mydb = Mydb()
         data = mydb.getOrdersByDataType()

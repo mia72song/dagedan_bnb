@@ -1,4 +1,4 @@
-function paymentRequest(method, data){
+function paymentRequestWithData(method, data){
     const url = `${window.origin}/auth/payment`;
     let p=fetch(url, {
         method,
@@ -8,7 +8,9 @@ function paymentRequest(method, data){
         },
         body: JSON.stringify(data)
     }).then(response=>{
-        if(response.status!==500){
+        if(response.status===403){
+            location.href="/admin";
+        }else if(response.status===200){
             return response.json()
         }else{
             console.log(response.json())
