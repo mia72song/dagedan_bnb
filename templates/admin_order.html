@@ -262,23 +262,24 @@
                 transfer_date: "",
                 past_data: {}, // 存放原始資料，以追蹤修改項目
                 labels: {
-                    bank: "匯款銀行", // 銀行
-                    account_no: "帳號末五碼", //帳號至先五碼
-                    name: "匯款戶名", // 戶名
+                    bank: "匯款銀行", 
+                    account_no: "帳號末五碼", 
+                    name: "匯款戶名", 
                     amount: "金額",
-                    transfer_date: "匯款日期",
+                    transfer_date: "匯款日期"
                 }
             }
             componentDidMount(){
                 if(this.props.pid!==null){
                     getPaymentRequest(this.props.pid).then(resp=>{
+                        const data = resp.data[0];
                         this.setState({
-                            bank: resp.data.bank,
-                            account_no: resp.data.account_no,
-                            name: resp.data.name,
-                            amount: resp.data.amount,
-                            transfer_date: resp.data.transfer_date,
-                            past_data: resp.data
+                            bank: data.bank,
+                            account_no: data.account_no,
+                            name: data.name,
+                            amount: data.amount,
+                            transfer_date: data.transfer_date,
+                            past_data: data
                         })
                     })
                 }
@@ -317,13 +318,13 @@
                 const {bank, account_no, name, amount, transfer_date} = this.state;
                 if(bank=="" || account_no=="" || name=="" || amount=="" || transfer_date==""){
                     alert("匯款資料皆不得為空")
-                    return false
+                    return
                 }else if(account_no.length<5){
                     alert("匯款帳號缺碼，請確認!!")
-                    return false
-                }else if(parseInt(amount)<=0){
+                    return
+                }else if(typeof amount!=="number"){
                     alert("請輸入阿拉伯數字")
-                    return false
+                    return
                 }else{
                     let check = confirm(msg)
                     return check

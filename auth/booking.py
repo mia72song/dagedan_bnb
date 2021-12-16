@@ -30,7 +30,7 @@ def get_booking_by_date(start_date_string, end_date_string):
 
 @auth.route("/booking/oid=<oid>")
 @jwt_required()
-def get_booking_list_by_oid(oid):
+def get_booking_by_oid(oid):
     try:
         mydb = BookingDB()
         data_list = mydb.getBookingByOrderId(oid)

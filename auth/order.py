@@ -14,8 +14,8 @@ status_code = 0
 def get_order_by_id(order_id):
     try:
         mydb = OrderDB()
-        data_list = mydb.getOrderById(order_id)        
-        body = jsonify({"data": data_list})
+        data_dict = mydb.getOrderById(order_id)
+        body = jsonify({"data": [data_dict, ]})
         status_code = 200
 
     except Exception as e:

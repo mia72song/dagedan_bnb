@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from models.db import Mydb
+from constants import DATE_FORMATTER
 
 class PaymentDB(Mydb):
     def __orderIsNull(self, order_id, col_name):
@@ -68,7 +69,16 @@ class PaymentDB(Mydb):
         print(f"付款編號：{pid} 資料已修改")
 
     def getPaymentById(self, pid):
+        cols = ["pid", "bank", "account_no", "name", "amount", "update_datetime", "current_user", "transfer_date"]
         sql = f"SELECT * FROM payment_atm WHERE id='{pid}'"
         self.cur.execute(sql)
-        data = self.cur.fetchone()
-        return data
+        result = self.cur.fetchone()
+        if result:
+            data_dict = dict(zip(cols, result))
+            data_dict["amount"] = float(data_dict["amount"])
+            data_dict["transfer_date"] = datetime.strftime(data_dict["transfer_date"], DATE_FORMATTER)
+            del data_dict["update_datetime"]
+            del data_dict["current_user"]
+            return data_dict
+        else:
+            return None

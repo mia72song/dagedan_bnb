@@ -32,9 +32,7 @@ class OrderDB(Mydb):
         self.cur.execute(sql)
         result = self.cur.fetchone()
         if result:
-            data_list = []
-            data_list.append(orderFormatter(result))
-            return data_list
+            return orderFormatter(result)
         else:
             return None
 
@@ -63,8 +61,7 @@ class OrderDB(Mydb):
         if results:
             data_list = []
             for r in results:
-                data_dict = orderFormatter(r)
-                data_list.append(data_dict)
+                data_list.append(orderFormatter(r))
             return data_list
         else:
             return None

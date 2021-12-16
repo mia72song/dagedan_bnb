@@ -10,24 +10,13 @@ from constants import DATE_FORMATTER
 body = "" #json
 status_code = 0
 
-# 將由db取得的付款資料，整理成dict格式
-def paymentFormatter(result):
-    cols = ["pid", "bank", "account_no", "name", "amount", "update_datetime", "current_user", "transfer_date"]
-    data_dict = dict(zip(cols, result))
-    data_dict["amount"] = float(data_dict["amount"])
-    data_dict["transfer_date"] = datetime.strftime(data_dict["transfer_date"], DATE_FORMATTER)
-    del data_dict["update_datetime"]
-    del data_dict["current_user"]
-
-    return data_dict    
-
 @auth.route("/payment/<pid>")
 @jwt_required()
 def get_payment(pid):
     try:
         mydb = PaymentDB()
-        data = list(mydb.getPaymentById(pid))
-        body = jsonify({"data": paymentFormatter(data)})
+        data_dict = mydb.getPaymentById(pid)
+        body = jsonify({"data": [data_dict, ]})
         status_code = 200
     except Exception as e:
         body = jsonify({
