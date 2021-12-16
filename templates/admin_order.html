@@ -125,41 +125,36 @@
             }
         }
         class Thead extends React.Component{
-            state = {
-                cols: [
-                    {id: "order_id_col", name: "訂單編號"},
-                    {id: "create_datetime_col", name: "建立時間"},
-                    {id: "date_col", name: "入住 / 退房日期"},
-                    {id: "nights_col", name: "天數"},
-                    {id: "guests_col", name: "人數"},
-                    {id: "amount_col", name: "總金額"},
-                    {id: "booker_info_col", name: "訂房人"},
-                    {id: "add_on_service_col", name: "附加服務"},
-                    {id: "order_status_col", name: "狀態"}
-                ]
-            }
+            cols = [
+                {id: "order_id_col", name: "訂單編號"},
+                {id: "create_datetime_col", name: "建立時間"},
+                {id: "date_col", name: "入住 / 退房日期"},
+                {id: "nights_col", name: "天數"},
+                {id: "guests_col", name: "人數"},
+                {id: "amount_col", name: "總金額"},
+                {id: "booker_info_col", name: "訂房人"},
+                {id: "add_on_service_col", name: "附加服務"},
+                {id: "order_status_col", name: "狀態"}
+            ]
             render(){
                 return(
                     <tr>
-                        { this.state.cols.map(col=><th id={col.id}>{col.name}</th>) }
+                        { this.cols.map(col=><th id={col.id}>{col.name}</th>) }
                     </tr>
                 )
             }
         }
         class DataRow extends React.Component{
             state = {
-                status: "",
-                status_list: {
-                    NEW: "新訂單",
-                    PAID: "已付款",
-                    CANCEL: "取消"
-                },
-                booking_list: false
+                status: ""
+            }
+            status_content = {
+                NEW: "新訂單",
+                PAID: "已付款",
+                CANCEL: "取消"
             }
             componentDidMount(){
-                this.setState({
-                    status: this.props.data.order_status
-                })
+                this.setState({status: this.props.data.order_status})
             }
             render(){
                 const data = this.props.data;
@@ -171,12 +166,7 @@
                         </td>
                         <td>
                             <div>{data.check_in_date} / {data.check_out_date}</div>
-                            <div className="booking_detail">
-                                <a href="javascript: void(0)" onClick={this.getBookingList} className="booking_list_btn">
-                                    {this.state.booking_list? "房間明細🔼" : "🔽房間明細" }
-                                </a>
-                                {this.state.booking_list && <BookingList oid={data.order_id}/>}
-                            </div> 
+                            <BookingInfo oid={data.order_id}/>
                         </td>
                         <td>{data.nights}</td>
                         <td>{data.guests}</td>
@@ -187,15 +177,37 @@
                         </td>
                         <td>{data.add_on_order_id}</td>
                         <td>
-                            {this.state.status_list[status]}
+                            <p>{this.status_content[status]}</p>
+                            {status!=="CANCEL" && <button onClick={this.handleCancel}>取消</button>}
                         </td>
                     </tr>
                 )
             }
+            handleCancel=()=>{
+                console.log("取消訂單編號：" ,this.props.data.order_id);
+                if(this.props.data.payment_id){
+                    alert("已付款了，確定要取消退款嗎?")
+                }else{
+                    console.log("可以取消")
+                }
+            }
+        }
+        class BookingInfo extends React.Component{
+            state = {
+                switchOn: false
+            }
+            render(){
+                return(
+                    <div className="booking_detail">
+                        <a href="javascript: void(0)" onClick={this.getBookingList} className="booking_list_btn">
+                            {this.state.switchOn? "房間明細🔼" : "🔽房間明細" }
+                        </a>
+                        {this.state.switchOn && <BookingList oid={this.props.oid}/>}
+                    </div> 
+                )
+            }
             getBookingList=()=>{
-                this.setState({
-                    booking_list: !this.state.booking_list
-                })
+                this.setState({switchOn: !this.state.switchOn})
             }
         }
         class BookingList extends React.Component{
@@ -222,12 +234,12 @@
         }
         class PaymentInfo extends React.Component{
             state = {
-                payment_status: {
-                    NEW: "待確認(ATM)",
-                    PAID:  "轉帳完成",
-                    CANCEL: "取消"
-                },
                 switchOn: false
+            }
+            payment_status = {
+                NEW: "待確認(ATM)",
+                PAID:  "轉帳完成",
+                CANCEL: "取消"
             }
             render(){
                 const status = this.props.status;
@@ -235,7 +247,7 @@
                     <div className="payment_div">
                         訂金：
                         <span>
-                            {this.state.payment_status[status]}
+                            {this.payment_status[status]}
                         </span>
                         <button className={status=="PAID" && "paid_btn"} 
                             onClick={this.getPaymentDetail}>
@@ -261,13 +273,13 @@
                 amount: "",
                 transfer_date: "",
                 past_data: {}, // 存放原始資料，以追蹤修改項目
-                labels: {
-                    bank: "匯款銀行", 
-                    account_no: "帳號末五碼", 
-                    name: "匯款戶名", 
-                    amount: "金額",
-                    transfer_date: "匯款日期"
-                }
+            }
+            labels = {
+                bank: "匯款銀行", 
+                account_no: "帳號末五碼", 
+                name: "匯款戶名", 
+                amount: "金額",
+                transfer_date: "匯款日期"
             }
             componentDidMount(){
                 if(this.props.pid!==null){
@@ -285,12 +297,11 @@
                 }
             }
             render(){
-                const labels = this.state.labels;
                 let payment_content = []
-                Object.keys(labels).forEach(col=>{
+                Object.keys(this.labels).forEach(col=>{
                     let item = (
                         <div>
-                            <label for="">{labels[col]}：</label>
+                            <label for="">{this.labels[col]}：</label>
                             <input type={col=="transfer_date"? "date" : "text"} id={`${col}_input`} value={this.state[col]} 
                                 onChange={this.handleChange(col)}/>
                         </div>
@@ -334,14 +345,13 @@
                 eObj.preventDefault();
                 const state = this.state;
                 let msg = "";
-                Object.keys(state.labels).forEach(col=>{
-                    msg = msg+ `${state.labels[col]}:${state[col]}\n`
+                Object.keys(this.labels).forEach(col=>{
+                    msg = msg+ `${this.labels[col]}:${state[col]}\n`
                 })
                 msg = msg +`再次確認?`
                 const check = this.checkInputValue(msg);
                 if(check){
                     delete state.past_data;
-                    delete state.labels;
                     state["oid"] = this.props.oid;
                     paymentRequestWithData("POST", state).then(resp=>{
                         if(resp.ok){
@@ -356,9 +366,9 @@
                 const state = this.state;
                 let msg = "";
                 let data = {};
-                Object.keys(state.labels).forEach(col=>{
+                Object.keys(this.labels).forEach(col=>{
                     if(state[col]!==state.past_data[col]){
-                        msg = msg+ `${state.labels[col]}：${state[col]}\n`
+                        msg = msg+ `${this.labels[col]}：${state[col]}\n`
                         data[col] = state[col]
                     }
                 })
@@ -377,7 +387,6 @@
                 }
             }
         }
-        
         addEventListener("load", ()=>{
             currentUserPromise.then(currentUser=>{
                 // console.log(currentUser)
