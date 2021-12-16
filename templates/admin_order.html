@@ -333,7 +333,7 @@
                 }else if(account_no.length<5){
                     alert("匯款帳號缺碼，請確認!!")
                     return
-                }else if(typeof amount!=="number"){
+                }else if(typeof amount!=="number" || amount>0){
                     alert("請輸入阿拉伯數字")
                     return
                 }else{
@@ -346,7 +346,7 @@
                 const state = this.state;
                 let msg = "";
                 Object.keys(this.labels).forEach(col=>{
-                    msg = msg+ `${this.labels[col]}:${state[col]}\n`
+                    msg = msg+ `${this.labels[col]}：${state[col]}\n`
                 })
                 msg = msg +`再次確認?`
                 const check = this.checkInputValue(msg);
