@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_jwt_extended import jwt_required
 
 from . import auth
-from model.db import Mydb
+from models import BookingDB
 from constants import DATE_FORMATTER
 
 # 初始化response content
@@ -27,7 +27,7 @@ def calendarFormatter(result, cols):
 @jwt_required()
 def get_booking_by_date(start_date_string, end_date_string):
     try:
-        mydb = Mydb()
+        mydb = BookingDB()
         data, cols = mydb.getBookingListByDate(start_date_string, end_date_string)
         order_calendar = []
         if data:
@@ -51,7 +51,7 @@ def get_booking_by_date(start_date_string, end_date_string):
 def get_booking_list_by_oid(oid):
     # cols = ["date", "room_no", "room_name", "room_type"]
     try:
-        mydb = Mydb()
+        mydb = BookingDB()
         results, cols = mydb.getBookingListByOrderId(oid)
         data = []
         if results:            

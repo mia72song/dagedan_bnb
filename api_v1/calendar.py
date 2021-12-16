@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 import json
 
 from . import api
-from model.db import Mydb
+from models import CalendarDB
 from constants import DATE_FORMATTER
 
 # 將由db取得的日曆，整理成dict格式
@@ -28,7 +28,7 @@ def get_weekly_calendar(start_date_string):
     end_date = start_date+timedelta(days=6)
     end_date_string = datetime.strftime(end_date, DATE_FORMATTER)
     try:
-        mydb = Mydb()
+        mydb = CalendarDB()
         data = mydb.getCalendar(start_date_string, end_date_string)
         weekly_calendar = []
         for d in data:

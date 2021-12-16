@@ -2,7 +2,7 @@ from flask import make_response
 import json
 
 from . import api
-from model.db import Mydb
+from models import RoomDB
 
 # 初始化response content
 body = "" #json
@@ -19,7 +19,7 @@ def roomFormatter(result):
 @api.route("/rooms")
 def get_all_rooms():
     try:
-        mydb = Mydb()
+        mydb = RoomDB()
         data = mydb.getRooms()
         room_list = []
         for d in data:

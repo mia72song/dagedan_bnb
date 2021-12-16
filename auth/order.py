@@ -3,7 +3,7 @@ from datetime import datetime
 from flask_jwt_extended import jwt_required
 
 from . import auth
-from model.db import Mydb
+from models import OrderDB
 from constants import DATE_FORMATTER, DATETIME_FORMATTER
 
 # 初始化response content
@@ -28,7 +28,7 @@ def orderFormatter(result):
 @jwt_required()
 def get_order_by_id(order_id):
     try:
-        mydb = Mydb()
+        mydb = OrderDB()
         data = mydb.getOrderById(order_id)
         data_dict = []
         if data:
@@ -51,7 +51,7 @@ def get_order_by_id(order_id):
 def get_orders_by_keyword(data_type, keyword):
     # data_type: status, phone, check_in_date
     try:
-        mydb = Mydb()
+        mydb = OrderDB()
         data = mydb.getOrdersByDataType([data_type, keyword.upper()])
         data_list = []
         if data:
@@ -74,7 +74,7 @@ def get_orders_by_keyword(data_type, keyword):
 @jwt_required()
 def get_all_orders():
     try:
-        mydb = Mydb()
+        mydb = OrderDB()
         data = mydb.getOrdersByDataType()
         data_list = []
         if data:
