@@ -1,5 +1,4 @@
-from flask import make_response
-import json
+from flask import jsonify
 
 from . import api
 from models import RoomDB
@@ -8,39 +7,21 @@ from models import RoomDB
 body = "" #json
 status_code = 0
 
-# 將由db取得的房間資料，整理成dict格式
-def roomFormatter(result):
-    cols = ["room_no", "name", "type", "accommodate", "rate_weekday", "rate_holiday", "single_discount", "discribe", "images"]
-    data_dict = dict(zip(cols, result))
-    data_dict["rate_weekday"] = float(data_dict["rate_weekday"])
-    data_dict["rate_holiday"] = float(data_dict["rate_holiday"])
-    return data_dict
-
 @api.route("/rooms")
 def get_all_rooms():
     try:
         mydb = RoomDB()
-        data = mydb.getRooms()
-        room_list = []
-        for d in data:
-            room = roomFormatter(d)
-            room_list.append(room)
-        
-        body = json.dumps({
-            "data":room_list
-        }, ensure_ascii=False, indent=2)
+        body = jsonify({"data": mydb.getRooms()})
         status_code = 200
     
     except Exception as e:
-        body = json.dumps({
+        body = jsonify({
             "error": True,
             "message": f"伺服器內部錯誤：{e}"
-        }, ensure_ascii=False, indent=2)
+        })
         status_code = 500
 
-    resp = make_response(body, status_code)
-    resp.headers["Content-Type"] = "application/json"
-    return resp
+    return body, status_code
 
 @api.route("/room/<type>")
 def get_room(type):

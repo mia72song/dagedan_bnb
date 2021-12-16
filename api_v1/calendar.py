@@ -1,23 +1,9 @@
-from flask import make_response
+from flask import jsonify
 from datetime import datetime, timedelta
-import json
 
 from . import api
 from models import CalendarDB
 from constants import DATE_FORMATTER
-
-# 將由db取得的日曆，整理成dict格式
-def calendarFormatter(result):
-    cols = ["date", "weekday", "is_holiday", "note"]
-    data_dict = dict(zip(cols, result))
-    data_dict["date"] = datetime.strftime(data_dict["date"], DATE_FORMATTER)
-
-    is_holiday = False
-    if data_dict["is_holiday"]:
-        is_holiday = True
-    data_dict["is_holiday"] = is_holiday
-
-    return data_dict
 
 @api.route("/weekly_calendar/start=<start_date_string>")
 def get_weekly_calendar(start_date_string):
@@ -29,24 +15,15 @@ def get_weekly_calendar(start_date_string):
     end_date_string = datetime.strftime(end_date, DATE_FORMATTER)
     try:
         mydb = CalendarDB()
-        data = mydb.getCalendar(start_date_string, end_date_string)
-        weekly_calendar = []
-        for d in data:
-            weekly_calendar.append(calendarFormatter(d))
-
-        body = json.dumps({
-            "data": weekly_calendar
-        }, ensure_ascii=False, indent=2)
+        weekly_calendar = mydb.getCalendar(start_date_string, end_date_string)
+        body = jsonify({"data": weekly_calendar})
         status_code = 200
 
     except Exception as e:
-        print(e)
-        body = json.dumps({
+        body = jsonify({
             "error": True,
             "message": f"伺服器內部錯誤：{e}"
-        }, ensure_ascii=False, indent=2)
+        })
         status_code = 500
 
-    resp = make_response(body, status_code)
-    resp.headers["Content-Type"] = "application/json"
-    return resp
+    return body, status_code

@@ -1,4 +1,21 @@
+from datetime import datetime
+
 from models.db import Mydb
+from constants import DATE_FORMATTER, DATETIME_FORMATTER
+
+# 將由db取得的訂單資料，整理成dict格式
+def orderFormatter(result):
+    cols = [
+            "order_id", "create_datetime", "booker_name", "booker_gender", "booker_phone",
+            "check_in_date", "check_out_date", "nights", "guests", "amount", "order_status",
+            "add_on_order_id", "payment_id"
+        ]
+    data_dict = dict(zip(cols, result))
+    data_dict["create_datetime"] = datetime.strftime(data_dict["create_datetime"], DATETIME_FORMATTER)
+    data_dict["check_in_date"] = datetime.strftime(data_dict["check_in_date"], DATE_FORMATTER)
+    data_dict["check_out_date"] = datetime.strftime(data_dict["check_out_date"], DATE_FORMATTER)
+    data_dict["amount"] = float(data_dict["amount"])
+    return data_dict
 
 class OrderDB(Mydb):
     def getOrderById(self, order_id):
@@ -13,12 +30,17 @@ class OrderDB(Mydb):
             WHERE order_id={order_id}
         """
         self.cur.execute(sql)
-        data = self.cur.fetchone()
-        return data
+        result = self.cur.fetchone()
+        if result:
+            data_list = []
+            data_list.append(orderFormatter(result))
+            return data_list
+        else:
+            return None
 
     def getOrdersByDataType(self, search_list=[]):
         '''
-        search_list = [data_type, keyword]
+        search_list = [col_name, value]
         None則，調用所有訂單
         '''
         sql = f"""
@@ -37,5 +59,17 @@ class OrderDB(Mydb):
         sql += f" ORDER BY o.create_datetime DESC"
         
         self.cur.execute(sql)
-        data = self.cur.fetchall()
-        return data
+        results = self.cur.fetchall()
+        if results:
+            data_list = []
+            for r in results:
+                data_dict = orderFormatter(r)
+                data_list.append(data_dict)
+            return data_list
+        else:
+            return None
+
+if __name__=="__main__":
+    mydb = OrderDB()
+    data = mydb.getOrdersByDataType()
+    print(data)

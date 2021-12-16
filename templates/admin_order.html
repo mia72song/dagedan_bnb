@@ -109,7 +109,7 @@
         class DataBox extends React.Component{
             render(){
                 let content;
-                if(this.props.data.length>0){
+                if(this.props.data){
                     content = this.props.data.map(d=><DataRow key={d.order_id} data={d}/>)
                 }
                 return(

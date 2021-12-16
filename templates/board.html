@@ -139,7 +139,9 @@
             }
             componentDidMount(){
                 this.token=PubSub.subscribe("BOOKED", (_, booked)=>{
-                    this.setState({booked})
+                    if(booked){
+                        this.setState({booked})
+                    }
                 })
             }
             render(){
@@ -147,7 +149,8 @@
                 let a_tag = null;
                 if(booked.length>0){
                     booked.forEach(b=>{
-                        if(b.bid===this.props.bid){
+                        let bid = `${b.date}-${b.room_no}`;
+                        if(bid==this.props.bid){
                             a_tag = (
                                 <a href={`/admin/order/${b.order_id}`} className="order_link">
                                     {b.booker_gender=="F" ? "Miss" : "Mr."} {b.booker_name} {b.booker_phone}
