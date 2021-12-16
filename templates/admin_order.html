@@ -17,6 +17,95 @@
         </div>
     </main>
     <script type="text/babel">
+        class Search extends React.Component{
+            state = {
+                orders_status: "NEW", // NEW, ALL, PAID, CANCEL
+                select: "",
+                keyword: ""
+            }
+            componentDidMount(){
+                let p;
+                if(location.search){
+                    const query_string = location.search.replace("?", "");
+                    p = getOrdersByKeyword(query_string.split("=")[0], query_string.split("=")[1])
+                    this.setState({
+                        orders_status: "ALL",
+                        select: query_string.split("=")[0],
+                        keyword: query_string.split("=")[1]
+                    })
+                }else if(location.pathname.split("/")[3]){
+                    p = getOrderById(location.pathname.split("/")[3])
+                    this.setState({
+                        orders_status: "ALL",
+                        select: "order_id",
+                        keyword: location.pathname.split("/")[3]
+                    })
+                }else if(location.pathname=="/admin/orders"){
+                    p = getOrdersByStatus(this.state.orders_status)
+                }
+                p.then(data=>{
+                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
+                })
+            }
+            render(){
+                return(
+                    <div id="wrap">
+                        <div id="status_wrap">
+                            <label for="">訂單狀態</label>
+                            <select value={this.state.orders_status} onChange={this.filterStatus}>
+                                <option value="NEW">新訂單</option>
+                                <option value="ALL">全部訂單</option>
+                                <option value="PAID">已付款</option>
+                                <option value="CANCEL">取消</option>
+                            </select>
+                        </div>
+                        <div id="keyword_wrap">
+                            <label for="">搜尋項目</label>
+                            <select value={this.state.select} onChange={this.handleChange("select")}>
+                                <option value="">請選取搜尋項目</option>
+                                <option value="order_id">訂單編號</option>
+                                <option value="phone">聯絡電話</option>
+                                <option value="check_in_date">入住日期</option>
+                            </select>
+                            <input type={this.state.select=="check_in_date" ? "date" : "text"} name="keyword" id="keyword" placeholder="請輸入關鍵字"
+                                value={this.state.keyword} onChange={this.handleChange("keyword")}/>
+                            <button type="submit" className="btn btn-dark" onClick={this.handleSubmit}>搜尋</button>
+                        </div>
+                    </div>
+                )
+            }
+            filterStatus=(eObj)=>{
+                getOrdersByStatus(eObj.target.value).then(data=>{
+                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
+                })
+                this.setState({
+                    orders_status: eObj.target.value,
+                    select: "",
+                    keyword: ""
+                })
+            }
+            handleChange=(dataType)=>{
+                return(eObj=>{
+                    this.setState({
+                        [dataType]: eObj.target.value
+                    });
+                })
+            }
+            handleSubmit=(eObj)=>{
+                if(this.state.select=="" || this.state.keyword==""){
+                    alert("搜尋項目及關鍵字皆不得為空")
+                    return
+                }else{
+                    const data_type = this.state.select;
+                    const keyword = this.state.keyword
+                    if(data_type=="order_id"){
+                        location.href = `/admin/order/${keyword}`
+                    }else{
+                        location.href = `/admin/orders?${data_type}=${keyword}`
+                    }                    
+                }
+            }
+        }
         class DataBox extends React.Component{
             render(){
                 let content;
@@ -287,95 +376,7 @@
                 }
             }
         }
-        class Search extends React.Component{
-            state = {
-                order_status: "NEW", // NEW, ALL, PAID, CANCEL
-                select: "",
-                keyword: ""
-            }
-            componentDidMount(){
-                let p;
-                if(location.search){
-                    const query_string = location.search.replace("?", "");
-                    p = getOrdersByKeyword(query_string.split("=")[0], query_string.split("=")[1])
-                    this.setState({
-                        order_status: "ALL",
-                        select: query_string.split("=")[0],
-                        keyword: query_string.split("=")[1]
-                    })
-                }else if(location.pathname.split("/")[3]){
-                    p = getOrderById(location.pathname.split("/")[3])
-                    this.setState({
-                        order_status: "ALL",
-                        select: "order_id",
-                        keyword: location.pathname.split("/")[3]
-                    })
-                }else if(location.pathname=="/admin/orders"){
-                    p = getOrdersByStatus(this.state.order_status)
-                }
-                p.then(data=>{
-                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
-                })
-            }
-            render(){
-                return(
-                    <div id="wrap">
-                        <div id="status_wrap">
-                            <label for="">訂單狀態</label>
-                            <select value={this.state.order_status} onChange={this.filterStatus}>
-                                <option value="NEW">新訂單</option>
-                                <option value="ALL">全部訂單</option>
-                                <option value="PAID">已付款</option>
-                                <option value="CANCEL">取消</option>
-                            </select>
-                        </div>
-                        <div id="keyword_wrap">
-                            <label for="">搜尋項目</label>
-                            <select value={this.state.select} onChange={this.handleChange("select")}>
-                                <option value="">請選取搜尋項目</option>
-                                <option value="order_id">訂單編號</option>
-                                <option value="phone">聯絡電話</option>
-                                <option value="check_in_date">入住日期</option>
-                            </select>
-                            <input type={this.state.select=="check_in_date" ? "date" : "text"} name="keyword" id="keyword" placeholder="請輸入關鍵字"
-                                value={this.state.keyword} onChange={this.handleChange("keyword")}/>
-                            <button type="submit" className="btn btn-dark" onClick={this.handleSubmit}>搜尋</button>
-                        </div>
-                    </div>
-                )
-            }
-            filterStatus=(eObj)=>{
-                getOrdersByStatus(eObj.target.value).then(data=>{
-                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
-                })
-                this.setState({
-                    order_status: eObj.target.value,
-                    select: "",
-                    keyword: ""
-                })
-            }
-            handleChange=(dataType)=>{
-                return(eObj=>{
-                    this.setState({
-                        [dataType]: eObj.target.value
-                    });
-                })
-            }
-            handleSubmit=(eObj)=>{
-                if(this.state.select=="" || this.state.keyword==""){
-                    alert("搜尋項目及關鍵字皆不得為空")
-                    return
-                }else{
-                    const data_type = this.state.select;
-                    const keyword = this.state.keyword
-                    if(data_type=="order_id"){
-                        location.href = `/admin/order/${keyword}`
-                    }else{
-                        location.href = `/admin/orders?${data_type}=${keyword}`
-                    }                    
-                }
-            }
-        }
+        
         addEventListener("load", ()=>{
             currentUserPromise.then(currentUser=>{
                 // console.log(currentUser)
@@ -383,7 +384,7 @@
                     ReactDOM.render(<Banner id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
                     ReactDOM.render(<Search />, document.querySelector("nav"));
                 }else{
-                    location.href = `${window.origin}/admin/`
+                    handleLogout()
                 }
             })
         })

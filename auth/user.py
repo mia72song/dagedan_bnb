@@ -1,5 +1,4 @@
-from flask import session, jsonify, request
-from flask.helpers import make_response
+from flask import session, jsonify, request, make_response
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 
 from . import auth
@@ -21,7 +20,6 @@ def login():
             if user_info:
                 session["user"] = user_info
                 access_token = create_access_token(identity=user_info[0])
-                print(access_token)
                 resp = make_response(jsonify({
                     "ok": True,
                     "access_token": access_token

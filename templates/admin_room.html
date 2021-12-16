@@ -16,7 +16,7 @@
                     ReactDOM.render(<Banner id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
 
                 }else{
-                    location.href = `${window.origin}/admin/`
+                    handleLogout()
                 }
             })
         })

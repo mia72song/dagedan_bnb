@@ -1,9 +1,11 @@
-function orderRequestWithAuth(url){
+function orderRequest(url){
     let p = fetch(url).then(response=>{
         if(response.status===200){
             return response.json()
+        }else if(response.status===500){
+            console.log(response.json());
         }else{
-            console.log(response.json())
+            handleLogout();
         }
     })
     return p
@@ -16,7 +18,7 @@ function getOrdersByStatus(status){
     }else{
         url = `${window.origin}/auth/orders/status=${status}`
     }
-    let p = orderRequestWithAuth(url).then(resp=>{
+    let p = orderRequest(url).then(resp=>{
         if(resp.data){
             return resp.data
         }
@@ -25,7 +27,7 @@ function getOrdersByStatus(status){
 }
 function getOrderById(order_id){
     const url = `${window.origin}/auth/order/${order_id}`
-    let p = orderRequestWithAuth(url).then(resp=>{
+    let p = orderRequest(url).then(resp=>{
         if(resp.data){
             return resp.data
         }
@@ -34,7 +36,7 @@ function getOrderById(order_id){
 }
 function getOrdersByKeyword(data_type, keyword){
     const url = `${window.origin}/auth/orders/${data_type}=${keyword}`
-    let p = orderRequestWithAuth(url).then(resp=>{
+    let p = orderRequest(url).then(resp=>{
         if(resp.data){
             return resp.data
         }

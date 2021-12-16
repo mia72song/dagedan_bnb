@@ -13,7 +13,7 @@ class Config:
 
     # JWT設置
     JWT_SECRET_KEY = secrets.token_hex()
-    JWT_TOKEN_LOCATION = ["headers", "cookies"]
+    JWT_TOKEN_LOCATION = ["headers", "cookies"] #"headers", "cookies", "json", "query_string"
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ["access"]
     PROPAGATE_EXCEPTIONS = True
@@ -25,6 +25,10 @@ class DevConfig(Config):
 class ProConfig(Config):
     ENV = "production"
     DEBUG = False
+
+    # If true this will only allow the cookies that contain your JWTs to be sent over https.
+    # In production, this should always be set to True
+    JWT_COOKIE_SECURE = True
 
 class TestingConfig(ProConfig):
     TESTING = True

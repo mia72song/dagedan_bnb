@@ -38,10 +38,10 @@ main{
     display: flex;
     margin: 20px 30px;
 }
-.title{
+#banner>.title{
     width: 50%;
 }
-.menu{
+#banner>.menu{
     width: 50%;
     text-align: right;
     margin-top: 13px;
@@ -67,6 +67,6 @@ main{
 .menu_not_checked:hover{
     text-decoration:underline;
 }
-#logout:hover{
+#logout_btn:hover{
     color: crimson;
 }

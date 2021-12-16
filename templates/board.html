@@ -13,7 +13,7 @@
     <main>
         <div class="news"></div>
         <div id="board">
-            
+            <!--由Board組件渲染-->
         </div>        
     </main>
     <script type="text/babel">
@@ -73,8 +73,7 @@
             }
             toNextPage=(number)=>{
                 return(eObj=>{
-                    let page = this.state.page+number;
-                    this.updateWeeklyCalendar(page);
+                    this.updateWeeklyCalendar(this.state.page+number);
                 })
             }
             updateWeeklyCalendar=(page)=>{
@@ -82,7 +81,7 @@
                 getWeeklyCalendar(start_date_string).then(respC=>{
                     let week = respC.data;
                     let end_date_string = week[6].date;
-                    getBookingListWithAuth(start_date_string, end_date_string).then(respB=>{
+                    getBookingListByDate(start_date_string, end_date_string).then(respB=>{
                         this.setState({
                             page,
                             y: week[0].date.substring(0,4),
@@ -111,10 +110,9 @@
                 const week = this.props.week;
                 let week_content = [];
                 week.forEach(d => {
-                    let id = d.date+"-"+room.room_no
                     let td = (
                         <td>
-                            <OrderLink id={id} />
+                            <OrderLink bid={d.date+"-"+room.room_no} />
                         </td>
                     )
                     week_content.push(td);               
@@ -124,12 +122,12 @@
                         <td scope="row" className="room_type">{room.name}-{room.room_no}</td>
                         { week_content }
                         <td>
-                            <button type="button" class="btn btn-light" onClick={this.handleClickBtn(room.room_no)}>修改房間</button>
+                            <button type="button" class="btn btn-light" onClick={this.changeRoomInfo(room.room_no)}>修改房間</button>
                         </td>
                     </tr>
                 )
             }
-            handleClickBtn=(room_no)=>{
+            changeRoomInfo=(room_no)=>{
                 return(eObj=>{
                     console.log(room_no);
                 })
@@ -145,12 +143,11 @@
                 })
             }
             render(){
-                const id =this.props.id;
                 const booked = this.state.booked;
                 let a_tag = null;
                 if(booked.length>0){
                     booked.forEach(b=>{
-                        if(b.bid===id){
+                        if(b.bid===this.props.bid){
                             a_tag = (
                                 <a href={`/admin/order/${b.order_id}`} className="order_link">
                                     {b.booker_gender=="F" ? "Miss" : "Mr."} {b.booker_name} {b.booker_phone}
@@ -172,7 +169,7 @@
                     ReactDOM.render(<Banner id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
                     ReactDOM.render(<Board/>, document.querySelector("#board"));
                 }else{
-                    location.href = `${window.origin}/admin/`
+                    location.href = `/admin`
                 }
             })
         })       

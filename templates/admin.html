@@ -17,8 +17,8 @@
             }
             render(){
                 return(
-                    <div id="box">
-                        <div id="logo">
+                    <div id="login_box">
+                        <div id="logo_box">
                             <img src="../static/images/logo1.jpg" alt=""/>
                         </div>
                         <form method="post" onSubmit={this.handleSubmit}>
@@ -39,8 +39,6 @@
             }
             handleChange=(dataType)=>{
                 return(eObj=>{
-                    // console.log(dataType);
-                    // console.log(eObj.target.value);
                     this.setState({[dataType]:eObj.target.value});
                 })
             }
@@ -56,7 +54,7 @@
                 p.then(resp=>{
                     if(resp.ok){
                         localStorage.setItem("jwt", resp.access_token)
-                        location.href = `${window.origin}/admin/board`
+                        location.href = `/admin/board`
                     }else if(resp.error){
                         alert(resp.message)
                         location.reload()
@@ -69,7 +67,7 @@
                 if(currentUser==null){
                     ReactDOM.render(<LoginForm/>, document.querySelector("main"));
                 }else{
-                    location.href = `${window.origin}/admin/board`
+                    location.href = `/admin/board`
                 }  
             })
         })

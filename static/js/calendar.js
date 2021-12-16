@@ -17,7 +17,7 @@ function getDateString(n=1){
     return (date_obj.getFullYear().toString()+"-"+m+"-"+d)
 }
 
-function getBookingList(start_date_string){
+function getBookingListByDate(start_date_string){
     const url = `${window.origin}/api/booking/start=${start_date_string}`;
     let p = fetch(url).then(response=>{
         if(response.status===200){

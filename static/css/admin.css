@@ -3,11 +3,20 @@ main{
     height: 450px;
     margin: auto;
 }
-#logo{
-    margin-top: 100px; 
+#login_box{
+    width: 250px;
 }
-#logo>img{
+#logo_box{
+    margin-top: 60px; 
+}
+#logo_box>img{
     width: 200px;
     display: block;
     margin: auto;
+}
+form{
+    margin-top: 10px;
+}
+.btn{
+    margin-top: 10px;
 }

@@ -10,7 +10,7 @@ function paymentRequestWithData(method, data){
         body: JSON.stringify(data)
     }).then(response=>{
         if(response.status===403){
-            location.href="/admin";
+            location.href = `/admin`;
         }else if(response.status===200){
             return response.json()
         }else{

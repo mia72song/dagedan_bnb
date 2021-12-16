@@ -1,6 +1,6 @@
-from flask import jsonify, session, request
+from flask import jsonify, request
 from datetime import datetime
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 from . import auth
 from model.db import Mydb
@@ -41,9 +41,8 @@ def get_payment(pid):
 @auth.route("/payment", methods=["POST"])
 @jwt_required()
 def create_payment():
-    current_user = get_jwt_identity()
-    if current_user:
-        current_username = session.get("user")[0]
+    if get_jwt_identity():
+        current_username = get_jwt_identity()
         create_data = request.get_json()
     else:
         body = jsonify({
@@ -86,8 +85,8 @@ def create_payment():
 @auth.route("/payment", methods=["PUT"])
 @jwt_required()
 def update_payment():
-    if session.get("user"):
-        current_username = session.get("user")[0]
+    if get_jwt_identity():
+        current_username = get_jwt_identity()
         update_data = request.get_json()
     else:
         body = jsonify({
