@@ -1,6 +1,6 @@
 from flask import jsonify, request
-from datetime import datetime
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from datetime import datetime
 
 from . import auth
 from models import PaymentDB
@@ -13,11 +13,19 @@ status_code = 0
 @auth.route("/payment/<pid>")
 @jwt_required()
 def get_payment(pid):
+    cols = ["pid", "bank", "account_no", "name", "amount", "update_datetime", "current_user", "transfer_date"]
     try:
         mydb = PaymentDB()
-        data_dict = mydb.getPaymentById(pid)
+        result = mydb.getPaymentById(pid)
+        data_dict = dict(zip(cols, result))
+        data_dict["amount"] = float(data_dict["amount"])
+        data_dict["transfer_date"] = datetime.strftime(data_dict["transfer_date"], DATE_FORMATTER)
+        del data_dict["update_datetime"]
+        del data_dict["current_user"]
+
         body = jsonify({"data": [data_dict, ]})
         status_code = 200
+        
     except Exception as e:
         body = jsonify({
             "error": True,

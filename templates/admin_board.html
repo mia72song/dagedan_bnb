@@ -99,7 +99,7 @@
                     <th className={this.props.data.is_holiday && "holiday"}>
                         <h2>{((this.props.data.date).split("-"))[2]}</h2>
                         <p>{this.props.data.weekday}</p>
-                        <p id="date_note">{this.props.data.note}</p>
+                        <p className="date_note">{this.props.data.note}</p>
                     </th>
                 )
             }

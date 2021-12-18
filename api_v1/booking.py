@@ -9,20 +9,26 @@ from constants import DATE_FORMATTER
 body = "" #json
 status_code = 0
 
-@api.route("/booking/start=<start_date_string>")
-def get_booking_by_weekly_calendar(start_date_string):
+@api.route("/booked/start=<start_date_string>")
+def get_booked_by_weekly_calendar(start_date_string):
     start_date = datetime.strptime(start_date_string, DATE_FORMATTER)
     end_date = start_date+timedelta(days=6)
     end_date_string = datetime.strftime(end_date, DATE_FORMATTER)
     try:
         mydb = BookingDB()
-        data_list = mydb.getBookingByDateToFront(start_date_string, end_date_string)
+        booked_list = []
+        for r in mydb.getBookedByDate(start_date_string, end_date_string):
+            cols = ["date", "is_holiday", "room_no"]
+            data_dict = dict(zip(cols, r))
+            data_dict["date"] = datetime.strftime(data_dict["date"], DATE_FORMATTER)
+            booked_list.append(data_dict)
+
         body = jsonify({
             "search_string": {
                 "start_date": start_date_string,
                 "end_date": end_date_string
             },
-            "data": data_list
+            "data": booked_list
             })
         status_code = 200
 

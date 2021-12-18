@@ -106,46 +106,107 @@
             }
         }
     }
-
     class Calendar extends React.Component{
         state = {
+            rooms: [],
             y: "",
             m: "",
-            week: []
+            week: [],
+            booked: []
         }
         componentDidMount(){
-            let search_sting = (location.search).replace("?", "").split("&");
-            let check_in_date = (search_sting[0].split("="))[1];
-            getBookingList(check_in_date).then(resp=>{
-                if(resp.data){
-                    console.log(resp.data);
-                }
-            })      
+            const first_search_sting = location.search.split("&")[0].split("?")[1].split("=");
+            if(first_search_sting[0]=="checkin"){
+                getWeeklyCalendar(first_search_sting[1]).then(respC=>{
+                    const week = respC.data;
+                    getBookingListByDate(week[0].date).then(respB=>{
+                        const booked = respB.data;
+                        console.log(booked);
+                        this.setState({
+                            rooms: this.props.rooms,
+                            y: week[0].date.split("-")[0],
+                            m: week[0].date.split("-")[1],
+                            week,
+                            booked
+                        })
+                    })
+                })
+            } 
         }
         render(){
             return(
                 <table>
                     <thead>
                         <tr>
-                            <th colspan="9"><h1>西元 {this.state.y} 年 - {this.state.m} 月</h1></th>
+                            <th colspan="9"><h2>{this.state.y} 年 - {this.state.m} 月</h2></th>
+                        </tr>
+                        <tr>
+                            <td className="left_td">
+                                今日
+                            </td>
+                            {this.state.week.map(d=><Day data={d}/>)}
+                            <td className="left_td">
+                                下週    
+                            </td>
                         </tr>
                     </thead>
                     <tbody>
-                    
+                        {this.state.rooms.map(r=><Row room={r} week={this.state.week}/>)}
                     </tbody>
                 </table>
             )
         }
     }
+    class Day extends React.Component{
+        render(){
+            const data = this.props.data;
+            return(
+                <th className={data.is_holiday && "holiday"}>
+                    <h1>{((data.date).split("-"))[2]}</h1>
+                    <p>{data.weekday}</p>
+                    <p className="date_note">{data.note}</p>
+                </th>
+            )
+        }
+    }
+    class Row extends React.Component{
+        render(){
+            const room = this.props.room;
+            const week = this.props.week;
+            return(
+                <tr>
+                    <th>
+                        {this.props.room.name}
+                    </th>
+                    {week.map(d=>(
+                        <BookingItem id={`${d.date}-${room.room_no}`}/>
+                        )
+                    )}
+                    <th>
+                        {this.props.room.name}
+                    </th> 
+                </tr>
+            )
+        }
+    }
+    class BookingItem extends React.Component{
+        render(){
+            return(
+                <td>
+                    <a href="#">{this.props.id}</a>
+                </td>
+            )
+        }
+    }
     addEventListener("load", ()=>{
         ReactDOM.render(<Search/>, document.querySelector(".search_wrap"))
+        if(window.location.search!==""){
+            roomRequest().then(resp=>{
+                if(resp.data){
+                    ReactDOM.render(<Calendar rooms={resp.data}/>, document.querySelector(".calendar_wrap"))
+                }
+            })
+        }
     })
-    if(window.location.search!==""){
-        roomRequest().then(resp=>{
-            if(resp.data){
-                ReactDOM.render(<Calendar rooms={resp.data}/>, document.querySelector(".calendar_wrap"))
-            }
-        })
-    }
 </script>
 {% endblock %}

@@ -9,7 +9,7 @@ def index():
 
 @admin.route("/board")
 def board():
-    return render_template("board.html")
+    return render_template("admin_board.html")
 
 @admin.route("/rooms")
 def get_room_list():

@@ -194,20 +194,20 @@
         }
         class BookingInfo extends React.Component{
             state = {
-                switchOn: false
+                on: false
             }
             render(){
                 return(
                     <div className="booking_detail">
                         <a href="javascript: void(0)" onClick={this.getBookingList} className="booking_list_btn">
-                            {this.state.switchOn? "房間明細🔼" : "🔽房間明細" }
+                            {this.state.on? "房間明細🔼" : "🔽房間明細" }
                         </a>
-                        {this.state.switchOn && <BookingList oid={this.props.oid}/>}
+                        {this.state.on && <BookingList oid={this.props.oid}/>}
                     </div> 
                 )
             }
             getBookingList=()=>{
-                this.setState({switchOn: !this.state.switchOn})
+                this.setState({on: !this.state.on})
             }
         }
         class BookingList extends React.Component{
@@ -234,7 +234,7 @@
         }
         class PaymentInfo extends React.Component{
             state = {
-                switchOn: false
+                on: false
             }
             payment_status = {
                 NEW: "待確認(ATM)",
@@ -253,16 +253,16 @@
                             onClick={this.getPaymentDetail}>
                             {status=="PAID"? "付款資料" : "確認轉帳"}
                         </button>
-                        {this.state.switchOn && (
+                        {this.state.on && (
                             <div className="payment_detail" id={`payment_detail_${this.props.oid}`}>
-                                <PaidForm oid={this.props.oid} pid={this.props.pid}/>
+                                <PaidForm oid={this.props.oid} pid={this.props.pid} cancel={status=="CANCEL"}/>
                             </div>
                         )}
                     </div>
                 )
             }
             getPaymentDetail=()=>{
-                this.setState({switchOn: !this.state.switchOn})
+                this.setState({on: !this.state.on})
             }
         }
         class PaidForm extends React.Component{
@@ -297,6 +297,7 @@
                 }
             }
             render(){
+                console.log(this.props.cancel);
                 let payment_content = []
                 Object.keys(this.labels).forEach(col=>{
                     let item = (

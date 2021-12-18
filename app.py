@@ -1,7 +1,8 @@
 from flask import *
+from flask_jwt_extended import JWTManager
+
 from config import envs
 
-from flask_jwt_extended import JWTManager
 jwt = JWTManager()
 
 app = Flask(__name__)

@@ -1,5 +1,5 @@
 .search_wrap{
-    padding-top: 20px;
+    padding-top: 10px;
 }
 #booking{
     width: 590px;
@@ -33,7 +33,29 @@
 }
 .calendar_wrap{
     height: 535px;
-    background-color: aqua;
-    width: 1200px;
+    background-color: #FFFFFF;
+    border: 3.5px #FFFFFF solid;
+    width: 1000px;
+    margin: 0 auto; 
+}
+table{
     margin: 0 auto;
+    margin-top: 10px;
+}
+table, th, td{
+    border: 2px black solid;
+}
+td, th{
+    width: 100px;
+}
+.left_td{
+    text-align: center;
+}
+.holiday{
+    color: red;
+}
+.date_note{
+    font-size: 8px;
+    height: 20px;
+    margin-top: 5px;
 }

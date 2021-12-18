@@ -1,6 +1,6 @@
 from flask import jsonify
-from datetime import datetime
 from flask_jwt_extended import jwt_required
+from datetime import datetime
 
 from . import auth
 from models import BookingDB
@@ -10,13 +10,25 @@ from constants import DATE_FORMATTER
 body = "" #json
 status_code = 0
 
-@auth.route("/booking/start=<start_date_string>&end=<end_date_string>")
+@auth.route("/booked/start=<start_date_string>&end=<end_date_string>")
 @jwt_required()
-def get_booking_by_date(start_date_string, end_date_string):
+def get_booker_info_by_date(start_date_string, end_date_string):
+    cols = [
+        "date", "room_no", "rate", "order_id", "guest_id", 
+        "booker_name", "booker_gender", "booker_phone"
+    ]
     try:
         mydb = BookingDB()
-        data_list = mydb.getBookingByDateToAdmin(start_date_string, end_date_string)
-        body = jsonify({"data": data_list})
+        booked_list = []
+        for r in mydb.getBookedByDateWithBookerInfo(start_date_string, end_date_string):
+            data_dict = dict(zip(cols, r))
+            data_dict["date"] = datetime.strftime(data_dict["date"], DATE_FORMATTER)
+            data_dict["rate"] = float(data_dict["rate"])
+            booked_list.append(data_dict)
+
+        print(booked_list)
+
+        body = jsonify({"data": booked_list})
         status_code = 200
 
     except Exception as e:
@@ -28,13 +40,19 @@ def get_booking_by_date(start_date_string, end_date_string):
 
     return body, status_code
 
-@auth.route("/booking/oid=<oid>")
+@auth.route("/booked/oid=<int:oid>")
 @jwt_required()
-def get_booking_by_oid(oid):
+def get_booked_by_oid(oid):
+    cols = ["date", "room_no", "room_name", "order_id"]
     try:
         mydb = BookingDB()
-        data_list = mydb.getBookingByOrderId(oid)
-        body = jsonify({"data": data_list})
+        booked_list = []
+        for r in mydb.getBookedByOrderIdWithRoomInfo(oid):
+            data_dict = dict(zip(cols, r))
+            data_dict["date"] = datetime.strftime(data_dict["date"], DATE_FORMATTER)
+            booked_list.append(data_dict)
+        
+        body = jsonify({"data": booked_list})
         status_code = 200
 
     except Exception as e:
