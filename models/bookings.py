@@ -1,5 +1,3 @@
-from datetime import datetime
-
 import sys
 sys.path.append("..")
 from models.db import Mydb
@@ -9,7 +7,7 @@ class BookingDB(Mydb):
         sql = f'''
             SELECT c.date, c.is_holiday, b.RoomNo AS room_no 
             from calendar AS c
-            INNER JOIN booking AS b ON b.Date=c.date
+            LEFT JOIN booking AS b ON b.Date=c.date
             WHERE c.date<='{end_date_string}' AND c.date>='{start_date_string}'
             ORDER BY date, room_no
         '''

@@ -18,7 +18,7 @@ function getDateString(n=1){
 }
 
 function getBookingListByDate(start_date_string){
-    const url = `${window.origin}/api/booking/start=${start_date_string}`;
+    const url = `${window.origin}/api/booked/start=${start_date_string}`;
     let p = fetch(url).then(response=>{
         if(response.status===200){
             return response.json();
