@@ -49,5 +49,5 @@ class RoomDB(Mydb):
 
 if __name__=="__main__":
     mydb = RoomDB()
-    data = mydb.getAvailableRoomsByDateType(is_holiday=True)
+    data = mydb.getAvailableRoomsByDateType()
     print(data)
