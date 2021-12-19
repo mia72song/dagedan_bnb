@@ -14,6 +14,7 @@ a{
 button{
     cursor: pointer;
 }
+
 /* header */
 header{
     height: 90px;
@@ -59,7 +60,7 @@ header{
 .menu a:hover{
     color: #FFFFFF;
 }
-.menu button{
+#book_now_btn{
     background-color: #1A1A1A;
     color: #FFFFFF;
     font-size: 19px;
@@ -68,29 +69,7 @@ header{
     height: 36px;
     width: 120px;
 }
-.menu button:hover{
-    background-color:#FFFFFF;
-    color: #F39801;
-    font-weight: bold;
-    border:1.5px #FFFFFF solid;
-}
-.menu_toggler{
-    display: none;
-    flex:none;
-    width: 50px;
-    margin: 0 auto;
-    line-height: 90px;
-}
-.menu_toggler_btn{
-    height: 40px;
-    width: 40px;
-    font-size: 20px;
-    background-color: #1A1A1A;
-    color: #FFFFFF;
-    border: #1A1A1A;
-    border-radius: 10px;
-}
-.menu_toggler_btn:hover{
+#book_now_btn:hover{
     background-color:#FFFFFF;
     color: #F39801;
     font-weight: bold;
@@ -99,6 +78,7 @@ header{
 .nav_wrap{
     height: 90px;
 }
+
 /* Main */
 main{
     height: 760px;
@@ -106,6 +86,35 @@ main{
 }
 .mainbox{
     height: 680px;
+}
+
+/* Search Component*/
+#available_room_search{
+    width: 590px;
+    margin: 20px auto;
+    background-color: #FFFFFF;
+    border: 5px #FFFFFF solid;
+    opacity: 0.95;
+    display: flex;
+}
+#available_room_search:hover{
+    opacity: 1;
+}
+#available_room_search>div{
+    margin: 10px;
+    font-size: 13px;
+}
+#available_room_search input{
+    line-height: 1.8;
+}
+.submit>button{
+    line-height: 3.2;
+    background-color: #F39801;
+    border: 2px #F39801 solid;
+    font-weight: bolder;
+}
+.submit>button:hover{
+    color: #FFFFFF;
 }
 /* Footer */
 footer{
@@ -128,21 +137,8 @@ footer{
 }
 /*RWD*/
 @media (max-width:1200px){
-    .nav{
-        width:95%;
-    }
-    footer>div{
-        width: 95%;
-    }
+     
 }
 @media (max-width:600px){
-    body{
-        font-size: 15px;
-    }
-    .menu_toggler{
-        display: block;
-    }
-    .menu>ul{
-        display: none;
-    }
+     
 }

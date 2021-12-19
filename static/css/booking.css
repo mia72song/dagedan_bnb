@@ -1,37 +1,16 @@
-.search_wrap{
+/* Search Component*/
+#search_wrap{
     padding-top: 10px;
 }
-#booking{
-    width: 590px;
-    margin: 20px auto;
-    background-color: #FFFFFF;
-    border: 5px #FFFFFF solid;
-    opacity: 0.95;
-    display: flex;
-}
-#booking:hover{
-    opacity: 1;
-}
-#booking>div{
-    margin: 10px;
-    font-size: 13px;
-}
-#booking input{
-    line-height: 1.8;
-}
 .submit>button{
-    line-height: 3.2;
     width: 75px;
-    font-weight: bolder;
-    background-color: #FFFFFF;
-    border: 2px #1A1A1A solid;
 }
 .submit>button:hover{
     background-color: #F39801;
     border: 2px #F39801 solid;
-    color: #FFFFFF;
 }
-.calendar_wrap{
+/* Calendar Component*/
+#calendar_wrap{
     height: 535px;
     background-color: #FFFFFF;
     border: 3.5px #FFFFFF solid;
@@ -53,9 +32,4 @@ td, th{
 }
 .holiday{
     color: red;
-}
-.date_note{
-    font-size: 8px;
-    height: 20px;
-    margin-top: 5px;
 }
