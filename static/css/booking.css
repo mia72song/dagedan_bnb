@@ -25,11 +25,17 @@ table, th, td{
     border: 2px black solid;
 }
 td, th{
-    width: 100px;
-}
-.left_td{
     text-align: center;
 }
+.calendar_th{
+    width: 55px;
+}
 .holiday{
-    color: red;
+    color: palevioletred;
+}
+.booking_item_checked{
+    background-color: chocolate;
+}
+tbody th{
+    height: 35px;
 }
