@@ -16,10 +16,10 @@ class OrderDB(Mydb):
         return self.cur.fetchone()
 
     def getOrdersByDataType(self, search_list=[]):
-        '''
+        """
         search_list = [col_name, value]
         None則，調用所有訂單
-        '''
+        """
         sql = f"""
             SELECT o.order_id,  o.create_datetime, 
             g.last_name, g.gender, g.phone AS phone,

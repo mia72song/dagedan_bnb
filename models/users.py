@@ -12,14 +12,14 @@ class UserDB(Mydb):
         else:
             return None
 
-    '''密碼加密儲存用
+    """密碼加密儲存用
     def updatePassword(self, username, password):
         password_hash = generate_password_hash(password)
         sql = f"UPDATE users SET password='{password_hash}' WHERE username='{username}'"
         self.cur.execute(sql)
         self.conn.commit()
         print("密碼已更新")
-    '''
+    """
 
 if __name__=="__main__":
     userdb = UserDB()

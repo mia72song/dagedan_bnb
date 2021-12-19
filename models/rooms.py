@@ -7,6 +7,7 @@ sql = f"""
     rt.discribe, rt.images, r.is_available FROM rooms AS r
     INNER JOIN room_types AS rt ON rt.type=r.RoomType
 """
+
 from models.db import Mydb
 class RoomDB(Mydb):
     def getRooms(self, sql=sql):
