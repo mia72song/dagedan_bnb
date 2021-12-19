@@ -12,6 +12,7 @@
 <div id="calendar_wrap">
     <!--由Calendar組件渲染-->
 </div>
+{% block script %}
 <script type="text/babel">
     class Calendar extends React.Component{
         state = {
@@ -123,4 +124,5 @@
         }
     })
 </script>
+{% endblock %}
 {% endblock %}

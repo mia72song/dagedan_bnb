@@ -22,9 +22,11 @@
 <div id="search_wrap">
     <!--由Search組件渲染，來自base.html-->
 </div>
+{% block script %}
 <script type="text/babel">
     addEventListener("load", ()=>{
         ReactDOM.render(<Search />, document.getElementById("search_wrap"))
     })
 </script>
+{% endblock %}
 {% endblock %}
