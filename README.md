@@ -1,1 +1,1 @@
-## Online booking & administration service for Dangedan B&B website
+## booking & administration service for Dangedan B&B website
