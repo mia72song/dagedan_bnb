@@ -1,6 +1,4 @@
 import csv
-from datetime import datetime
-
 import sys
 sys.path.append("..")
 
@@ -8,21 +6,6 @@ from models.db import Mydb
 from constants import DATE_FORMATTER
 
 class CalendarDB(Mydb):
-    def getCalendar(self, start_date_string, end_date_string):
-        cols = ["date", "weekday", "is_holiday", "note"]
-        sql = f"SELECT * FROM calendar WHERE date<='{end_date_string}' AND date>='{start_date_string}'"
-        self.cur.execute(sql)
-        results = self.cur.fetchall()
-        if results:
-            data_list = []
-            for r in results:
-                data_dict = dict(zip(cols, r))
-                data_dict["date"] = datetime.strftime(data_dict["date"], DATE_FORMATTER)
-                data_list.append(data_dict)
-            return data_list
-        else:
-            return None
-
     def updateCalendarFromCSV(self, csv_file_mane):
         with open(csv_file_mane, "r") as f:
             rows = csv.DictReader(f)

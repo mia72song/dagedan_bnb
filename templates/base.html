@@ -67,10 +67,23 @@
                 kids: 0
             }
             componentDidMount(){
-                this.setState({
-                    check_in_date: getDateString(),
-                    check_out_date: getDateString(2)
-                })
+                if(location.pathname==="/booking" && location.search){
+                    const search_string_1st = location.search.split("&")[0].split("?")[1].split("=");
+                    const search_string_2nd = location.search.split("&")[1].split("=");
+                    const search_string_3th = location.search.split("&")[2].split("=");
+                    const search_string_4th = location.search.split("&")[3].split("=");
+                    this.setState({
+                        check_in_date: search_string_1st[0]==="checkin" && search_string_1st[1],
+                        check_out_date: search_string_2nd[0]==="checkout" && search_string_2nd[1],
+                        [search_string_3th[0]]: search_string_3th[1],
+                        [search_string_4th[0]]: search_string_4th[1]
+                    })
+                }else{
+                    this.setState({
+                        check_in_date: getDateString(),
+                        check_out_date: getDateString(2)
+                    })
+                }
             }
             render(){
                 return(

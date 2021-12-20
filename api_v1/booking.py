@@ -32,6 +32,7 @@ def get_booked_calendar(start_date_string):
                 booked = data_dict[date]["booked"]
                 booked.append(b[3])
                 continue
+            
             if b[3]:
                 booked.append(b[3])
 

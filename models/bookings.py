@@ -3,11 +3,11 @@ sys.path.append("..")
 from models.db import Mydb
 
 class BookingDB(Mydb):
-    def closeBooking(self, date):
+    def closeBookingOnCalendar(self, date):
         sql = f"UPDATE calendar SET is_closed=1 WHERE date='{date}'"
         self.cur.execute(sql)
         self.conn.commit()
-        print(f"{date}已關房")
+        print(f"{date}已全天關房")
 
     def getBookedCalendar(self, start_date_string, end_date_string):
         sql = f"""
@@ -55,7 +55,6 @@ if __name__=="__main__":
         }
     }
     '''
-    mydb.closeBooking("2022-02-01")
     data_dict = {}
     booked = mydb.getBookedCalendar("2022-01-28", "2022-02-02")
     from datetime import datetime
