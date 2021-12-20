@@ -19,8 +19,8 @@ def get_all_rooms():
         room_list = []
         for r in results:
             data_dict = dict(zip(cols, r))
-            data_dict["rate_weekday"] = float(data_dict["rate_weekday"])
-            data_dict["rate_holiday"] = float(data_dict["rate_holiday"])
+            data_dict["rate_weekday"] = format(float(data_dict["rate_weekday"]), ",")
+            data_dict["rate_holiday"] = format(float(data_dict["rate_holiday"]), ",")
             room_list.append(data_dict)
         
         body = jsonify({"data": room_list})
@@ -47,8 +47,8 @@ def get_available_rooms():
                 "accommodate", "rate_weekday", "rate_holiday" , "single_discount", "discribe", "images", "is_available"
             ]
             data_dict = dict(zip(cols, r))
-            data_dict["rate_weekday"] = float(data_dict["rate_weekday"])
-            data_dict["rate_holiday"] = float(data_dict["rate_holiday"])
+            data_dict["rate_weekday"] = format(int(data_dict["rate_weekday"]), ",")
+            data_dict["rate_holiday"] = format(int(data_dict["rate_holiday"]), ",")
             del data_dict["is_available"]
             room_list.append(data_dict)
                  

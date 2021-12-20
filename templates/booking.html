@@ -41,6 +41,13 @@
         }
         render(){
             const week_keys = Object.keys(this.state.week);
+            let y = "2021";
+            let m = "12";
+            if(week_keys[0]){
+                console.log(week_keys[0]);
+                y = week_keys[0].slice(0, 4);
+                m = week_keys[0].slice(5, 7);
+            }
             let calendar_content = [];
             week_keys.forEach(date=>{
                 calendar_content.push(<Day date={date} detail={this.state.week[date]} />)
@@ -50,14 +57,21 @@
                 <table>
                     <thead>
                         <tr>
+                            <th></th>
                             <th>
-                                {this.state.start_date_index!==1 && <a href="javascript: void(0)" onClick={this.toNextPage(-7)}>上週</a>}
+                                {this.state.start_date_index!==1 && <a href="javascript: void(0)" onClick={this.toNextPage(-7)}>{`< 上週`}</a>}
                             </th>
-                            { calendar_content }
+                            <th colspan="5">
+                                <h3>{y}年 - {m}月</h3>
+                            </th>
                             <th>
-                                {this.state.start_date_index<(this.state.max_index+1) && <a href="javascript: void(0)" onClick={this.toNextPage(7)}>下週</a>}
+                                {this.state.start_date_index<(this.state.max_index+1) && <a href="javascript: void(0)" onClick={this.toNextPage(7)}>{`下週 >`}</a>}
                                 
                             </th>
+                        </tr>
+                        <tr>
+                            <th className="room_type">房型</th>
+                            { calendar_content }
                         </tr>
                     </thead>
                     <tbody>
@@ -116,35 +130,47 @@
                     bid = date+"_"+room.room_no;
                     rate = (week[date]["is_holiday"]? room.rate_holiday : room.rate_weekday);
                 }               
-                booking_content.push(<BookingItem id={bid} rate={rate} />)
+                booking_content.push(<BookingItem id={bid} rate={rate} holiday={week[date]["is_holiday"]}/>)
             })
             return(
                 <tr>
-                    <th>
+                    <th className="room_type">
                         {room.room_name}
                     </th>
                     { booking_content }
-                    <th>
-                        {room.room_name}
-                    </th> 
                 </tr>
             )
         }
     }
     class BookingItem extends React.Component{
+        state = {
+            checked: ""
+        }
         render(){
             const bid = this.props.id;
             return(
-                <td>
-                    <a href="javascript: void(0)" onClick={this.handleClick(bid)}>{ this.props.rate }</a>
+                <td className={!this.props.rate && "booked"} onClick={this.handleClick(bid)}>
+                    {this.props.rate &&
+                        <a href="javascript: void(0)" className={!this.props.holiday && "special_price"}>
+                            {this.state.checked===bid? (
+                                <img src="static/images/checked.png" alt="" className="booking_icon"/>
+                                ) : (
+                                <h5>Book Now</h5>
+                                )
+                            }
+                        </a>
+                    }
                 </td>
             )
         }
         handleClick=(bid)=>{
             return(eObj=>{
                 console.log("Click:", bid);
-                
-                
+                if(this.state.checked){
+                    this.setState({checked: ""})
+                }else{
+                    this.setState({checked: bid})
+                }                
             })
         }
     }

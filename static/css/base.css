@@ -83,6 +83,8 @@ header{
 main{
     height: 760px;
     background-image: url('../images/index.jpg');
+    background-repeat: no-repeat; 
+    background-size:cover;
 }
 .mainbox{
     height: 680px;
