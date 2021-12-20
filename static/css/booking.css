@@ -33,6 +33,10 @@ td, th{
 .holiday{
     color: palevioletred;
 }
+.month_string{
+    font-size: 14px;
+    text-align: left;
+}
 .booking_item_checked{
     background-color: chocolate;
 }

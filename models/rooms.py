@@ -19,20 +19,6 @@ class RoomDB(Mydb):
         self.cur.execute(sql)
         return self.cur.fetchall()
 
-    def getAvailableRoomsByDateType(self, is_holiday=False):
-        rate_type = "rate_weekday"
-        if is_holiday:
-            rate_type = "rate_holiday"
-        sql = f"""
-            SELECT r.room_no, r.name, r.RoomType AS room_type, 
-            rt.accommodate, rt.{rate_type}, rt.single_discount, 
-            rt.discribe, rt.images, r.is_available FROM rooms AS r
-            INNER JOIN room_types AS rt ON rt.type=r.RoomType 
-            WHERE is_available=1
-        """
-        self.cur.execute(sql)
-        return self.cur.fetchall()
-
     def getRoomsByType(self, type, sql=sql, available=True):
         sql += f"WHERE RoomType='{type}'"
         if available:
@@ -49,5 +35,5 @@ class RoomDB(Mydb):
 
 if __name__=="__main__":
     mydb = RoomDB()
-    data = mydb.getAvailableRoomsByDateType()
+    data = mydb.getAvailableRooms()
     print(data)

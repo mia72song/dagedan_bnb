@@ -36,26 +36,20 @@ def get_all_rooms():
 
     return body, status_code
 
-@api.route("/available_rooms/<date_type>")
-# route params: "holiday", "weekday"
-def get_available_rooms(date_type):
+@api.route("/available_rooms")
+def get_available_rooms():
     try:
         mydb = RoomDB()
-        if date_type=="holiday":
-            results = mydb.getAvailableRoomsByDateType(is_holiday=True)
-        elif date_type=="weekday":
-            results = mydb.getAvailableRoomsByDateType(is_holiday=False)
-        else:
-            return jsonify({"data": None}), 404
-
+        results = mydb.getAvailableRooms()
         room_list = []
         for r in results:
             cols = [
                 "room_no", "room_name", "room_type", 
-                "accommodate", "rate", "single_discount", "discribe", "images", "is_available"
+                "accommodate", "rate_weekday", "rate_holiday" , "single_discount", "discribe", "images", "is_available"
             ]
             data_dict = dict(zip(cols, r))
-            data_dict["rate"] = float(data_dict["rate"])
+            data_dict["rate_weekday"] = float(data_dict["rate_weekday"])
+            data_dict["rate_holiday"] = float(data_dict["rate_holiday"])
             del data_dict["is_available"]
             room_list.append(data_dict)
                  

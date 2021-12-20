@@ -3,11 +3,17 @@ sys.path.append("..")
 from models.db import Mydb
 
 class BookingDB(Mydb):
-    def getBookedByDate(self, start_date_string, end_date_string):
+    def closeBooking(self, date):
+        sql = f"UPDATE calendar SET is_closed=1 WHERE date='{date}'"
+        self.cur.execute(sql)
+        self.conn.commit()
+        print(f"{date}已關房")
+
+    def getBookedCalendar(self, start_date_string, end_date_string):
         sql = f"""
-            SELECT c.date, c.is_holiday, b.RoomNo AS room_no 
+            SELECT c.date, c.weekday, c.is_holiday, b.RoomNo AS room_no, c.is_closed
             from calendar AS c
-            INNER JOIN booking AS b ON b.Date=c.date
+            LEFT JOIN booking AS b ON b.Date=c.date
             WHERE c.date<='{end_date_string}' AND c.date>='{start_date_string}'
             ORDER BY date, room_no
         """
@@ -40,5 +46,35 @@ class BookingDB(Mydb):
 
 if __name__=="__main__":
     mydb = BookingDB()
-    data = mydb.getBookedByOrderIdWithRoomInfo(2)
-    print(data)
+    '''
+    data_dict = {
+        date: {
+            "weekday": "日",
+            "is_holiday": bool, 
+            "booked": []
+        }
+    }
+    '''
+    mydb.closeBooking("2022-02-01")
+    data_dict = {}
+    booked = mydb.getBookedCalendar("2022-01-28", "2022-02-02")
+    from datetime import datetime
+    from constants import DATE_FORMATTER
+    for b in booked:
+        date = datetime.strftime(b[0], DATE_FORMATTER)
+        booked = []  
+        if date in data_dict:
+            booked = data_dict[date]["booked"]
+            booked.append(b[3])
+            continue
+
+        if b[3] : 
+            booked.append(b[3])   
+
+        data_dict[date] = {
+            "weekday": b[1],
+            "is_holiday": (b[2]==1),
+            "booked": booked,
+            "is_closed": (b[4]==1)
+        }
+    print(data_dict)

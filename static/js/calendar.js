@@ -17,20 +17,8 @@ function getDateString(n=1){
     return (date_obj.getFullYear().toString()+"-"+m+"-"+d)
 }
 
-function getBookedListByDate(start_date_string){
-    const url = `${window.origin}/api/booked/start=${start_date_string}`;
-    let p = fetch(url).then(response=>{
-        if(response.status===200){
-            return response.json();
-        }else{
-            console.log(response.json());
-        }
-    })
-    return p
-}
-
 function getWeeklyCalendar(start_date_string){
-    const url = `${window.origin}/api/weekly_calendar/start=${start_date_string}`;
+    const url = `${window.origin}/api/booked_calendar/start=${start_date_string}`;
     let p = fetch(url).then(response=>{
         if(response.status===200){
             return response.json();
