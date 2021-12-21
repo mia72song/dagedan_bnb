@@ -21,8 +21,8 @@
             week: [],
             rooms: []
         }
-        getBookingCalendar=(start_date_string)=>{
-            getWeeklyCalendar(start_date_string).then(respC=>{
+        getBookingCalendar=(start_date_string, num_of_guests)=>{
+            getWeeklyCalendar(start_date_string, num_of_guests).then(respC=>{
                 this.setState({
                     start_date_index: this.getDateIndex(start_date_string),
                     week: respC.data
@@ -30,12 +30,14 @@
             })
         }
         componentDidMount(){
-            const first_search_string = location.search.split("&")[0].split("?")[1];
-            if(first_search_string.split("=")[0]=="checkin"){
-                const start_date_string = first_search_string.split("=")[1];
+            if(search_string_1st[0]==="checkin"&& search_string_3th[0]==="adults"&&search_string_4th[0]==="kids"){
+                const num_of_guests = parseInt(search_string_3th[1])+parseInt(search_string_4th[1]);
                 roomRequest().then(respR=>{
-                    this.setState({rooms: respR.data});
-                    this.getBookingCalendar(start_date_string);
+                    this.setState({
+                        num_of_guests,
+                        rooms: respR.data
+                    });
+                    this.getBookingCalendar(search_string_1st[1], num_of_guests);
                 })
             }
         }
@@ -44,9 +46,9 @@
             let y = "2021";
             let m = "12";
             if(week_keys[0]){
-                console.log(week_keys[0]);
-                y = week_keys[0].slice(0, 4);
-                m = week_keys[0].slice(5, 7);
+                const first_date = week_keys[0];
+                y = first_date.split("-")[0];
+                m = first_date.split("-")[1];
             }
             let calendar_content = [];
             week_keys.forEach(date=>{
@@ -94,7 +96,8 @@
                    index = 1
                }
                const next_start_date_string = getDateString(index);
-               this.getBookingCalendar(next_start_date_string);
+               const num_of_guests = parseInt(search_string_3th[1])+parseInt(search_string_4th[1]);
+               this.getBookingCalendar(next_start_date_string, num_of_guests);
             })
         }
     }
@@ -110,7 +113,7 @@
                 m = m[1]
             }
             return(
-                <th className={data.is_holiday? "calendar_th holiday" : "calendar_th"}>
+                <th className="calendar_th">
                     <h1><span className="month_string">{ date==="1"&& `${m}/` }</span>{date}</h1>
                     <p>{data.weekday}</p>
                 </th>
@@ -123,10 +126,10 @@
             const week = this.props.week;
             let booking_content = [];
             Object.keys(week).forEach(date=>{
-                const booked = week[date]["booked"];
+                const available_rooms = week[date]["available_rooms"];
                 let bid;
                 let rate;
-                if(!booked.includes(room.room_no) && !week[date]["is_closed"]){
+                if(available_rooms.includes(room.room_no) && !week[date]["is_closed"]){
                     bid = date+"_"+room.room_no;
                     rate = (week[date]["is_holiday"]? room.rate_holiday : room.rate_weekday);
                 }               
@@ -165,7 +168,6 @@
         }
         handleClick=(bid)=>{
             return(eObj=>{
-                console.log("Click:", bid);
                 if(this.state.checked){
                     this.setState({checked: ""})
                 }else{

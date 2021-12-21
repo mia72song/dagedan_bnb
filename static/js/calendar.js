@@ -17,8 +17,8 @@ function getDateString(n=1){
     return (date_obj.getFullYear().toString()+"-"+m+"-"+d)
 }
 
-function getWeeklyCalendar(start_date_string){
-    const url = `${window.origin}/api/booked_calendar/start=${start_date_string}`;
+function getWeeklyCalendar(start_date_string, num_of_guests){
+    const url = `${window.origin}/api/booking_calendar/start=${start_date_string}&guests=${num_of_guests}`;
     let p = fetch(url).then(response=>{
         if(response.status===200){
             return response.json();
