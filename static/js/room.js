@@ -1,9 +1,9 @@
 function roomRequest(type=null){
     let url;
     if(type){
-        url = `${window.origin}/api/available_rooms/${type}`;
+        url = `${window.origin}/api/rooms?type=${type}`;
     }else{
-        url = `${window.origin}/api/available_rooms`;
+        url = `${window.origin}/api/rooms`;
     }
     let p = fetch(url).then(response=>{
         if(response.status===200){
