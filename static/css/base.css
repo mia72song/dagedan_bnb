@@ -92,12 +92,13 @@ main{
 
 /* Search Component*/
 #available_room_search{
-    width: 590px;
+    width: 595px;
     margin: 20px auto;
     background-color: #FFFFFF;
     border: 5px #FFFFFF solid;
     opacity: 0.95;
     display: flex;
+    letter-spacing: 1px;
 }
 #available_room_search:hover{
     opacity: 1;
@@ -107,15 +108,20 @@ main{
     font-size: 13px;
 }
 #available_room_search input{
+    margin-top: 2px;
     line-height: 1.8;
+    width: 135px;
+    padding-left: 5px;
 }
-.submit>button{
+.submit_div>button{
     line-height: 3.2;
+    height: 52px;
     background-color: #F39801;
     border: 2px #F39801 solid;
     font-weight: bolder;
+    width: 80px;
 }
-.submit>button:hover{
+.submit_div>button:hover{
     color: #FFFFFF;
 }
 /* Footer */
