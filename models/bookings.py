@@ -20,7 +20,7 @@ class BookingDB(RoomDB):
         self.cur.execute(sql)
         return self.cur.fetchall()
 
-    def getBookingCalendarByRoomAccommodate(self, start_date_string, end_date_string, num_of_guests=2):
+    def getBookedCalendarByRoomAccommodate(self, start_date_string, end_date_string, num_of_guests=2):
         sql = f"""
             SELECT c.date, c.weekday, c.is_holiday, r.room_no, c.is_closed
             from calendar AS c

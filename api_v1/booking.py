@@ -8,8 +8,8 @@ from constants import DATE_FORMATTER
 # 初始化response content
 body = "" #json
 status_code = 0
-@api.route("/booking_calendar/start=<start_date_string>&guests=<int:num_of_guests>")
-def get_available_booking_calendar(start_date_string, num_of_guests):
+@api.route("/booked_calendar/start=<start_date_string>&guests=<int:num_of_guests>")
+def get_booked_calendar(start_date_string, num_of_guests):
     start_date = datetime.strptime(start_date_string, DATE_FORMATTER)
     end_date = start_date+timedelta(days=6)
     end_date_string = datetime.strftime(end_date, DATE_FORMATTER)
@@ -19,30 +19,26 @@ def get_available_booking_calendar(start_date_string, num_of_guests):
         num_of_guests = 4
     try:
         mydb = BookingDB()
-        rooms = [item[0] for item in mydb.getRoomsByAccommodate(2)]
-
         data_dict = {}
-        results = mydb.getBookingCalendarByRoomAccommodate(start_date_string, end_date_string, num_of_guests)
-        for b in results:
-            date = datetime.strftime(b[0], DATE_FORMATTER)
-            available_rooms = rooms.copy()
-            if b[4]==1:
-                available_rooms = []
-            else:
-                if date in data_dict:
-                    available_rooms = data_dict[date]["available_rooms"]
-                    available_rooms.remove(b[3])
-                    continue
-                
-                if b[3]:
-                    available_rooms.remove(b[3])
-
+        results = mydb.getBookedCalendarByRoomAccommodate(start_date_string, end_date_string, num_of_guests)
+        for r in results:
+            booked = []
+            date = datetime.strftime(r[0], DATE_FORMATTER)
+            if date in data_dict:
+                booked = data_dict[date]["booked"]
+                booked.append(r[3])
+                continue
+            
+            if r[3]:
+                booked.append(r[3])
+            
             data_dict[date] = {
-                "weekday": b[1],
-                "is_holiday": (b[2]==1),
-                "available_rooms": available_rooms,
-                "is_closed": (b[4]==1)
+                "weekday": r[1],
+                "is_holiday": (r[2]==1),
+                "booked": booked,
+                "is_closed": (r[4]==1)
             }
+        
         body = jsonify({"data": data_dict})
         status_code = 200
 

@@ -19,6 +19,13 @@ class RoomDB(Mydb):
         self.cur.execute(sql)
         return self.cur.fetchall()
 
+    def getRoomsByAccommodate(self, num_of_guests, sql=sql, available=True):            
+        sql += f"WHERE rt.accommodate='{num_of_guests}'"
+        if available:
+            sql += f" AND is_available=1"
+        self.cur.execute(sql)
+        return self.cur.fetchall()
+
     def getAvailableRoomNosByRoomType(self, RoomType):
         sql = f"SELECT room_no FROM rooms WHERE is_available=1 AND RoomType='{RoomType}'"
         self.cur.execute(sql)
@@ -35,13 +42,6 @@ class RoomDB(Mydb):
         self.cur.execute(sql)
         return self.cur.fetchall()
     
-    def getRoomsByAccommodate(self, num_of_guests, sql=sql, available=True):            
-        sql += f"WHERE rt.accommodate='{num_of_guests}'"
-        if available:
-            sql += f" AND is_available=1"
-        self.cur.execute(sql)
-        return self.cur.fetchall()
-
 if __name__=="__main__":
     mydb = RoomDB()
     data = mydb.getRoomTypes("TWIN")

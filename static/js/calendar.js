@@ -18,7 +18,7 @@ function getDateString(n=1){
 }
 
 function getWeeklyCalendar(start_date_string, num_of_guests){
-    const url = `${window.origin}/api/booking_calendar/start=${start_date_string}&guests=${num_of_guests}`;
+    const url = `${window.origin}/api/booked_calendar/start=${start_date_string}&guests=${num_of_guests}`;
     let p = fetch(url).then(response=>{
         if(response.status===200){
             return response.json();
