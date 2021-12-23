@@ -69,10 +69,21 @@
                 guests: 1
             }
             componentDidMount(){
-                this.setState({
-                    check_in_date: dateIndexToString(1),
-                    check_out_date: dateIndexToString(2)
-                })
+                if(location.search){
+                    search_string_1st = location.search.split("&")[0].split("?")[1].split("=");
+                    search_string_2nd = location.search.split("&")[1].split("=");
+                    search_string_3th = location.search.split("&")[2].split("=");
+                    this.setState({
+                        check_in_date: (search_string_1st[0]==="checkin" && search_string_1st[1]),
+                        check_out_date: (search_string_2nd[0]==="checkout" && search_string_2nd[1]),
+                        guests: (search_string_3th[0]==="guests" && search_string_3th[1])
+                    })
+                }else{
+                    this.setState({
+                        check_in_date: dateIndexToString(1),
+                        check_out_date: dateIndexToString(2)
+                    })
+                }
             }
             render(){
                 const check_in_index = dateStringToIndex(this.state.check_in_date);
