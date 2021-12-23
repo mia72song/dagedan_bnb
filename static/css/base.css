@@ -14,6 +14,12 @@ a{
 button{
     cursor: pointer;
 }
+input{
+    font-family: 'Noto Sans TC', sans-serif;
+    margin-top: 2px;
+    line-height: 1.8;
+    padding-left: 5px;
+}
 
 /* header */
 header{
@@ -108,10 +114,7 @@ main{
     font-size: 13px;
 }
 #available_room_search input{
-    margin-top: 2px;
-    line-height: 1.8;
     width: 135px;
-    padding-left: 5px;
 }
 .submit_div>button{
     line-height: 3.2;

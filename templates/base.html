@@ -69,33 +69,23 @@
                 guests: 1
             }
             componentDidMount(){
-                if(location.pathname==="/booking" && location.search){
-                    search_string_1st = location.search.split("&")[0].split("?")[1].split("=");
-                    search_string_2nd = location.search.split("&")[1].split("=");
-                    search_string_3th = location.search.split("&")[2].split("=");
-                    this.setState({
-                        check_in_date: search_string_1st[0]==="checkin" && search_string_1st[1],
-                        check_out_date: search_string_2nd[0]==="checkout" && search_string_2nd[1],
-                        [search_string_3th[0]]: search_string_3th[1]
-                    })
-                }else{
-                    this.setState({
-                        check_in_date: getDateString(),
-                        check_out_date: getDateString(2)
-                    })
-                }
+                this.setState({
+                    check_in_date: dateIndexToString(1),
+                    check_out_date: dateIndexToString(2)
+                })
             }
             render(){
+                const check_in_index = dateStringToIndex(this.state.check_in_date);
                 return(
                     <div id="available_room_search">
                         <div className="check_in_date_div">
                             <p>Check In 入住日期</p>
-                            <input type="date" name="check_in_date" id="check_in_date" 
+                            <input type="date" name="check_in_date" id="check_in_date" min={dateIndexToString(1)} max={dateIndexToString(12*7)}
                                 value={this.state.check_in_date} onChange={this.handleChange("check_in_date")}/>
                         </div>
                         <div className="check_out_date_div">
                             <p>Check Out 退房日期</p>
-                            <input type="date" name="check_out_date" id="check_out_date" 
+                            <input type="date" name="check_out_date" id="check_out_date" min={dateIndexToString(check_in_index+1)} max={dateIndexToString(12*7+1)}
                                 value={this.state.check_out_date} onChange={this.handleChange("check_out_date")}/>
                         </div>
                         <div className="num_of_guests_div">
@@ -111,31 +101,22 @@
             }
             handleChange=(dataType)=>{         
                 return (eObj)=>{
-                    let thatDay_s = 0
-                    if(dataType=="check_in_date"){
-                        let today_s = new Date(getDateString(0)).getTime()
-                        thatDay_s = new Date(eObj.target.value).getTime()
-                        if(today_s==thatDay_s){
-                            alert("本日住宿，請電洽089-771-551")
-                            return
-                        }else if(today_s>thatDay_s){
-                            alert("無效日期")
-                            return
-                        }
-                    }else if(dataType=="check_out_date"){
-                        let nextDay_s = new Date(getDateString()).getTime()
-                        thatDay_s = new Date(eObj.target.value).getTime()
-                        if(nextDay_s>thatDay_s){
-                            alert("無效日期")
-                            return
-                        }
+                    if(dataType==="check_in_date"){
+                        const check_in_date = eObj.target.value;
+                        const check_in_index = dateStringToIndex(check_in_date);
+                        const check_out_date = dateIndexToString(check_in_index+1);
+                        this.setState({
+                            check_in_date,
+                            check_out_date
+                        })
+                    }else{
+                        this.setState({[dataType]: eObj.target.value})
                     }
-                    this.setState({[dataType]: eObj.target.value})
                 }
             }
             handleSubmit=()=>{
                 const {check_in_date, check_out_date, guests} = this.state
-                if(new Date(check_out_date)>new Date(check_in_date)){
+                if(dateStringToIndex(check_out_date)>dateStringToIndex(check_in_date)){
                     let search_string = "checkin="+check_in_date+"&checkout="+check_out_date+"&guests="+guests
                     location.href = `${window.origin}/booking?${search_string}`
                 }else{
