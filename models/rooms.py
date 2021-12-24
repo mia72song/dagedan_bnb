@@ -19,30 +19,40 @@ class RoomDB(Mydb):
         self.cur.execute(sql)
         return self.cur.fetchall()
 
-    def getRoomsByAccommodate(self, num_of_guests, sql=sql, available=True):            
-        sql += f"WHERE rt.accommodate='{num_of_guests}'"
-        if available:
-            sql += f" AND is_available=1"
+    def getRoomNos(self, room_type=None, num_of_guests=None):
+        sql = f"""
+            SELECT room_no FROM rooms AS r 
+            INNER JOIN room_types AS rt ON rt.type=r.RoomType 
+            WHERE is_available=1
+        """
+        if room_type:
+            sql += f" AND RoomType='{room_type.capitalize()}'"
+
+        if num_of_guests:
+            sql += f" AND rt.accommodate={int(num_of_guests)}"
+
+        sql += " ORDER BY room_no"
+
         self.cur.execute(sql)
         return self.cur.fetchall()
 
-    def getAvailableRoomNosByRoomType(self, RoomType):
-        sql = f"SELECT room_no FROM rooms WHERE is_available=1 AND RoomType='{RoomType}'"
-        self.cur.execute(sql)
-        return self.cur.fetchall()
-
-    def getRoomTypes(self, type=None):
+    def getRoomTypes(self, room_type=None, num_of_guests=None):
         sql = f"""
             SELECT type, name, accommodate, images, description, 
             rate_weekday, rate_holiday, single_discount 
             FROM room_types WHERE is_del=0
         """
-        if type:
-            sql += f" AND type='{type.capitalize()}'"
+        if room_type:
+            sql += f" AND type='{room_type.capitalize()}'"
+
+        if num_of_guests:
+            sql += f" AND accommodate={int(num_of_guests)}"
+        
         self.cur.execute(sql)
         return self.cur.fetchall()
     
 if __name__=="__main__":
     mydb = RoomDB()
-    data = mydb.getRoomTypes("TWIN")
+
+    data = mydb.getRoomNos(room_type="Twin")
     print(data)

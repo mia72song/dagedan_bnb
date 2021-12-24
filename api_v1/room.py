@@ -20,19 +20,15 @@ def get_rooms():
         rooms = {}
         for r in results:
             room_type_string = r[0]
-            available_rooms = mydb.getAvailableRoomNosByRoomType(room_type_string)
-            if available_rooms:
-                room_type = dict(zip(cols, r))
-                if room_type["images"]:
-                    room_type["images"] = room_type["images"].split(", ")
+            room_type = dict(zip(cols[1:], r[1:]))
+            if room_type["images"]:
+                room_type["images"] = room_type["images"].split(", ")
 
-                room_type["rate_weekday"] = format(int(room_type["rate_weekday"]), ",")
-                room_type["rate_holiday"] = format(int(room_type["rate_holiday"]), ",")
-                
-                room_type["room_numbers"] = [item[0] for item in available_rooms]
-                del room_type["room_type"]
-                
-                rooms[room_type_string] = room_type
+            room_type["rate_weekday"] = format(int(room_type["rate_weekday"]), ",")
+            room_type["rate_holiday"] = format(int(room_type["rate_holiday"]), ",")
+            room_type["room_nos"] = [item[0] for item in mydb.getRoomNos(room_type=room_type_string)]
+                        
+            rooms[room_type_string] = room_type
                  
         body = jsonify({"data": rooms})
         status_code = 200

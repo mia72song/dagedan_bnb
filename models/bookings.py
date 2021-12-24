@@ -20,20 +20,6 @@ class BookingDB(RoomDB):
         self.cur.execute(sql)
         return self.cur.fetchall()
 
-    def getBookedCalendarByRoomAccommodate(self, start_date_string, end_date_string, num_of_guests=2):
-        sql = f"""
-            SELECT c.date, c.weekday, c.is_holiday, r.room_no, c.is_closed
-            from calendar AS c
-            LEFT JOIN booking AS b ON b.Date=c.date
-            LEFT JOIN rooms AS r ON r.room_no=b.RoomNo
-            LEFT JOIN room_types AS rt ON rt.type=r.RoomType
-            WHERE c.date BETWEEN '{start_date_string}' AND '{end_date_string}'
-            AND (rt.accommodate={num_of_guests} OR rt.accommodate IS NULL)
-            ORDER BY date, room_no
-        """
-        self.cur.execute(sql)
-        return self.cur.fetchall()
-
     def getBookedByDateWithBookerInfo(self, start_date_string, end_date_string):
         sql = f"""
             SELECT b.Date, b.RoomNo, b.rate, b.OrderId, o.GuestId, 
@@ -61,6 +47,6 @@ class BookingDB(RoomDB):
 if __name__=="__main__":
     mydb = BookingDB()
     data_dict = {}
-    booked = mydb.getBookingCalendarByRoomAccommodate("2021-12-28", "2022-01-04", 2)
+    booked = mydb.getBookedCalendar("2021-12-28", "2022-01-04")
     
     print(booked)
