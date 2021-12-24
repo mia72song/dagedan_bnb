@@ -1,7 +1,7 @@
 from flask import jsonify, request
 
 from . import api
-from models_v2 import Rooms
+from models import Rooms
 
 # 初始化response content
 body = "" #json

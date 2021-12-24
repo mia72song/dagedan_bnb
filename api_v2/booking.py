@@ -2,7 +2,7 @@ from flask import jsonify, request
 from datetime import datetime, timedelta
 
 from . import api
-from models_v2 import Bookings
+from models import Bookings
 from constants import DATE_FORMATTER
 
 # 初始化response content
