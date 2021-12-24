@@ -17,7 +17,7 @@ from cms import admin
 app.register_blueprint(admin, url_prefix = "/admin")
 from auth import auth
 app.register_blueprint(auth, url_prefix = "/auth")
-from api_v1 import api
+from api_v2 import api
 app.register_blueprint(api, url_prefix = "/api")
 
 # 前台頁面

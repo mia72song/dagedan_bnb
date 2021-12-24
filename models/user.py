@@ -2,7 +2,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 from models.db import Mydb
 
-class UserDB(Mydb):
+class Users(Mydb):
     def getUser(self, username, password):
         sql = f"SELECT username, password, staff_name FROM users WHERE username='{username}' and is_del=0"
         self.cur.execute(sql)
@@ -20,9 +20,3 @@ class UserDB(Mydb):
         self.conn.commit()
         print("密碼已更新")
     """
-
-if __name__=="__main__":
-    userdb = UserDB()
-    result = userdb.getUser("mia72song", "721015")
-    print(result)
-    del userdb

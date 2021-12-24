@@ -1,7 +1,7 @@
 from flask import jsonify, request
 
 from . import api
-from models import RoomDB
+from models_v2 import Rooms
 
 # 初始化response content
 body = "" #json
@@ -11,11 +11,11 @@ status_code = 0
 def get_rooms():
     cols = ["room_type", "name", "accommodate", "images", "description", "rate_weekday", "rate_holiday", "single_discount"]
     try:
-        mydb = RoomDB()
+        mydb = Rooms()
         if request.args.get("type"):
-            results = mydb.getRoomTypes(request.args.get("type"))
+            results = mydb.getRoomInfoByType(request.args.get("type"))
         else:
-            results = mydb.getRoomTypes()
+            results = mydb.getRoomInfoByType()
 
         rooms = {}
         for r in results:
@@ -26,7 +26,6 @@ def get_rooms():
 
             room_type["rate_weekday"] = format(int(room_type["rate_weekday"]), ",")
             room_type["rate_holiday"] = format(int(room_type["rate_holiday"]), ",")
-            room_type["room_nos"] = [item[0] for item in mydb.getRoomNos(room_type=room_type_string)]
                         
             rooms[room_type_string] = room_type
                  

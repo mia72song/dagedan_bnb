@@ -5,7 +5,7 @@ sys.path.append("..")
 from models.db import Mydb
 from constants import DATE_FORMATTER
 
-class CalendarDB(Mydb):
+class MyCalendar(Mydb):
     def updateCalendarFromCSV(self, csv_file_mane):
         with open(csv_file_mane, "r") as f:
             rows = csv.DictReader(f)
@@ -26,7 +26,7 @@ csv_file_mane = "111年中華民國政府行政機關辦公日曆表.csv"
 if __name__=="__main__": 
     import pymysql
     try:
-        mydb = CalendarDB()
+        mydb = MyCalendar()
         mydb.updateCalendarFromCSV(csv_file_mane)
         print(f"{csv_file_mane}已更新入資料庫")
     except pymysql.err.IntegrityError:
