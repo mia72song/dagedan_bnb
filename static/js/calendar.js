@@ -24,8 +24,11 @@ function dateStringToIndex(date_string){
     return (target_date_ms-today_ms)/one_day_ms
 }
 
-function getWeeklyCalendar(start_date_string, num_of_guests){
-    const url = `${window.origin}/api/booked_calendar/start=${start_date_string}&guests=${num_of_guests}`;
+function getWeeklyCalendar(start_date_string, num_of_guests=null){
+    let url = `${window.origin}/api/booking/calendar/from${start_date_string}`;
+    if(num_of_guests){
+        url = url +`?guests=${num_of_guests}`;
+    }
     let p = fetch(url).then(response=>{
         if(response.status===200){
             return response.json();

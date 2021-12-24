@@ -10,16 +10,6 @@ from constants import DATE_FORMATTER
 body = "" #json
 status_code = 0
 
-def roomNosGroupByType(room_nos):
-    mydb = BookingDB()
-    data_dict = {}
-    for r in mydb.roomNosGetType(tuple(room_nos)):
-        if r[0] not in data_dict:
-            data_dict[r[0]] = [r[1], ]
-        else:
-            data_dict[r[0]].append(r[1])
-    return data_dict   
-
 @api.route("/booking/calendar/from<start_date_string>")
 def get_booking_calendar(start_date_string):
     start_date = datetime.strptime(start_date_string, DATE_FORMATTER)
