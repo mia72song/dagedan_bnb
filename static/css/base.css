@@ -93,7 +93,7 @@ main{
     background-size:cover;
 }
 .mainbox{
-    height: 680px;
+    min-height: 680px;
 }
 
 /* Search Component*/

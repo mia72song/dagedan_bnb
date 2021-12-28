@@ -9,177 +9,88 @@
 <div id="search_wrap">
     <!--由Search組件渲染，來自base.html-->
 </div>
-<div id="calendar_wrap">
-    <!--由Calendar組件渲染-->
+<div id="room_box_wrap">
+    <!--由RoomBox組件渲染-->
 </div>
 {% block script %}
 <script type="text/babel">
-    class Calendar extends React.Component{
-        state = {
-            start_date_index: 1, // 自今天為0起算的索引, 明天即為1, ...以此類推, 最大值84
-            max_index: 7*12,
-            week: [],
-            rooms: []
+    function comma(value){
+        if(!isNaN(Number(value))){
+            return value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")
+        }else{
+            alert(`${value}不是數字!`)
         }
-        getBookingCalendar=(start_date_string, num_of_guests)=>{
-            getWeeklyCalendar(start_date_string, num_of_guests).then(respC=>{
-                this.setState({
-                    start_date_index: this.getDateIndex(start_date_string),
-                    week: respC.data
-                })
-            })
-        }
+    }
+    class RoomBox extends React.Component{
+        state = {}
         componentDidMount(){
-            if(search_string_1st[0]==="checkin"&& search_string_3th[0]==="adults"&&search_string_4th[0]==="kids"){
-                const num_of_guests = parseInt(search_string_3th[1])+parseInt(search_string_4th[1]);
-                roomRequest().then(respR=>{
-                    this.setState({
-                        num_of_guests,
-                        rooms: respR.data
-                    });
-                    this.getBookingCalendar(search_string_1st[1], num_of_guests);
-                })
-            }
-        }
-        render(){
-            const week_keys = Object.keys(this.state.week);
-            let y = "2021";
-            let m = "12";
-            if(week_keys[0]){
-                const first_date = week_keys[0];
-                y = first_date.split("-")[0];
-                m = first_date.split("-")[1];
-            }
-            let calendar_content = [];
-            week_keys.forEach(date=>{
-                calendar_content.push(<Day date={date} detail={this.state.week[date]} />)
-            })
-            const rooms = this.state.rooms;
-            return(
-                <table>
-                    <thead>
-                        <tr>
-                            <th></th>
-                            <th>
-                                {this.state.start_date_index!==1 && <a href="javascript: void(0)" onClick={this.toNextPage(-7)}>{`< 上週`}</a>}
-                            </th>
-                            <th colspan="5">
-                                <h3>{y}年 - {m}月</h3>
-                            </th>
-                            <th>
-                                {this.state.start_date_index<(this.state.max_index+1) && <a href="javascript: void(0)" onClick={this.toNextPage(7)}>{`下週 >`}</a>}
-                                
-                            </th>
-                        </tr>
-                        <tr>
-                            <th className="room_type">房型</th>
-                            { calendar_content }
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { rooms.map(room=><Row room={room} week={this.state.week}/>) }
-                    </tbody>
-                </table>
-            )
-        }
-        getDateIndex=(date_string)=>{
-            const one_day_ms = 1000*60*60*24;
-            const today_string = getDateString(0);
-            let today_ms = new Date(today_string).getTime();
-            let target_date_ms = new Date(date_string).getTime()
-            return (target_date_ms-today_ms)/one_day_ms
-        }
-        toNextPage=(days)=>{
-            return(eObj=>{
-               let index = this.state.start_date_index+days;
-               if(index<=0){
-                   index = 1
-               }
-               const next_start_date_string = getDateString(index);
-               const num_of_guests = parseInt(search_string_3th[1])+parseInt(search_string_4th[1]);
-               this.getBookingCalendar(next_start_date_string, num_of_guests);
+            const num_of_guests = (search_string_3th[0]==="guests" && search_string_3th[1]);
+            roomRequest(num_of_guests).then(respR=>{
+                this.setState(respR.data)
             })
         }
-    }
-    class Day extends React.Component{
         render(){
-            const data = this.props.detail;
-            let date = ((this.props.date).split("-"))[2];
-            if(date[0]==="0"){
-                date = date[1]
-            }
-            let m = ((this.props.date).split("-"))[1];
-            if(m[0]==="0"){
-                m = m[1]
-            }
+            let rooms_content = [];
+            Object.keys(this.state).forEach(type=>{
+                rooms_content.push(<RoomInfo type={type} info={this.state[type]}/>)
+            })
             return(
-                <th className="calendar_th">
-                    <h1><span className="month_string">{ date==="1"&& `${m}/` }</span>{date}</h1>
-                    <p>{data.weekday}</p>
-                </th>
+                <div>
+                    {rooms_content}
+                </div>
             )
         }
     }
-    class Row extends React.Component{
-        render(){
-            const room = this.props.room;
-            const week = this.props.week;
-            let booking_content = [];
-            Object.keys(week).forEach(date=>{
-                const available_rooms = week[date]["available_rooms"];
-                let bid;
-                let rate;
-                if(available_rooms.includes(room.room_no) && !week[date]["is_closed"]){
-                    bid = date+"_"+room.room_no;
-                    rate = (week[date]["is_holiday"]? room.rate_holiday : room.rate_weekday);
-                }               
-                booking_content.push(<BookingItem id={bid} rate={rate} holiday={week[date]["is_holiday"]}/>)
+    class RoomInfo extends React.Component{
+        state = null
+        componentDidMount(){
+            const check_in_date = (search_string_1st[0]==="checkin" && search_string_1st[1]);
+            const check_out_date = (search_string_2nd[0]==="checkout" && search_string_2nd[1]);
+            availableRoomsRequest(check_in_date, check_out_date, this.props.type).then(resp=>{
+                if(resp.min_quantity!==0){
+                    this.setState(resp)
+                }
             })
-            return(
-                <tr>
-                    <th className="room_type">
-                        {room.room_name}
-                    </th>
-                    { booking_content }
-                </tr>
-            )
-        }
-    }
-    class BookingItem extends React.Component{
-        state = {
-            checked: ""
         }
         render(){
-            const bid = this.props.id;
             return(
-                <td className={!this.props.rate && "booked"} onClick={this.handleClick(bid)}>
-                    {this.props.rate &&
-                        <a href="javascript: void(0)" className={!this.props.holiday && "special_price"}>
-                            {this.state.checked===bid? (
-                                <img src="static/images/checked.png" alt="" className="booking_icon"/>
-                                ) : (
-                                <h5>Book Now</h5>
-                                )
-                            }
-                        </a>
-                    }
-                </td>
+                <div>
+                    {this.state && (
+                        <div className="room_info_div">
+                            <div className="room_img_div">
+                                <img src={this.props.info.images && this.props.info.images[5]} alt=""/>    
+                            </div>
+                            <div className="room_detail">
+                                <div>
+                                    <h3>{this.props.info.name}</h3>
+                                    <p>{this.props.info.description}<a href="#">更多詳情</a></p>
+                                </div>
+                                <div className="special_price">
+                                    <h4>特價方案：</h4>
+                                    <p>平日特價：<span>NT </span>{comma(this.props.info.rate_weekday)}</p>
+                                    <p>一人入住：<span>NT </span>{comma(this.props.info.rate_weekday*this.props.info.single_discount)}<span> 起</span></p>
+                                </div>
+                            </div>
+                            <div className="room_rate">
+                                <div>
+                                    <p>每晚定價：適用{this.props.info.accommodate}人</p>
+                                    <h1><span>NT </span>{comma(this.props.info.rate_holiday)}</h1>
+                                </div>
+                                <div>
+                                    <button className="book_now_btn">Book Now</button>
+                                    {this.state.min_quantity<=2 && <p>最後{this.state.min_quantity}間</p>}
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                </div>
             )
-        }
-        handleClick=(bid)=>{
-            return(eObj=>{
-                if(this.state.checked){
-                    this.setState({checked: ""})
-                }else{
-                    this.setState({checked: bid})
-                }                
-            })
         }
     }
     addEventListener("load", ()=>{
         ReactDOM.render(<Search />, document.getElementById("search_wrap"));
         if(window.location.search!==""){
-            ReactDOM.render(<Calendar />, document.getElementById("calendar_wrap"))
+            ReactDOM.render(<RoomBox />, document.getElementById("room_box_wrap"));
         }
     })
 </script>

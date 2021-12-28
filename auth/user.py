@@ -2,7 +2,7 @@ from flask import session, jsonify, request, make_response
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 
 from . import auth
-from models import UserDB
+from models import Users
 
 @auth.route("/user", methods=["POST"])
 def login():
@@ -15,7 +15,7 @@ def login():
             }), 400
         
         try:
-            mydb = UserDB()
+            mydb = Users()
             user_info = mydb.getUser(login_data["username"], login_data["password"])            
             if user_info:
                 session["user"] = user_info

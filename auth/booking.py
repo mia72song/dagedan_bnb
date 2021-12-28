@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from datetime import datetime
 
 from . import auth
-from models import BookingDB
+from models import Bookings
 from constants import DATE_FORMATTER
 
 # 初始化response content
@@ -18,7 +18,7 @@ def get_booker_info_by_date(start_date_string, end_date_string):
         "booker_name", "booker_gender", "booker_phone"
     ]
     try:
-        mydb = BookingDB()
+        mydb = Bookings()
         booked_list = []
         for r in mydb.getBookedByDateWithBookerInfo(start_date_string, end_date_string):
             data_dict = dict(zip(cols, r))
