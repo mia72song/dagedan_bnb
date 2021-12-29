@@ -14,7 +14,7 @@ a{
 button{
     cursor: pointer;
 }
-input{
+input, select{
     font-family: 'Noto Sans TC', sans-serif;
     margin-top: 2px;
     line-height: 1.8;

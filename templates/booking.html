@@ -25,7 +25,7 @@
         state = {}
         componentDidMount(){
             const num_of_guests = (search_string_3th[0]==="guests" && search_string_3th[1]);
-            roomRequest(num_of_guests).then(respR=>{
+            roomInfoRequest(num_of_guests).then(respR=>{
                 this.setState(respR.data)
             })
         }
@@ -46,7 +46,7 @@
         componentDidMount(){
             const check_in_date = (search_string_1st[0]==="checkin" && search_string_1st[1]);
             const check_out_date = (search_string_2nd[0]==="checkout" && search_string_2nd[1]);
-            availableRoomsRequest(check_in_date, check_out_date, this.props.type).then(resp=>{
+            availableRoomRequest(check_in_date, check_out_date, this.props.type).then(resp=>{
                 if(resp.min_quantity!==0){
                     this.setState(resp)
                 }
@@ -77,16 +77,125 @@
                                     <h1><span>NT </span>{comma(this.props.info.rate_holiday)}</h1>
                                 </div>
                                 <div>
-                                    <button className="book_now_btn">Book Now</button>
+                                    <button className="book_now_btn" onClick={this.handleBookingForm}>Book Now</button>
                                     {this.state.min_quantity<=2 && <p>最後{this.state.min_quantity}間</p>}
                                 </div>
                             </div>
                         </div>
                     )}
+                    {this.state && (
+                        <div id={`booking_detail_${this.props.type}`}>
+                            <BookingForm info={this.props.info} available={this.state}/>
+                        </div>
+                    )}
                 </div>
             )
         }
+        handleBookingForm=()=>{
+            document.querySelectorAll("div[id^='booking_detail_']").forEach(div=>{
+                div.style.display="none";
+            })
+            let booking_form = document.getElementById(`booking_detail_${this.props.type}`);
+            if(booking_form.style.display==="" || booking_form.style.display==="none"){
+                booking_form.style.display="block";
+            }
+        }
     }
+    class BookingForm extends React.Component{
+        state = {
+            quantity: 1,
+            guests: 1,
+            addon:"",
+            amount: 0,
+            name: "",
+            gender: "",
+            phone: "",
+            email: "",
+            arrival_datetime: "",
+            note: ""
+        }
+        updateAmount=(quantity, guests)=>{
+            let amount = 0;
+            this.props.available.data.forEach(date=>{
+                if(date.is_holiday){
+                    amount = amount+this.props.info.rate_holiday*quantity
+                }else{
+                    amount = amount+this.props.info.rate_weekday*quantity
+                }
+
+                if(parseInt(guests)===1){
+                    amount = amount*this.props.info.single_discount
+                }
+            })
+            return parseInt(amount)
+        }
+        componentDidMount(){
+            this.setState({
+                guests: (search_string_3th[0]==="guests" && search_string_3th[1])
+            })
+        }
+        render(){
+            const check_in_date = (search_string_1st[0]==="checkin" && search_string_1st[1]);
+            const check_out_date = (search_string_2nd[0]==="checkout" && search_string_2nd[1]);
+            console.log(this.props.info);
+            console.log(this.props.available);
+            return(
+                <div className="booking_form">
+                    <div>
+                        <p>期間：{check_in_date} ~ {check_out_date}，共 {dateStringToIndex(check_out_date)-dateStringToIndex(check_in_date)} 晚</p>
+                        <p>房型：
+                            {this.props.info.name} * 
+                            <input type="number" value={this.state.quantity} min="1" max={this.state.guests>1? this.props.available.min_quantity : 1} 
+                            onChange={this.handleChange("quantity")}/>
+                            間
+                        </p>
+                        <p>
+                            人數：
+                            <input type="number" value={this.state.guests} min="1" max={this.props.info.accommodate} 
+                            onChange={this.handleChange("guests")}/>
+                            人
+                        </p>
+                        <p>
+                            加購服務：
+                            <select>
+                                <option value="grapefruit">Grapefruit</option>
+                                <option value="lime">Lime</option>
+                                <option selected value="coconut">Coconut</option>
+                                <option value="mango">Mango</option>
+                            </select>
+                        </p>
+                        <p>
+                            總金額：新台幣
+                            <input type="text" disabled="true" readOnly="true" 
+                            value={this.updateAmount(this.state.quantity, this.state.guests)} 
+                            onChange={this.handleChange("amount")} />
+                            元    
+                        </p>
+                    </div>
+                    <div className="arrow_img_div">
+                        <img src="static\images\9XpPMJYNvm.png" alt=""/>
+                    </div>
+                    <div className="booker_info">
+                        Booker Info
+                    </div>
+                </div>
+            )
+        }
+        handleChange=(dataType)=>{
+            return(eOby)=>{
+                if(dataType==="guests" && parseInt(eOby.target.value)<=1){
+                    this.setState({
+                        quantity: 1,
+                        guests: eOby.target.value
+                    })
+                }else{
+                    this.setState({[dataType]: eOby.target.value});
+                }
+            }
+        }
+        
+    }
+
     addEventListener("load", ()=>{
         ReactDOM.render(<Search />, document.getElementById("search_wrap"));
         if(window.location.search!==""){

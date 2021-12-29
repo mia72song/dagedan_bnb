@@ -5,6 +5,7 @@ main{
 .mainbox{
     height: auto;
 }
+
 /* Search Component*/
 #search_wrap{
     padding: 10px;
@@ -34,7 +35,6 @@ main{
     margin: 0 auto;
     margin-top: -15px;
 }
-
 
 /* RoomInfo Component*/
 .room_info_div{
@@ -72,7 +72,6 @@ main{
 .room_rate h1{
     color: blue;
     font-size: 48px;
-
 }
 h1>span{
     font-size: 16px;
@@ -93,5 +92,43 @@ p>span{
     border: #1A1A1A;
     border-radius: 50px;
     height: 36px;
+    width: 120px;
+}
+
+/* BookingForm Component */
+div[id^="booking_detail_"]{
+    display: none;
+    width: 90%;
+    background-color: aquamarine;
+    margin: 0 auto;
+    margin-top: -10px;
+    line-height: 2.2;
+    padding-left: 10px;
+    height: 220px;
+}
+.booking_form{
+    display: flex;
+}
+.booking_form>div{
+    margin: 10px;
+}
+.booking_form input, select{
+    width: 60px;
+    font-size: 14px;
+    margin: 3px 5px;
+}
+.booking_form select{
+    height: 31px;
+    width: 200px;
+}
+.arrow_img_div{
+    width: 60px;
+    line-height: 180px;
+}
+.arrow_img_div>img{
+    width: inherit;
+    height: auto;
+}
+.booker_info input{
     width: 120px;
 }
