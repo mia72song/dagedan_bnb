@@ -1,4 +1,4 @@
-from models.room import Rooms
+from models.db import Mydb
 
-class Bookings(Rooms):
+class Bookings(Mydb):
     pass

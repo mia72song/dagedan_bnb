@@ -9,6 +9,6 @@ from constants import DATE_FORMATTER
 body = "" #json
 status_code = 0
 
-@api.route("/boking", methods=["POST"])
+@api.route("/booking", methods=["POST"])
 def create_new_booking():
     pass
