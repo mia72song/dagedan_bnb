@@ -14,9 +14,7 @@ def get_rooms():
     cols = ["room_type", "name", "accommodate", "images", "description", "rate_weekday", "rate_holiday", "single_discount"]
     try:
         mydb = Rooms()
-        if request.args.get("type"):
-            results = mydb.getRoomInfoByType(room_type=request.args.get("type"))
-        elif request.args.get("guests"):
+        if request.args.get("guests"):
             results = mydb.getRoomInfoByType(num_of_guests=request.args.get("guests"))
         else:
             results = mydb.getRoomInfoByType()
