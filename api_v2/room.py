@@ -45,7 +45,37 @@ def get_rooms():
 
     return body, status_code
 
-@api.route("/check_available/from<start_date_string>to<end_date_string>/<room_type>")
+@api.route("/rooms/<room_type>")
+def get_rooms_by_type(room_type):
+    cols = ["room_type", "name", "accommodate", "images", "description", "rate_weekday", "rate_holiday", "single_discount"]
+    try:
+        mydb = Rooms()
+        results = mydb.getRoomInfoByType(room_type=room_type)
+        rooms = {}
+        for r in results:
+            room_type_string = r[0]
+            room_type = dict(zip(cols[1:], r[1:]))
+            if room_type["images"]:
+                room_type["images"] = room_type["images"].split(", ")
+
+            room_type["rate_weekday"] = int(room_type["rate_weekday"])
+            room_type["rate_holiday"] = int(room_type["rate_holiday"])
+                        
+            rooms[room_type_string] = room_type
+                 
+        body = jsonify({"data": rooms})
+        status_code = 200
+        
+    except Exception as e:
+        body = jsonify({
+            "error": True,
+            "message": f"伺服器內部錯誤：{e}"
+        })
+        status_code = 500
+
+    return body, status_code
+
+@api.route("/rooms/<room_type>/available/from<start_date_string>to<end_date_string>")
 def check_available_room_by_type(start_date_string, end_date_string, room_type):
     try:
         mydb = Rooms()        
