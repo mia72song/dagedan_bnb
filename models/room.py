@@ -4,11 +4,6 @@ sys.path.append("..")
 from models.db import Mydb
 
 class Rooms(Mydb):
-    def getRoomTypes(self, num_of_guests=1):
-        sql = f"SELECT type FROM room_types WHERE is_del=0 AND accommodate>={int(num_of_guests)}"
-        self.cur.execute(sql)
-        return self.cur.fetchall()
-
     def getRoomInfoByType(self, room_type=None, num_of_guests=1):
         sql = f"""
             SELECT type, name, accommodate, images, description, 
