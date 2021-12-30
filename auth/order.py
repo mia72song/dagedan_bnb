@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from datetime import datetime
 
 from . import auth
-from models import OrderDB
+from models import Orders
 from constants import DATE_FORMATTER, DATETIME_FORMATTER
 
 # 初始化response content

@@ -103,16 +103,17 @@
     }
     class BookingForm extends React.Component{
         state = {
+            room_type: "",
+            check_in_date: "",
+            check_out_date: "",
+            nights: 1,
+            num_of_guests: 1,
             quantity: 1,
-            guests: 1,
-            addon:"",
-            amount: 0,
             name: "",
-            gender: "",
+            gender: "male",
             phone: "",
             email: "",
-            arrival_datetime: "",
-            note: ""
+            arrival_datetime: ""
         }
         updateAmount=(quantity, guests)=>{
             let amount = 0;
@@ -122,7 +123,6 @@
                 }else{
                     amount = amount+this.props.info.rate_weekday*quantity
                 }
-
                 if(parseInt(guests)===1){
                     amount = amount*this.props.info.single_discount
                 }
@@ -130,45 +130,38 @@
             return parseInt(amount)
         }
         componentDidMount(){
+            const check_in_date = (search_string_1st[0]==="checkin" && search_string_1st[1]);
+            const check_out_date = (search_string_2nd[0]==="checkout" && search_string_2nd[1]);
             this.setState({
-                guests: (search_string_3th[0]==="guests" && search_string_3th[1])
+                room_type: this.props.available.room_type,
+                check_in_date,
+                check_out_date,
+                nights: dateStringToIndex(check_out_date)-dateStringToIndex(check_in_date),
+                num_of_guests: parseInt(search_string_3th[0]==="guests" && search_string_3th[1]),
+                arrival_datetime: `${check_in_date}T15:00`
             })
         }
         render(){
-            const check_in_date = (search_string_1st[0]==="checkin" && search_string_1st[1]);
-            const check_out_date = (search_string_2nd[0]==="checkout" && search_string_2nd[1]);
-            console.log(this.props.info);
-            console.log(this.props.available);
+            // console.log(this.props);
             return(
-                <div className="booking_form">
-                    <div>
-                        <p>期間：{check_in_date} ~ {check_out_date}，共 {dateStringToIndex(check_out_date)-dateStringToIndex(check_in_date)} 晚</p>
+                <form className="booking_form" onSubmit={this.handelSubmit}>
+                    <div className="booking_detail">
+                        <h4>- 訂房明細 -</h4>
+                        <p>期間：{this.state.check_in_date} ~ {this.state.check_out_date}，共 {this.state.nights} 晚</p>
                         <p>房型：
                             {this.props.info.name} * 
-                            <input type="number" value={this.state.quantity} min="1" max={this.state.guests>1? this.props.available.min_quantity : 1} 
+                            <input type="number" value={this.state.quantity} min="1" max={this.state.num_of_guests>1? this.props.available.min_quantity : 1} 
                             onChange={this.handleChange("quantity")}/>
                             間
                         </p>
-                        <p>
-                            人數：
-                            <input type="number" value={this.state.guests} min="1" max={this.props.info.accommodate} 
-                            onChange={this.handleChange("guests")}/>
+                        <p>人數：
+                            <input type="number" value={this.state.num_of_guests} min="1" max={this.props.info.accommodate} 
+                            onChange={this.handleChange("num_of_guests")}/>
                             人
                         </p>
-                        <p>
-                            加購服務：
-                            <select>
-                                <option value="grapefruit">Grapefruit</option>
-                                <option value="lime">Lime</option>
-                                <option selected value="coconut">Coconut</option>
-                                <option value="mango">Mango</option>
-                            </select>
-                        </p>
-                        <p>
-                            總金額：新台幣
-                            <input type="text" disabled="true" readOnly="true" 
-                            value={this.updateAmount(this.state.quantity, this.state.guests)} 
-                            onChange={this.handleChange("amount")} />
+                        <p>總金額：新台幣
+                            <input type="text" disabled="true" readOnly="true" id={`total_amount_${this.state.room_type}`}
+                            value={this.updateAmount(this.state.quantity, this.state.num_of_guests)}/>
                             元    
                         </p>
                     </div>
@@ -176,9 +169,37 @@
                         <img src="static\images\9XpPMJYNvm.png" alt=""/>
                     </div>
                     <div className="booker_info">
-                        Booker Info
+                        <h4>- 訂房人資訊 -</h4>
+                        <div>
+                            <label for="booker_name">訂房全名：</label>
+                            <input type="text" value={this.state.name} onChange={this.handleChange("name")} required/>
+                            <span className="radio_container">
+                                <input type="radio" checked={this.state.gender==="male"} onChange={this.handelGenderCheck("male")}/>
+                                <label for="male">先生</label>
+                            </span>
+                            <span className="radio_container">
+                                <input type="radio" checked={this.state.gender==="female"} onChange={this.handelGenderCheck("female")}/>
+                                <label for="female">小姐</label>
+                            </span>
+                        </div>
+                        <div>
+                            <label for="phone">聯絡手機：</label>
+                            <input type="tel" minlength="10" maxlength="20" value={this.state.phone} onChange={this.handleChange("phone")} required/>
+                        </div>
+                        <div>
+                            <label for="email">E-Mail：</label>
+                            <input type="email" value={this.state.email} onChange={this.handleChange("email")} required/>  
+                        </div>
+                        <div>
+                            <label for="arrival_datetime">預計抵達時間：</label>
+                            <input type="datetime-local" min={`${check_in_date}T15:00`} max={`${check_in_date}T21:00`} 
+                            value={this.state.arrival_datetime} onChange={this.handleChange("arrival_datetime")}/> 
+                        </div>
+                        <div>
+                            <input type="submit" value="確認訂房" />    
+                        </div>
                     </div>
-                </div>
+                </form>
             )
         }
         handleChange=(dataType)=>{
@@ -193,7 +214,33 @@
                 }
             }
         }
-        
+        handelGenderCheck=(gender)=>{
+            return(eObj)=>{
+                this.setState({gender})
+            }
+        }
+        handelSubmit=(eObj)=>{
+            eObj.preventDefault();
+            // 結算金額
+            const amount = document.getElementById(`total_amount_${this.state.room_type}`).value;
+            // 建立訂房明細
+            let booking = [];
+            const available_array = this.props.available.data;
+            const quantity = this.state.quantity;
+            const nights = this.state.nights;
+            for(let n=0; n<nights; n++){
+                const room_nos = available_array[n].available_rooms;
+                const date = available_array[n].date;
+                for(let q=0; q<quantity; q++){                    
+                    let bid = `${date}_${room_nos[q]}`;
+                    booking.push(bid);
+                }
+            }
+            let data = this.state;
+            data["booking"] = booking;
+            data["amount"] = amount;
+            console.log(data);
+        }
     }
 
     addEventListener("load", ()=>{

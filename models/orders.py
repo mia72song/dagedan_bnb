@@ -1,6 +1,6 @@
 from models.db import Mydb
 
-class OrderDB(Mydb):
+class Orders(Mydb):
     def getOrderById(self, order_id):
         sql = f"""
             SELECT o.order_id,  o.create_datetime, 
@@ -37,8 +37,3 @@ class OrderDB(Mydb):
         
         self.cur.execute(sql)
         return self.cur.fetchall()
-
-if __name__=="__main__":
-    mydb = OrderDB()
-    data = mydb.getOrdersByDataType()
-    print(data)

@@ -41,6 +41,7 @@ main{
     background-color: #F0F0F0;
     margin: 10px auto;
     display: flex;
+    box-shadow:0px 4px 10px -10px rgba(20%,20%,40%,0.5);
 }
 .room_info_div>div{
     margin: 10px;
@@ -99,36 +100,57 @@ p>span{
 div[id^="booking_detail_"]{
     display: none;
     width: 90%;
-    background-color: aquamarine;
+    background-color: #E6E6F2;
     margin: 0 auto;
     margin-top: -10px;
     line-height: 2.2;
-    padding-left: 10px;
-    height: 220px;
+    padding-left: 10px;    
 }
 .booking_form{
+    margin: 10px auto;
     display: flex;
 }
-.booking_form>div{
-    margin: 10px;
+.booking_form>div, form{
+    margin: 10px 15px;
 }
-.booking_form input, select{
-    width: 60px;
+.booking_form h4{
+    margin-left: -5px;
+    letter-spacing: 3px;
+}
+.booking_form input{
+    width: 50px;
     font-size: 14px;
     margin: 3px 5px;
 }
-.booking_form select{
-    height: 31px;
-    width: 200px;
+input:disabled{
+    font-weight: bolder;
+    font-size: 18px;
+    width: 100px;
+    padding: 0 2px;
+    text-align: center;
+    color: blue;
+    letter-spacing: 1px;
 }
 .arrow_img_div{
     width: 60px;
-    line-height: 180px;
+    line-height: 220px;
 }
 .arrow_img_div>img{
     width: inherit;
     height: auto;
 }
+.booker_info>div{
+    margin-top: 5px;
+}
 .booker_info input{
+    width: 150px;
+}
+.booker_info input[type="submit"]{
     width: 120px;
+}
+.radio_container>input[type="radio"]{
+    width: 30px;
+}
+input[type="datetime-local"], input[type="email"]{
+    width: 200px;
 }
