@@ -1,6 +1,6 @@
 ## Booking & Administration service for Dangedan B&B website
 
-### 預計完成功能
+### 主要功能
 
 #### 前台(住客端)：
 
