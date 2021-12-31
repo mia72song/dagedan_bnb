@@ -1,15 +1,13 @@
 from flask import *
 from flask_jwt_extended import JWTManager
 
-jwt = JWTManager()
-
 app = Flask(__name__)
 
 from config import envs
 env_config = envs.get("dev")  #dev, pro, test，配置文件因運行環境而異
 app.config.from_object(env_config)
 
-jwt.init_app(app)
+jwt = JWTManager(app)
 
 from utils import ReConverter
 app.url_map.converters["re"] = ReConverter

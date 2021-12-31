@@ -204,14 +204,11 @@
         }
         handleChange=(dataType)=>{
             return(eOby)=>{
-                if(dataType==="guests" && parseInt(eOby.target.value)<=1){
-                    this.setState({
-                        quantity: 1,
-                        guests: eOby.target.value
-                    })
-                }else{
-                    this.setState({[dataType]: eOby.target.value});
-                }
+                let value = (
+                    (dataType==="num_of_guests" || dataType==="quantity")? 
+                    parseInt(eOby.target.value) : eOby.target.value
+                );
+                this.setState({[dataType]: value});
             }
         }
         handelGenderCheck=(gender)=>{
@@ -236,10 +233,10 @@
                     booking.push(bid);
                 }
             }
-            let data = this.state;
-            data["booking"] = booking;
-            data["amount"] = amount;
-            console.log(data);
+            let booking_data = this.state;
+            booking_data["booking"] = booking;
+            booking_data["amount"] = parseInt(amount);
+            console.log(booking_data);
         }
     }
 
