@@ -9,5 +9,5 @@ def index(html_filename):
         html_filename = "admin.html"
     else:
         html_filename = f"admin_{html_filename}.html"
-        
-    return render_template("admin.html")
+
+    return render_template(html_filename)
