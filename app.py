@@ -1,20 +1,17 @@
 from flask import *
 from flask_jwt_extended import JWTManager
 
-from config import envs
-
 jwt = JWTManager()
 
 app = Flask(__name__)
 
-# 先載入config 再 init_app(app)
+from config import envs
 env_config = envs.get("dev")  #dev, pro, test，配置文件因運行環境而異
 app.config.from_object(env_config)
 
 jwt.init_app(app)
 
 from utils import ReConverter
-#為flask添加自定義的轉換器 (要在藍圖之前導入)
 app.url_map.converters["re"] = ReConverter
 
 from auth import auth
