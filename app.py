@@ -17,8 +17,6 @@ from utils import ReConverter
 #為flask添加自定義的轉換器 (要在藍圖之前導入)
 app.url_map.converters["re"] = ReConverter
 
-from cms import admin
-app.register_blueprint(admin, url_prefix = "/admin")
 from auth import auth
 app.register_blueprint(auth, url_prefix = "/auth")
 from api_v2 import api
@@ -32,6 +30,16 @@ def index(html_filename):
     else:
         html_filename += ".html"
         
+    return render_template(html_filename)
+
+# 管理後台頁面
+@app.route("/admin/<re(r'.*'):html_filename>")
+def admin(html_filename):
+    if not html_filename:
+        html_filename = "admin.html"
+    else:
+        html_filename = f"admin_{html_filename}.html"
+
     return render_template(html_filename)
 
 #Rroduction Environment：app.run(host="0.0.0.0", port=3000)
