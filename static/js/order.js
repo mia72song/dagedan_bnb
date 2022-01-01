@@ -43,3 +43,21 @@ function getOrdersByKeyword(data_type, keyword){
     })
     return p
 }
+
+function postOrder(data){
+    let p = fetch(`${window.origin}/api/orders`, {
+        method: "post",
+        credentials: "include",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    }).then(response=>{
+        if(response.status!==500){
+            return response.json()
+        }else{
+            console.log(response.json())
+        }
+    })
+    return p
+}

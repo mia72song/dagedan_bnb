@@ -4,6 +4,7 @@
     {{ super() }}
     <link rel="stylesheet" type="text/css" href="static/css/booking.css">
     <script type="text/javascript" src="static/js/room.js"></script>
+    <script type="text/javascript" src="static/js/order.js"></script>
 {% endblock %}
 {% block content %}
 <div id="search_wrap">
@@ -172,7 +173,7 @@
                         <h4>- 訂房人資訊 -</h4>
                         <div>
                             <label for="booker_name">訂房全名：</label>
-                            <input type="text" value={this.state.name} onChange={this.handleChange("name")} required/>
+                            <input type="text" value={this.state.name} onChange={this.handleChange("name")} pattern="^[\u4e00-\u9fa5]+$|^[a-zA-Z\s]+$" required/>
                             <span className="radio_container">
                                 <input type="radio" checked={this.state.gender==="male"} onChange={this.handelGenderCheck("male")}/>
                                 <label for="male">先生</label>
@@ -223,12 +224,10 @@
             // 建立訂房明細
             let booking = [];
             const available_array = this.props.available.data;
-            const quantity = this.state.quantity;
-            const nights = this.state.nights;
-            for(let n=0; n<nights; n++){
+            for(let n=0; n<this.state.nights; n++){
                 const room_nos = available_array[n].available_rooms;
                 const date = available_array[n].date;
-                for(let q=0; q<quantity; q++){                    
+                for(let q=0; q<this.state.quantity; q++){                    
                     let bid = `${date}_${room_nos[q]}`;
                     booking.push(bid);
                 }
@@ -237,6 +236,9 @@
             booking_data["booking"] = booking;
             booking_data["amount"] = parseInt(amount);
             console.log(booking_data);
+            postOrder(booking_data).then(resp=>{
+                console.log(resp)
+            })
         }
     }
 

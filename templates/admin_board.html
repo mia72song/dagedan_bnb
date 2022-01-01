@@ -169,7 +169,7 @@
             currentUserPromise.then(currentUser=>{
                 // console.log(currentUser)
                 if(currentUser!==null){
-                    ReactDOM.render(<Banner id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
+                    ReactDOM.render(<Banner id={currentUser.user} name={currentUser.name}/>, document.querySelector("header"));
                     ReactDOM.render(<Board/>, document.querySelector("#board"));
                 }else{
                     location.href = `/admin`

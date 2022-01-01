@@ -4,20 +4,25 @@ sys.path.append("..")
 from models.db import Mydb
 
 class Guests(Mydb):
-    def guestPhoneExist(self, phone):
-        sql = f"SELECT guest_id from guests WHERE phone='{phone}'"
+    def __phoneExist(self, phone):
+        sql = f"SELECT gid from guests WHERE phone='{phone}'"
         self.cur.execute(sql)
         return self.cur.fetchone()
 
-    def createGuest(self, last_name, first_name, gender, phone, email, nationality, current_user):
-        if self.guestPhoneExist(phone):
-            gid = self.guestPhoneExist(phone)[0]
-            print(f"編號{gid}住客資料已存在")
+    def createGuest(self, name, gender, phone, email, current_user):
+        if self.__phoneExist(phone):
+            gid = self.__phoneExist(phone)[0]
+            print(f"電話：{phone} 已存在於住客編號：{gid} 資料中")
         else:
-            pass
+            sql = f"""
+                INSERT INTO guests (name, gender, phone, email, update_user) 
+                VALUES ('{name}','{gender}','{phone}','{email}','{current_user}')
+            """
+            self.cur.execute(sql)
+            self.conn.commit()
+            print("新住客資料已建立")
 
 
 if __name__=="__main__":
     mydb = Guests()
-    data = mydb.guestExist("0950400600")
-    print(data)
+    mydb.createGuest("李鷗", "M", "0987654321", "leolee@gmail.com", "mia72song")
