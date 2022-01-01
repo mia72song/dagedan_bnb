@@ -18,7 +18,7 @@ def create_new_order():
             g = Guests()
             gender = "M"
             if data["gender"]=="female" : gender = "F"
-            g.createGuest(data["name"], gender, data["phone"], data["email"], data["name"])
+            g.createGuest(data["name"], gender, data["phone"], data["email"])
 
             o = Orders()
             o.createOrder(data["check_in_date"], data["check_out_date"], data["nights"], data["num_of_guests"], data["amount"], data["phone"], data["arrival_datetime"], booking=data["booking"])
