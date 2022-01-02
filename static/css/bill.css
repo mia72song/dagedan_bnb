@@ -1,0 +1,18 @@
+main{
+    background-image: none;
+    background-color: #FFFFFF;
+}
+
+#bill_wrap{
+    margin: 0 auto;
+    width: 1000px;
+    background-color: #F0F0F0;
+    font-size: 18px;
+}
+#bill_wrap>div{
+    padding: 30px 50px;
+}
+table, tr, th, td {
+    padding: 10px;
+    line-height: 2;
+}
