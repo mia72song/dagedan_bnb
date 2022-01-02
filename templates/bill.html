@@ -17,7 +17,7 @@
             console.log(this.props.data);
             return(
                 <div>
-                    <h3>您已完成訂房，請按下列資訊在期限內進行付款：</h3>
+                    <h4>您已完成訂房，請按下列資訊在期限內進行付款：</h4>
                     <table>
                         <tr>
                             <th>訂單編號</th>
@@ -32,7 +32,7 @@
                             </td>
                         </tr>
                         <tr>
-                            <th>金額</th>
+                            <th>金　　額</th>
                             <td>新台幣 {parseInt(this.props.data.amount)} 元</td>
                         </tr>
                         <tr>
@@ -40,7 +40,7 @@
                             <td>{this.props.data.deadline}</td>
                         </tr>
                     </table>
-                    <p>請於完成匯款後，來電089-771551確認。</p>
+                    <p>*** 請於完成匯款後，來電089-771551確認。 ***</p>
                 </div>
             )
         }
