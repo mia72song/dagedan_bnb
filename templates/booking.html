@@ -238,6 +238,9 @@
             console.log(booking_data);
             postOrder(booking_data).then(resp=>{
                 console.log(resp)
+                if(resp.ok){
+                    location.href = `${window.origin}/bill?oid=${resp.oid}`
+                }
             })
         }
     }

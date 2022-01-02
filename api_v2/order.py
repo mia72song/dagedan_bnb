@@ -21,9 +21,12 @@ def create_new_order():
             g.createGuest(data["name"], gender, data["phone"], data["email"])
 
             o = Orders()
-            o.createOrder(data["check_in_date"], data["check_out_date"], data["nights"], data["num_of_guests"], data["amount"], data["phone"], data["arrival_datetime"], booking=data["booking"])
+            oid = o.createOrder(data["check_in_date"], data["check_out_date"], data["nights"], data["num_of_guests"], data["amount"], data["phone"], data["arrival_datetime"], booking=data["booking"])
             
-            body = jsonify({"ok": True})
+            body = jsonify({
+                "ok": True,
+                "oid": oid
+                })
             status_code = 200
         
         except Exception as e:
@@ -43,5 +46,30 @@ def create_new_order():
             "message": "No Json Data"
         })
         status_code = 400
+
+    return body, status_code
+
+@api.route("/order/<oid>")
+def getOrderById(oid):
+    try:
+        o = Orders()
+        data = o.getOrderById(oid)
+        amount = data[2]
+        deadline = datetime.strftime(data[-1], DATE_FORMATTER)
+        
+        body = jsonify({
+            "data": {
+                "amount": amount,
+                "deadline": deadline
+            }
+        })
+        status_code = 200
+
+    except Exception as e:
+        body = jsonify({
+            "error": True,
+            "message": f"伺服器內部錯誤：{e}"
+        })
+        status_code = 500
 
     return body, status_code
