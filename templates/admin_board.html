@@ -2,10 +2,7 @@
 {% block title %}Board{% endblock %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/board.css") }}>
-    <script type="text/javascript" src={{ url_for("static", filename="js/room.js") }}></script>
-    <script type="text/javascript" src={{ url_for("static", filename="js/calendar.js") }}></script>
-    <script type="text/javascript" src={{ url_for("static", filename="js/booking.js") }}></script>
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/admin/board.css") }}>
     <!-- Load Pubsub-js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pubsub-js/1.9.3/pubsub.min.js" integrity="sha512-ASNLdxh5Knd0ESqUQE2hvUbXxOmu0y27vVVibROAKRomo+R6ocykvh0m8tE9qMEfmeVbEyNL1M6FvvyRKyZIoQ==" crossorigin="anonymous"></script>
 {% endblock %}
@@ -16,161 +13,12 @@
             <!--由Board組件渲染-->
         </div>        
     </main>
-    <script type="text/babel">
-        class Board extends React.Component{
-            state = {
-                rooms: [],
-                page: 0,
-                y: "2021",
-                m: "12",
-                week: []
-            }
-            componentDidMount(){
-                roomRequest().then(resp=>{
-                    this.setState({rooms: resp.data});
-                    this.updateWeeklyCalendar(0);
-                })
-            }
-            render(){
-                const rooms = this.state.rooms;
-                const week = this.state.week;
-                let calendar_content = [];
-                let row_content = [];
-                if(week.length>0 && rooms.length>0){
-                    calendar_content = week.map(day=><Calendar key={day.date} data={day} />)
-                    row_content = rooms.map(r=><Row key={r.room_no} room={r} week={week} />)
-                }
-                return(
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th colspan="9">
-                                    <h5>{this.state.y}年 - {this.state.m}月</h5>
-                                </th>
-                            </tr>
-                            <tr className="calendar_tr">
-                                {this.state.page!==0 ? (
-                                    <th id="prv_page">
-                                        <p><a href="/admin/board">回本週</a></p>
-                                        <p><a href="javascript: void(0)" onClick={this.toNextPage(-1)}>上週</a></p>                            
-                                    </th>
-                                ) : (
-                                    <th id="prv_page">
-                                        <a href="/admin/orders">歷史訂單</a>
-                                    </th>
-                                )}
-                                { calendar_content }
-                                <th id="next_page">
-                                    <a href="javascript: void(0)" onClick={this.toNextPage(1)}>下週</a>
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { row_content }
-                        </tbody>
-                    </table>
-                )
-            }
-            toNextPage=(number)=>{
-                return(eObj=>{
-                    this.updateWeeklyCalendar(this.state.page+number);
-                })
-            }
-            updateWeeklyCalendar=(page)=>{
-                let start_date_string = getDateString(page*7);
-                getWeeklyCalendar(start_date_string).then(respC=>{
-                    let week = respC.data;
-                    let end_date_string = week[6].date;
-                    getBookingListByDate(start_date_string, end_date_string).then(respB=>{
-                        this.setState({
-                            page,
-                            y: week[0].date.substring(0,4),
-                            m: week[0].date.substring(5,7),
-                            week
-                        })
-                        PubSub.publish('BOOKED', respB.data);
-                    })
-                })
-            }
-        }
-        class Calendar extends React.Component{
-            render(){
-                return(
-                    <th className={this.props.data.is_holiday && "holiday"}>
-                        <h2>{((this.props.data.date).split("-"))[2]}</h2>
-                        <p>{this.props.data.weekday}</p>
-                        <p className="date_note">{this.props.data.note}</p>
-                    </th>
-                )
-            }
-        }
-        class Row extends React.Component{
-            render(){
-                const room = this.props.room;
-                const week = this.props.week;
-                let week_content = [];
-                week.forEach(d => {
-                    let td = (
-                        <td>
-                            <OrderLink bid={d.date+"-"+room.room_no} />
-                        </td>
-                    )
-                    week_content.push(td);               
-                });
-                return(
-                    <tr>
-                        <td scope="row" className="room_type">{room.name}-{room.room_no}</td>
-                        { week_content }
-                        <td>
-                            <button type="button" class="btn btn-light" onClick={this.changeRoomInfo(room.room_no)}>修改房間</button>
-                        </td>
-                    </tr>
-                )
-            }
-            changeRoomInfo=(room_no)=>{
-                return(eObj=>{
-                    console.log(room_no);
-                })
-            }
-        }
-        class OrderLink extends React.Component{
-            state = {
-                booked: []
-            }
-            componentDidMount(){
-                this.token=PubSub.subscribe("BOOKED", (_, booked)=>{
-                    if(booked){
-                        this.setState({booked})
-                    }
-                })
-            }
-            render(){
-                const booked = this.state.booked;
-                let a_tag = null;
-                if(booked.length>0){
-                    booked.forEach(b=>{
-                        let bid = `${b.date}-${b.room_no}`;
-                        if(bid==this.props.bid){
-                            a_tag = (
-                                <a href={`/admin/order/${b.order_id}`} className="order_link">
-                                    {b.booker_gender=="F" ? "Miss" : "Mr."} {b.booker_name} {b.booker_phone}
-                                </a>
-                            )
-                        }
-                    })
-                }
-                return a_tag
-            }
-            componentWillUnmount(){
-                PubSub.unsubscribe(this.token);
-            }
-        }
+    <script type="text/babel">        
         addEventListener("load", ()=>{
             currentUserPromise.then(currentUser=>{
-                // console.log(currentUser)
                 if(currentUser!==null){
-                    ReactDOM.render(<Banner id={currentUser.user} name={currentUser.name}/>, document.querySelector("header"));
-                    ReactDOM.render(<Board/>, document.querySelector("#board"));
+                    // console.log(currentUser);
+                    ReactDOM.render(<Banner id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
                 }else{
                     location.href = `/admin`
                 }

@@ -2,8 +2,7 @@
 {% block title %}Staff Only{% endblock %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/admin.css") }}>
-    <script type="text/javascript" src={{ url_for("static", filename="js/user.js") }}></script>
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/admin/admin.css") }}>
 {% endblock %}
 {% block content %}
     <main>
@@ -25,12 +24,12 @@
                         <div className="mb-3">
                             <label for="" className="form-label">帳號</label>
                             <input type="text" className="form-control" name="username" id="username"
-                                value={this.state.username} onChange={this.handleChange("username")}/>
+                                value={this.state.username} onChange={this.handleChange("username")} required/>
                         </div>
                         <div className="mb-3">
                             <label for="" className="form-label">密碼</label>
                             <input type="password" className="form-control" name="password" id="password"
-                                value={this.state.password} onChange={this.handleChange("password")}/>
+                                value={this.state.password} onChange={this.handleChange("password")} required/>
                         </div>
                         <button type="submit" className="btn btn-primary">登入</button>
                         </form>
@@ -44,12 +43,7 @@
             }
             handleSubmit=(eObj)=>{
                 eObj.preventDefault()
-                const {username, password} = this.state
-                if(username==="" || password===""){
-                    alert("登入資料皆不得為空值")
-                    return
-                }
-                const data = {username, password}
+                const data = this.state
                 let p = userRequest("post", data)
                 p.then(resp=>{
                     if(resp.ok){

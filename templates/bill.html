@@ -13,8 +13,6 @@
 <script type="text/babel">
     class Bill extends React.Component{
         render(){
-            console.log(this.props.oid);
-            console.log(this.props.data);
             return(
                 <div>
                     <h4>您已完成訂房，請按下列資訊在期限內進行付款：</h4>
@@ -46,7 +44,7 @@
         }
     }
     addEventListener("load", ()=>{
-        const oid = window.location.search.split("?")[1].split("=")[1]
+        const oid = window.location.search.split("?")[1].split("=")[1];
         if(oid){
             getOrderByOid(oid).then(resp=>{
                 ReactDOM.render(<Bill oid={oid} data={resp.data}/>, document.getElementById("bill_wrap"));
