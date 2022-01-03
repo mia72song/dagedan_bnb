@@ -2,8 +2,7 @@ from flask import jsonify, request
 from datetime import datetime, timedelta
 
 from . import api
-from models import Guests
-from models import Orders
+from models import Apidb
 from constants import DATE_FORMATTER
 
 # 初始化response content
@@ -15,13 +14,12 @@ def create_new_order():
     data = request.get_json()
     if data:
         try:
-            g = Guests()
+            mydb = Apidb()
             gender = "M"
             if data["gender"]=="female" : gender = "F"
-            g.createGuest(data["name"], gender, data["phone"], data["email"])
+            mydb.createGuest(data["name"], gender, data["phone"], data["email"])
 
-            o = Orders()
-            oid = o.createOrder(data["check_in_date"], data["check_out_date"], data["nights"], data["num_of_guests"], data["amount"], data["phone"], data["arrival_datetime"], booking=data["booking"])
+            oid = mydb.createOrder(data["check_in_date"], data["check_out_date"], data["nights"], data["num_of_guests"], data["amount"], data["phone"], data["arrival_datetime"], booking=data["booking"])
             
             body = jsonify({
                 "ok": True,
@@ -37,8 +35,7 @@ def create_new_order():
             status_code = 500
         
         finally:
-            del g
-            del o
+            del mydb
     
     else:
         body = jsonify({
@@ -52,8 +49,8 @@ def create_new_order():
 @api.route("/order/<oid>")
 def getOrderById(oid):
     try:
-        o = Orders()
-        data = o.getOrderById(oid)
+        mydb = Apidb()
+        data = mydb.getOrderById(oid)
         amount = data[2]
         deadline = datetime.strftime(data[-1], DATE_FORMATTER)
         

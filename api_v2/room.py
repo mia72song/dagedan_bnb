@@ -2,7 +2,7 @@ from flask import jsonify, request
 from datetime import datetime
 
 from . import api
-from models import Rooms
+from models import Apidb
 from constants import DATE_FORMATTER
 
 # 初始化response content
@@ -13,7 +13,7 @@ status_code = 0
 def get_rooms():
     cols = ["room_type", "name", "accommodate", "images", "description", "rate_weekday", "rate_holiday", "single_discount"]
     try:
-        mydb = Rooms()
+        mydb = Apidb()
         if request.args.get("guests"):
             results = mydb.getRoomInfoByType(num_of_guests=request.args.get("guests"))
         else:
@@ -47,7 +47,7 @@ def get_rooms():
 def get_rooms_by_type(room_type):
     cols = ["room_type", "name", "accommodate", "images", "description", "rate_weekday", "rate_holiday", "single_discount"]
     try:
-        mydb = Rooms()
+        mydb = Apidb()
         results = mydb.getRoomInfoByType(room_type=room_type)
         rooms = {}
         for r in results:
@@ -76,7 +76,7 @@ def get_rooms_by_type(room_type):
 @api.route("/rooms/<room_type>/available/from<start_date_string>to<end_date_string>")
 def check_available_room_by_type(start_date_string, end_date_string, room_type):
     try:
-        mydb = Rooms()        
+        mydb = Apidb()
         data_list = []
         week = mydb.getCalendar(start_date_string, end_date_string)
         min_quantity = 100
