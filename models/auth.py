@@ -26,7 +26,7 @@ class Authdb(Mydb):
         print("密碼已更新")
     """
     '''Order'''
-    def __checkStatus(self):
+    def __updateStatus(self):
         today = date.today()
         date_string =  datetime.strftime(today, DATE_FORMATTER)
         sql = f"""
@@ -37,7 +37,7 @@ class Authdb(Mydb):
         self.conn.commit()
 
     def getOrdersByStatus(self, status="ALL"):
-        self.__checkStatus()
+        self.__updateStatus()
         sql = f"""
             SELECT oid, create_datetime, 
             check_in_date, check_in_date, nights, num_of_guests, amount, 
@@ -73,7 +73,16 @@ class Authdb(Mydb):
         return self.cur.fetchall()
 
     def getOrderById(self, oid):
-        pass
+        sql = f"""
+            SELECT oid, create_datetime, 
+            check_in_date, check_in_date, nights, num_of_guests, amount, 
+            g.name, g.gender, g.phone, PaymentId, status 
+            FROM orders AS o
+            INNER JOIN guests AS g ON g.phone=o.Phone
+            WHERE oid={oid}
+        """
+        self.cur.execute(sql)
+        return self.cur.fetchall()
     
     '''Booking'''
     def getBookingByOrderId(self, oid):
@@ -158,3 +167,8 @@ class Authdb(Mydb):
         sql = f"SELECT * FROM payment_atm WHERE id='{pid}'"
         self.cur.execute(sql)
         return self.cur.fetchone()
+
+if __name__=="__main__":
+    mydb = Authdb()
+    data = mydb.getOrderById(1641219478)
+    print(data)

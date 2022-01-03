@@ -26,7 +26,24 @@ def orderFormatter(result):
 @auth.route("/order/<int:order_id>")
 @jwt_required()
 def get_order_by_id(order_id):
-    pass
+    try:
+        mydb = Authdb()
+        data_list = []
+        results = mydb.getOrderById(order_id)
+        for r in results:
+            data_list.append(orderFormatter(r))
+
+        body = jsonify({"data": data_list})
+        status_code = 200
+    
+    except Exception as e:
+        body = jsonify({
+            "error": True,
+            "message": f"伺服器內部錯誤：{e}"
+        })
+        status_code = 500
+
+    return body, status_code
 
 @auth.route("/orders")
 @jwt_required()
