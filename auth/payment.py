@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
 
 from . import auth
-from models import PaymentDB
+from models import Authdb
 from constants import DATE_FORMATTER
 
 # 初始化response content
@@ -15,7 +15,7 @@ status_code = 0
 def get_payment(pid):
     cols = ["pid", "bank", "account_no", "name", "amount", "update_datetime", "current_user", "transfer_date"]
     try:
-        mydb = PaymentDB()
+        mydb = Authdb()
         result = mydb.getPaymentById(pid)
         data_dict = dict(zip(cols, result))
         data_dict["amount"] = float(data_dict["amount"])
@@ -51,7 +51,7 @@ def create_payment():
 
     if create_data:
         try:
-            mydb = PaymentDB()
+            mydb = Authdb()
             result, msg = mydb.createPayment(create_data, current_username)
             if result:
                 body = jsonify({"ok": True})
@@ -95,7 +95,7 @@ def update_payment():
         
     if update_data:
         try:
-            mydb = PaymentDB()
+            mydb = Authdb()
             mydb.updatePayment(update_data, current_username)
             body = jsonify({"ok": True})
             status_code = 200

@@ -3,7 +3,7 @@ from flask_jwt_extended import jwt_required
 from datetime import datetime
 
 from . import auth
-from models import Orders
+from models import Authdb
 from constants import DATE_FORMATTER, DATETIME_FORMATTER
 
 # 初始化response content
@@ -32,7 +32,7 @@ def get_order_by_id(order_id):
 @jwt_required()
 def get_orders():
     try:
-        mydb = Orders()
+        mydb = Authdb()
         data_list = []
         # with data_type: phone, check_in_date
         if request.args.get("phone"):
@@ -60,7 +60,7 @@ def get_orders():
 @jwt_required()
 def get_orders_by_status(status):
     try:
-        mydb = Orders()
+        mydb = Authdb()
         data_list = []
         results = mydb.getOrdersByStatus(status=status.upper())
 
