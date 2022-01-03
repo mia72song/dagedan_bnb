@@ -1,7 +1,11 @@
-function getOrders(col_name=null, keyword=null){
+function getOrders(data_type=null, keyword=null){
     let url = `${window.origin}/auth/orders`;
-    if(col_name && keyword){
-        url = url+`?${col_name}=${keyword}`
+    if(data_type && keyword){
+        if(data_type==="status"){
+            url = url+`/${keyword}`
+        }else{
+            url = url+`?${data_type}=${keyword}`
+        }
     }
     let p = fetch(url).then(response=>{
         if(response.status!==500){
@@ -11,4 +15,7 @@ function getOrders(col_name=null, keyword=null){
         }
     })
     return p
+}
+function orderRequestById(oid, method, data=null){
+    pass
 }
