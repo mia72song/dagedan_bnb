@@ -45,6 +45,12 @@ def get_order_by_id(order_id):
 
     return body, status_code
 
+@auth.route("/order/<int:order_id>", methods=["PUT"])
+@jwt_required()
+def update_order_status(order_id):
+    data = request.get_json()
+    return jsonify({"msg": "Got it"}), 200
+
 @auth.route("/orders")
 @jwt_required()
 def get_orders():

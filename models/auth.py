@@ -36,8 +36,14 @@ class Authdb(Mydb):
         self.cur.execute(sql)
         self.conn.commit()
 
+    def __cancelBooking(self):
+        sql = f"DELETE FROM booking WHERE OrderId IN(SELECT oid FROM orders WHERE status='CANCEL')"
+        self.cur.execute(sql)
+        self.conn.commit()
+
     def getOrdersByStatus(self, status="ALL"):
         self.__updateStatus()
+        self.__cancelBooking()
         sql = f"""
             SELECT oid, create_datetime, 
             check_in_date, check_in_date, nights, num_of_guests, amount, 
@@ -83,6 +89,12 @@ class Authdb(Mydb):
         """
         self.cur.execute(sql)
         return self.cur.fetchall()
+
+    def updateOrderStatus(self, oid, status):
+        # status："NEW", "PAID" ,"CANCEL", "DELETE"
+        sql = f"UPDATE orders SET status='{status.upper()}' WHERE oid={oid}"
+        self.cur.execute(sql)
+        self.conn.commit()
     
     '''Booking'''
     def getBookingByOrderId(self, oid):
@@ -170,5 +182,5 @@ class Authdb(Mydb):
 
 if __name__=="__main__":
     mydb = Authdb()
-    data = mydb.getOrderById(1641219478)
+    data = mydb.getOrdersByStatus()
     print(data)
