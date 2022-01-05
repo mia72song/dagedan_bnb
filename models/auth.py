@@ -164,8 +164,11 @@ class Authdb(Mydb):
             self.cur.execute(sql)
             self.conn.commit()
             print(f"付款編號：{pid} 資料已修改")
+            msg = "ok"
         else:
-            print(f"付款編號：{pid} 未修改任何資料!!")
+            msg = f"付款編號：{pid} 未修改任何資料!!"
+        
+        return msg
 
     def getPaymentById(self, pid):
         sql = f"SELECT * FROM payment_atm WHERE id='{pid}'"

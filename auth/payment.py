@@ -99,11 +99,19 @@ def update_payment(pid):
     if data:
         try:
             mydb = Authdb()
-            mydb.updatePayment(current_username, pid, bank=data.get("bank"), account_no=data.get("account_no"), name=data.get("name"), amount=data.get("amount"), transfer_date=data.get("transfer_date"))            
-            body = jsonify({
-                "ok": True
-            })
-            status_code = 200
+            msg = mydb.updatePayment(current_username, pid, bank=data.get("bank"), account_no=data.get("account_no"), name=data.get("name"), amount=data.get("amount"), transfer_date=data.get("transfer_date"))            
+            if msg=="ok":            
+                body = jsonify({
+                    "ok": (msg=="ok")
+                })
+                status_code = 200
+            else:
+                body = jsonify({
+                    "error": True,
+                    "message": msg
+                })
+                status_code = 500
+
         except Exception as e:
             body = jsonify({
                 "error": True,
