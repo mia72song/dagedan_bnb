@@ -1,4 +1,4 @@
-function postOrder(data){
+function createNewOrder(data){
     let p = fetch(`${window.origin}/api/orders`, {
         method: "post",
         credentials: "include",

@@ -2,7 +2,7 @@ function roomInfoRequest(num_of_guests=1, room_type=null){
     let url = `${window.origin}/api/rooms`;
     if(room_type){
         url = url+`/${room_type}`
-    }else if(num_of_guests){
+    }else{
         url = url+`?guests=${num_of_guests}`
     }
     let p = fetch(url).then(response=>{
