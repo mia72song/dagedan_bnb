@@ -15,6 +15,7 @@ function postOrder(data){
     })
     return p
 }
+
 function getOrderByOid(oid){
     let p = fetch(`${window.origin}/api/order/${oid}`).then(response=>{
         if(response.status!==500){

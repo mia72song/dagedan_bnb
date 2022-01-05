@@ -35,6 +35,10 @@ main{
     margin: 0 auto;
     margin-top: -15px;
 }
+#room_box>h1{
+    text-align: center;
+    color: blue;
+}
 
 /* RoomInfo Component*/
 .room_info_div{

@@ -4,6 +4,7 @@
     {{ super() }}
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/admin/order.css") }}>
     <script type="text/javascript" src={{ url_for("static", filename="js/admin/order.js") }}></script>
+    <script type="text/javascript" src={{ url_for("static", filename="js/admin/booked.js") }}></script>
     <script type="text/javascript" src={{ url_for("static", filename="js/admin/payment.js") }}></script>
 {% endblock %}
 {% block content %}
@@ -16,71 +17,90 @@
         </div>
     </main>
     <script type="text/babel">
+        const order_status = {
+            ALL: "所有訂單",
+            NEW: "新訂單",
+            PAID: "已付款",
+            CANCEL: "取消"
+        }
+        const search_select = {
+            order_id: "訂單編號",
+            phone: "聯絡電話",
+            check_in_date: "入住日期"
+        }
         class Search extends React.Component{
             state = {
-                orders_status: "NEW", // NEW, ALL, PAID, CANCEL
-                select: "",
+                orders_status: "NEW", // NEW, PAID, CANCEL, ALL
+                select: "", // order_id, phone, check_in_date
                 keyword: ""
             }
             componentDidMount(){
+                // 訪問路徑：/order, /order?id=<oid>
                 let p;
                 if(location.search){
                     const query_string = location.search.replace("?", "");
-                    p = getOrdersByKeyword(query_string.split("=")[0], query_string.split("=")[1])
-                    this.setState({
-                        orders_status: "ALL",
-                        select: query_string.split("=")[0],
-                        keyword: query_string.split("=")[1]
+                    const oid = (query_string.split("=")[0]==="id" && query_string.split("=")[1]);
+                    if(oid){
+                        p = getOrders("order_id", oid).then(resp=>{
+                            this.setState({
+                                orders_status: "ALL",
+                                select: "order_id",
+                                keyword: oid
+                            })
+                            return resp.data
+                        })
+                    }
+                }else{
+                    p = getOrders("status", this.state.orders_status).then(resp=>{
+                        return resp.data
                     })
-                }else if(location.pathname.split("/")[3]){
-                    p = getOrderById(location.pathname.split("/")[3])
-                    this.setState({
-                        orders_status: "ALL",
-                        select: "order_id",
-                        keyword: location.pathname.split("/")[3]
-                    })
-                }else if(location.pathname=="/admin/orders"){
-                    p = getOrdersByStatus(this.state.orders_status)
                 }
                 p.then(data=>{
                     ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
                 })
             }
             render(){
+                let status_options = [];
+                Object.keys(order_status).forEach(option=>{
+                    status_options.push(
+                        <option value={option}>{order_status[option]}</option>
+                    )
+                })
+                let searcht_options = [];
+                Object.keys(search_select).forEach(option=>{
+                    searcht_options.push(
+                        <option value={option}>{search_select[option]}</option>
+                    )
+                })
                 return(
                     <div id="wrap">
                         <div id="status_wrap">
                             <label for="">訂單狀態</label>
                             <select value={this.state.orders_status} onChange={this.filterStatus}>
-                                <option value="NEW">新訂單</option>
-                                <option value="ALL">全部訂單</option>
-                                <option value="PAID">已付款</option>
-                                <option value="CANCEL">取消</option>
+                                { status_options }
                             </select>
                         </div>
-                        <div id="keyword_wrap">
+                        <form id="keyword_wrap" onSubmit={this.handleSubmit}>
                             <label for="">搜尋項目</label>
-                            <select value={this.state.select} onChange={this.handleChange("select")}>
+                            <select value={this.state.select} onChange={this.handleChange("select")} required>
                                 <option value="">請選取搜尋項目</option>
-                                <option value="order_id">訂單編號</option>
-                                <option value="phone">聯絡電話</option>
-                                <option value="check_in_date">入住日期</option>
+                                { searcht_options }
                             </select>
                             <input type={this.state.select=="check_in_date" ? "date" : "text"} name="keyword" id="keyword" placeholder="請輸入關鍵字"
-                                value={this.state.keyword} onChange={this.handleChange("keyword")}/>
-                            <button type="submit" className="btn btn-dark" onClick={this.handleSubmit}>搜尋</button>
-                        </div>
+                                value={this.state.keyword} onChange={this.handleChange("keyword")} required/>
+                            <button type="submit" className="btn btn-dark">搜尋</button>
+                        </form>
                     </div>
                 )
             }
             filterStatus=(eObj)=>{
-                getOrdersByStatus(eObj.target.value).then(data=>{
-                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
-                })
                 this.setState({
                     orders_status: eObj.target.value,
                     select: "",
                     keyword: ""
+                })
+                getOrders("status", eObj.target.value).then(resp=>{
+                    ReactDOM.render(<DataBox data={resp.data}/>, document.querySelector("#databox"));
                 })
             }
             handleChange=(dataType)=>{
@@ -91,39 +111,13 @@
                 })
             }
             handleSubmit=(eObj)=>{
-                if(this.state.select=="" || this.state.keyword==""){
-                    alert("搜尋項目及關鍵字皆不得為空")
-                    return
-                }else{
-                    const data_type = this.state.select;
-                    const keyword = this.state.keyword
-                    if(data_type=="order_id"){
-                        location.href = `/admin/order/${keyword}`
-                    }else{
-                        location.href = `/admin/orders?${data_type}=${keyword}`
-                    }                    
-                }
+                eObj.preventDefault();
+                getOrders(this.state.select, this.state.keyword).then(resp=>{
+                    ReactDOM.render(<DataBox data={resp.data}/>, document.querySelector("#databox"));
+                })
             }
         }
         class DataBox extends React.Component{
-            render(){
-                let content;
-                if(this.props.data){
-                    content = this.props.data.map(d=><DataRow key={d.order_id} data={d}/>)
-                }
-                return(
-                    <table className="table">
-                        <thead>
-                            <Thead />
-                        </thead>
-                        <tbody>
-                            { content }
-                        </tbody>
-                    </table>
-                )
-            }
-        }
-        class Thead extends React.Component{
             cols = [
                 {id: "order_id_col", name: "訂單編號"},
                 {id: "create_datetime_col", name: "建立時間"},
@@ -131,15 +125,22 @@
                 {id: "nights_col", name: "天數"},
                 {id: "guests_col", name: "人數"},
                 {id: "amount_col", name: "總金額"},
-                {id: "booker_info_col", name: "訂房人"},
-                {id: "add_on_service_col", name: "附加服務"},
+                {id: "booker_info_col", name: "訂房 / 付款資訊"},
+                // {id: "add_on_service_col", name: "附加服務"},
                 {id: "order_status_col", name: "狀態"}
             ]
             render(){
                 return(
-                    <tr>
-                        { this.cols.map(col=><th id={col.id}>{col.name}</th>) }
-                    </tr>
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                { this.cols.map(col=><th id={col.id}>{col.name}</th>) }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            { this.props.data && this.props.data.map(d=><DataRow key={d.order_id} data={d}/>) }
+                        </tbody>
+                    </table>
                 )
             }
         }
@@ -147,37 +148,34 @@
             state = {
                 status: ""
             }
-            status_content = {
-                NEW: "新訂單",
-                PAID: "已付款",
-                CANCEL: "取消"
-            }
             componentDidMount(){
                 this.setState({status: this.props.data.order_status})
             }
             render(){
                 const data = this.props.data;
-                const status = this.state.status;
+                let tr_class = "cancel_tr";
+                if(this.state.status!=="CANCEL"){
+                    tr_class = (this.state.status==="PAID"? "paid_tr" : "new_tr")
+                }
                 return(
-                    <tr>
+                    <tr className={tr_class}>
                         <td>{data.order_id}</td>
                         <td><p>{data.create_datetime}</p>                               
                         </td>
                         <td>
                             <div>{data.check_in_date} / {data.check_out_date}</div>
-                            <BookingInfo oid={data.order_id}/>
+                            {this.state.status!=="CANCEL" && <BookingInfo oid={data.order_id}/>}
                         </td>
                         <td>{data.nights}</td>
                         <td>{data.guests}</td>
                         <td>{data.amount}</td>
                         <td className="left_td">
                             <p>{data.booker_name} {data.booker_gender=="F"? "小姐" : "先生"} {data.booker_phone}</p>
-                            <PaymentInfo status={status} oid={data.order_id} pid={data.payment_id}/>
+                            {this.state.status!=="CANCEL" && <PaymentInfo status={status} oid={data.order_id} pid={data.pid}/>}
                         </td>
-                        <td>{data.add_on_order_id}</td>
                         <td>
-                            <p>{this.status_content[status]}</p>
-                            {status!=="CANCEL" && <button onClick={this.handleCancel}>取消</button>}
+                            <p>{order_status[this.state.status]}</p>
+                            {this.state.status!=="CANCEL" && <button onClick={this.handleCancel}>取消</button>}
                         </td>
                     </tr>
                 )
@@ -211,16 +209,16 @@
         }
         class BookingList extends React.Component{
             state = {
-                booking_list: []
+                booked_list: []
             }
             componentDidMount(){
-                getBookingListByOrderId(this.props.oid).then(resp=>{
-                    this.setState({booking_list : resp.data})
+                getBookedListByOrderId(this.props.oid).then(resp=>{
+                    this.setState({booked_list : resp.data})
                 })
             }
             render(){
                 let booking_content = []
-                this.state.booking_list.forEach(b=>{
+                this.state.booked_list.forEach(b=>{
                     let item = <div>{b.date} {b.room_name}</div>
                     booking_content.push(item)
                 })
@@ -244,10 +242,6 @@
                 const status = this.props.status;
                 return(
                     <div className="payment_div">
-                        訂金：
-                        <span>
-                            {this.payment_status[status]}
-                        </span>
                         <button className={status=="PAID" && "paid_btn"} 
                             onClick={this.getPaymentDetail}>
                             {status=="PAID"? "付款資料" : "確認轉帳"}
@@ -282,28 +276,27 @@
             }
             componentDidMount(){
                 if(this.props.pid!==null){
-                    getPaymentRequest(this.props.pid).then(resp=>{
-                        const data = resp.data[0];
+                    getPayment(this.props.pid).then(resp=>{
                         this.setState({
-                            bank: data.bank,
-                            account_no: data.account_no,
-                            name: data.name,
-                            amount: data.amount,
-                            transfer_date: data.transfer_date,
-                            past_data: data
+                            bank: resp.data.bank,
+                            account_no: resp.data.account_no,
+                            name: resp.data.name,
+                            amount: resp.data.amount,
+                            transfer_date: resp.data.transfer_date,
+                            past_data: resp.data
                         })
                     })
                 }
             }
             render(){
-                console.log(this.props.cancel);
+                // console.log(this.props.cancel);
                 let payment_content = []
                 Object.keys(this.labels).forEach(col=>{
                     let item = (
                         <div>
                             <label for="">{this.labels[col]}：</label>
                             <input type={col=="transfer_date"? "date" : "text"} id={`${col}_input`} value={this.state[col]} 
-                                onChange={this.handleChange(col)}/>
+                                onChange={this.handleChange(col)} required/>
                         </div>
                     )
                     payment_content.push(item)
@@ -312,7 +305,7 @@
                     <form className="payment_form" id={`payment_form_${this.props.oid}`}
                         onSubmit={this.props.pid!==null? this.handleUpdate : this.handleCreate}>
                         { payment_content }
-                        {this.props.pid==null? (
+                        {this.props.pid===null? (
                             <input type="submit" value="提交"/>
                         ):(
                             <input className="update_btn" type="submit" value="修改"/>
@@ -322,18 +315,20 @@
             }
             handleChange=(dataType)=>{
                 return(eObj=>{
-                    this.setState({[dataType]: eObj.target.value})
+                    let value = eObj.target.value;
+                    if(dataType==="amount"){
+                        value = parseInt(eObj.target.value);
+                    }
+                    this.setState({[dataType]: value})
                 })
             }
             checkInputValue=(msg)=>{
+                // console.log(this.state);
                 const {bank, account_no, name, amount, transfer_date} = this.state;
-                if(bank=="" || account_no=="" || name=="" || amount=="" || transfer_date==""){
-                    alert("匯款資料皆不得為空")
-                    return
-                }else if(account_no.length<5){
+                if(account_no.length<5){
                     alert("匯款帳號缺碼，請確認!!")
                     return
-                }else if(typeof amount!=="number" || amount>0){
+                }else if(typeof amount!=="number" || amount<0){
                     alert("請輸入阿拉伯數字")
                     return
                 }else{
@@ -352,11 +347,10 @@
                 const check = this.checkInputValue(msg);
                 if(check){
                     delete state.past_data;
-                    state["oid"] = this.props.oid;
-                    paymentRequestWithData("POST", state).then(resp=>{
+                    createNewPayment(this.props.oid, state).then(resp=>{
                         if(resp.ok){
                             alert("新增完成")
-                            location.href = `/admin/order/${this.props.oid}`
+                            location.href = `/admin/order?id=${this.props.oid}`
                         }
                     })
                 }
@@ -373,14 +367,13 @@
                     }
                 })
                 if(msg!=="" && data!=={} && this.props.pid!==null){
-                    data["pid"] = this.props.pid;
                     msg = msg +`是否確定修改?`
                     const check = this.checkInputValue(msg);
                     if(check){
-                        paymentRequestWithData("PUT", data).then(resp=>{
+                        updatePayment(this.props.pid, data).then(resp=>{
                             if(resp.ok){
                                 alert("修改完成")
-                                location.href = `/admin/order/${this.props.oid}`
+                                location.href = `/admin/order?id=${this.props.oid}`
                             }
                         })
                     }

@@ -5,6 +5,8 @@
     <link rel="stylesheet" type="text/css" href="static/css/booking.css">
     <script type="text/javascript" src="static/js/room.js"></script>
     <script type="text/javascript" src="static/js/order.js"></script>
+    <!-- Load Pubsub-js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pubsub-js/1.9.3/pubsub.min.js" integrity="sha512-ASNLdxh5Knd0ESqUQE2hvUbXxOmu0y27vVVibROAKRomo+R6ocykvh0m8tE9qMEfmeVbEyNL1M6FvvyRKyZIoQ==" crossorigin="anonymous"></script>
 {% endblock %}
 {% block content %}
 <div id="search_wrap">
@@ -23,23 +25,35 @@
         }
     }
     class RoomBox extends React.Component{
-        state = {}
+        state = {
+            total_quantity: 0,
+            rooms: {}
+        }
         componentDidMount(){
             const num_of_guests = (search_string_3th[0]==="guests" && search_string_3th[1]);
             roomInfoRequest(num_of_guests).then(respR=>{
-                this.setState(respR.data)
+                this.setState({rooms: respR.data});
+            });
+            this.token=PubSub.subscribe("QUANTITY", (_, quantity)=>{
+                // console.log("RoomBox被通知：", quantity);
+                this.setState({total_quantity: this.state.total_quantity+quantity});
             })
         }
         render(){
             let rooms_content = [];
-            Object.keys(this.state).forEach(type=>{
-                rooms_content.push(<RoomInfo type={type} info={this.state[type]}/>)
+            Object.keys(this.state.rooms).forEach(type=>{
+                rooms_content.push(<RoomInfo type={type} info={this.state.rooms[type]}/>);
             })
             return(
-                <div>
-                    {rooms_content}
+                <div id="room_box">
+                    { this.state.total_quantity===0 && <h1>搜尋期間內無空房</h1> }
+                    { rooms_content }
                 </div>
             )
+        }
+        componentWillUnmount(){
+            // 取消KEYWORD消息訂閱
+            PubSub.unsubscribe(this.token);
         }
     }
     class RoomInfo extends React.Component{
@@ -51,6 +65,7 @@
                 if(resp.min_quantity!==0){
                     this.setState(resp)
                 }
+                PubSub.publish('QUANTITY', resp.min_quantity);
             })
         }
         render(){
@@ -94,10 +109,10 @@
         }
         handleBookingForm=()=>{
             document.querySelectorAll("div[id^='booking_detail_']").forEach(div=>{
-                div.style.display="none";
+                div.style.display="";
             })
             let booking_form = document.getElementById(`booking_detail_${this.props.type}`);
-            if(booking_form.style.display==="" || booking_form.style.display==="none"){
+            if(booking_form.style.display===""){
                 booking_form.style.display="block";
             }
         }
@@ -237,14 +252,13 @@
             booking_data["amount"] = parseInt(amount);
             console.log(booking_data);
             postOrder(booking_data).then(resp=>{
-                console.log(resp)
+                // console.log(resp)
                 if(resp.ok){
                     location.href = `${window.origin}/bill?oid=${resp.oid}`
                 }
             })
         }
     }
-
     addEventListener("load", ()=>{
         ReactDOM.render(<Search />, document.getElementById("search_wrap"));
         if(window.location.search!==""){
