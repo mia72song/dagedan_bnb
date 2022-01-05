@@ -22,3 +22,14 @@ table{
 th, td{
     padding: 5px 20px;
 }
+/*RWD*/
+@media (max-width:1200px){
+    #bill_wrap{
+        width:90%;
+    }
+}
+@media (max-width:600px){
+    #bill_wrap{
+        width:95%;
+    }
+}

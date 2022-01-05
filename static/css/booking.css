@@ -2,9 +2,6 @@ main{
     background-image: none;
     background-color: #FFFFFF;
 }
-.mainbox{
-    height: auto;
-}
 
 /* Search Component*/
 #search_wrap{
@@ -35,9 +32,9 @@ main{
     margin: 0 auto;
     margin-top: -15px;
 }
-#room_box>h1{
+#no_available_msg{
     text-align: center;
-    color: blue;
+    color: green;
 }
 
 /* RoomInfo Component*/

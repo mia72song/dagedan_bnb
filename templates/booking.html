@@ -26,27 +26,29 @@
     }
     class RoomBox extends React.Component{
         state = {
-            total_quantity: 0,
-            rooms: {}
+            total_quantity: null
         }
         componentDidMount(){
-            const num_of_guests = (search_string_3th[0]==="guests" && search_string_3th[1]);
-            roomInfoRequest(num_of_guests).then(respR=>{
-                this.setState({rooms: respR.data});
-            });
             this.token=PubSub.subscribe("QUANTITY", (_, quantity)=>{
                 // console.log("RoomBox被通知：", quantity);
-                this.setState({total_quantity: this.state.total_quantity+quantity});
+                let total_quantity;
+                if(this.state.total_quantity){
+                    total_quantity = this.state.total_quantity+quantity;
+                }else{
+                    total_quantity = quantity;
+                }
+                this.setState({total_quantity});
             })
         }
         render(){
+            const rooms = this.props.rooms;
             let rooms_content = [];
-            Object.keys(this.state.rooms).forEach(type=>{
-                rooms_content.push(<RoomInfo type={type} info={this.state.rooms[type]}/>);
+            Object.keys(rooms).forEach(type=>{
+                rooms_content.push(<RoomInfo type={type} info={rooms[type]}/>);
             })
             return(
                 <div id="room_box">
-                    { this.state.total_quantity===0 && <h1>搜尋期間內無空房</h1> }
+                    { this.state.total_quantity===0 && <h1 id="no_available_msg">搜尋期間內無空房</h1> }
                     { rooms_content }
                 </div>
             )
@@ -262,7 +264,11 @@
     addEventListener("load", ()=>{
         ReactDOM.render(<Search />, document.getElementById("search_wrap"));
         if(window.location.search!==""){
-            ReactDOM.render(<RoomBox />, document.getElementById("room_box_wrap"));
+            const num_of_guests = (search_string_3th[0]==="guests" && search_string_3th[1]);
+            roomInfoRequest(num_of_guests).then(respR=>{
+                ReactDOM.render(<RoomBox rooms={respR.data}/>, document.getElementById("room_box_wrap"));
+            });
+            
         }
     })
 </script>
