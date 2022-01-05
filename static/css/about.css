@@ -22,13 +22,19 @@
 }
 .contact{
     width: 800px;
-    height: 290px;
+    min-height: 290px;
     margin: 0 auto;
     background-color: whitesmoke;
     display: flex;
+    flex-direction:row;
+    flex-wrap: wrap;
 }
 .contact>div{
-    margin-left: 20px;
+    margin-left: 30px;
+}
+.iframe_div>iframe{
+    width: inherit;
+    margin-left: 30px;
 }
 .info{
     text-align: left;
@@ -37,4 +43,29 @@
 .info>h3{
     color: #F39801;
     margin: 10px 0;
+}
+/*RWD*/
+@media (max-width:1200px){
+    .box{
+        width:95%;
+    }
+    .box>div{
+        width: 100%;
+    }
+}
+@media (max-width:600px){
+    .about>div{
+        padding: 20px 35px;
+    }
+    .contact>div{
+        margin: 0 auto;
+        width: 90%;
+    }
+    .iframe_div>iframe{
+        margin: 0 auto;
+    }
+    .info{
+        padding-left: 60px;
+        padding-bottom: 20px;
+    }
 }
