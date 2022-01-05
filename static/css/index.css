@@ -28,7 +28,7 @@
     font-weight: 900;
     font-family: "Noto Sans", sans-serif;
 }
-.discribe{
+.describe{
     color: #FFFFFF;
     margin: 0 auto;
     margin-top: 20px;
@@ -36,4 +36,26 @@
 }
 #search_wrap{
     margin-top: 40px;
+}
+/*RWD*/
+@media (max-width:1200px){
+    .box{
+        width: 90%;
+    }
+}
+@media (max-width:600px){
+    #award{
+        padding-left: 15px;
+        padding-top: 15px;
+    }
+    #award>img{
+        width: 130px;
+        height: 130px;
+    }
+    .slogan{
+        font-size: 3em;
+    }
+    .title{
+        font-size: 2em;
+    }
 }
