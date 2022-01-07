@@ -2,11 +2,13 @@
 
 *{
     margin: 0;
-    font-family: 'Noto Sans TC', sans-serif;
+    padding: 0;
+    box-sizing: border-box;
 }
 body{
-    font-size: 18px;
+    font-size: 17px;
     color: #1A1A1A;
+    font-family: 'Noto Sans TC', sans-serif;
 }
 a{
     text-decoration: none;
@@ -16,9 +18,12 @@ button{
     cursor: pointer;
 }
 input, select{
-    line-height: 1.8;
+    line-height: 1.5;
     padding-left: 5px;
+    height: 30px;
+    font-family: 'Noto Sans TC', sans-serif;
 }
+
 h1{
     font-size: 45px;
 }
@@ -48,7 +53,7 @@ header{
     overflow: hidden;
     box-shadow:0px 4px 10px -10px rgba(20%,20%,40%,0.5);
 }
-.header_dropdow{
+.header_dropdown{
     background-color: #FFFFFF;
 }
 .nav{
@@ -88,21 +93,21 @@ header{
     color: #FFFFFF;
 }
 #book_now_btn{
+    height: 36px;
+    width: 120px;
     background-color: #1A1A1A;
     color: #FFFFFF;
     border: #1A1A1A;
     border-radius: 50px;
-    height: 36px;
-    width: 120px;
+    font-weight: 500;
+    font-size: 16.5px;
     letter-spacing: 1px;
-    font-weight: normal;
-    font-size: 17px;
 }
 #book_now_btn:hover{
     background-color:#FFFFFF;
     color: #F39801;
-    font-weight: bold;
     border:1.5px #FFFFFF solid;
+    font-weight: bold;
 }
 
 /* menu_toggler */
@@ -139,7 +144,7 @@ main{
 }
 
 /* Search Component*/
-#available_room_search{
+#available_search{
     width: 500px;
     margin: 20px auto;
     padding: 0 5px;
@@ -151,25 +156,25 @@ main{
     justify-content:space-around;
     flex-wrap: wrap;
 }
-#available_room_search:hover{
+#available_search:hover{
     opacity: 1;
 }
-#available_room_search>div{
+#available_search>div{
     margin: 10px 0;
     font-size: 15px;
 }
-#available_room_search input{
-    width: 125px;
+#available_search input{
+    width: 130px;
     margin-top: 2px;
 }
-#available_room_search input[type="number"]{
+#available_search input[type="number"]{
     width: 80px;
 }
 .submit_div>button{
-    height: 53px;
+    height: 54px;
     background-color: #F39801;
     border: 2px #F39801 solid;
-    font-weight: normal;
+    font-weight: bold;
     width: 80px;
     letter-spacing: 1px;
 }
@@ -184,13 +189,13 @@ footer{
     opacity: 0.7;
     margin-bottom: 0;
 }
-.icon{
+.social_media_icon{
     display: flex;
     justify-content: center;
     height: 50px;
     line-height: 50px;
 }
-.icon img{
+.social_media_icon img{
     margin: 10px 5px;
     height: 30px;
     width: 30px;
@@ -202,12 +207,6 @@ footer{
     }
 }
 @media (max-width:600px){
-    body{
-        font-size: 17px;
-    }
-    main{
-        
-    }
     header{
         height: auto;
     }
@@ -239,22 +238,24 @@ footer{
         color: #F39801;
         font-weight: bold;
     }
-    /* available_room_search */
-    #available_room_search{
-        width: 280px;
+    /* available_search */
+    #available_search{
+        width: 300px;
         margin: 5px auto;
     }
-    #available_room_search>div{
-        width: 50%;
-        margin: 5px auto;
+    #available_search>div{
+        width: 48%;
+        margin: 5px 2.5px;
         font-size: 14px;
     }
-    #available_room_search input[type="number"]{
-        width: 125px;
+    #available_search input{
+        width: 100%;
+    }
+    #available_search input[type="number"]{
+        width: 100%;
     }
     .submit_div>button{
-        width: 130px;
-        margin: auto 5px;
+        width: 100%;
         font-size: 14px;
     }
 }

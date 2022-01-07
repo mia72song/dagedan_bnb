@@ -25,7 +25,7 @@
             {% endblock %}
         </div>
         <footer>
-            <div class="icon">
+            <div class="social_media_icon">
                 <h3>Follow Us &thinsp;</h3>
                 <a href="https://www.facebook.com/Dagedanhouse">
                     <img src="/static/images/icon-fb.png" alt="">
@@ -69,7 +69,7 @@
             render(){
                 const check_in_index = dateStringToIndex(this.state.check_in_date);
                 return(
-                    <div id="available_room_search">
+                    <div id="available_search">
                         <div className="check_in_date_div">
                             <p>入住日期</p>
                             <input type="date" name="check_in_date" id="check_in_date" min={dateIndexToString(1)} max={dateIndexToString(12*7)}
@@ -123,7 +123,7 @@
             }
             render(){
                 return(
-                    <header className={this.state.dropdown && "header_dropdow"}>
+                    <header className={this.state.dropdown && "header_dropdown"}>
                         <div className="nav">
                             <div className="logo">
                                 <a href="/">
