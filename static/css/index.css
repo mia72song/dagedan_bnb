@@ -1,8 +1,8 @@
 #award{
     width: 1200px;
-    height: 160px;
+    height: 150px;
     margin: 0 auto;
-    padding-left: 30px;
+    padding-left: 20px;
     padding-top: 30px;
 }
 #award>img{
@@ -13,7 +13,7 @@
 .box{
     width: 500px;
     margin: 0 auto;
-    margin-top: 40px;
+    margin-top: 30px;
     text-align: center;
     line-height: 2;
 }
@@ -43,7 +43,7 @@
         width: 90%;
         max-width: 500px;
         min-width: 300px;
-        font-size: 14px;
+        font-size: 15px;
     }
     .box>div{
         margin: 10px auto;
