@@ -15,28 +15,9 @@
     {% endblock %}
 </head>
 <body>
-    <header>
-        <div class="nav">
-            <div class="logo">
-                <a href="/">
-                    <img src="/static/images/logo.png" alt="home">
-                </a>
-            </div>
-            <div class="menu">
-                <ul>
-                    <li>
-                        <a href="/about">關於打個蛋</a>
-                    </li>
-                    <li>
-                        <a href="/booking">
-                            <button id="book_now_btn">線上訂房</button>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </header>
-    <div class="nav_wrap"></div>
+    <div id="header_wrap">
+        <!--由Header組件渲染-->
+    </div>   
     <main>
         <div class="mainbox">
             {% block content %}
@@ -45,7 +26,7 @@
         </div>
         <footer>
             <div class="icon">
-                <h2>Follow Us &thinsp;</h2>
+                <h3>Follow Us &thinsp;</h3>
                 <a href="https://www.facebook.com/Dagedanhouse">
                     <img src="/static/images/icon-fb.png" alt="">
                 </a>
@@ -54,7 +35,7 @@
                 </a>          
             </div>
             <div>
-                © 2020 by Dagedan House B&B
+                <p>© 2020 by Dagedan House B&B</p>
             </div>
         </footer>
     </main>
@@ -90,17 +71,17 @@
                 return(
                     <div id="available_room_search">
                         <div className="check_in_date_div">
-                            <p>Check In 入住日期</p>
+                            <p>入住日期</p>
                             <input type="date" name="check_in_date" id="check_in_date" min={dateIndexToString(1)} max={dateIndexToString(12*7)}
                                 value={this.state.check_in_date} onChange={this.handleChange("check_in_date")}/>
                         </div>
                         <div className="check_out_date_div">
-                            <p>Check Out 退房日期</p>
+                            <p>退房日期</p>
                             <input type="date" name="check_out_date" id="check_out_date" min={dateIndexToString(check_in_index+1)} max={dateIndexToString(12*7+1)}
                                 value={this.state.check_out_date} onChange={this.handleChange("check_out_date")}/>
                         </div>
                         <div className="num_of_guests_div">
-                            <p>Guests 住宿人數</p>
+                            <p>住宿人數</p>
                             <input type="number" name="guests" id="guests" min="1" max="99" 
                                 value={this.state.guests} onChange={this.handleChange("guests")}/>
                         </div>
@@ -136,6 +117,68 @@
                 }
             }
         }
+        class Header extends React.Component{
+            state = {
+                dropdown: false
+            }
+            render(){
+                return(
+                    <header className={this.state.dropdown && "header_dropdow"}>
+                        <div className="nav">
+                            <div className="logo">
+                                <a href="/">
+                                    {this.state.dropdown? (
+                                        <img src="static/images/logo1.jpg" id="logo_mobile" alt="home"/>
+                                    ):(
+                                        <img src="/static/images/logo.png" id="logo_main" alt="home"/>
+                                    )}
+                                </a>
+                            </div>
+                            <div id="menu_toggler">
+                                <button onClick={this.handleDropDown}>
+                                    {this.state.dropdown? (
+                                        <img src="/static/images/OK_icon2.png" id="menu_toggler_btn_close" alt="menu_toggler_btn_close"/>
+                                    ):(
+                                        <img src="/static/images/OK_icon1.png" id="menu_toggler_btn_open" alt="menu_toggler_btn_open"/>
+                                    )}
+                                </button>
+                            </div>
+                            <div id="menu">
+                                <ul>
+                                    <li>
+                                        <a href="/about">關於打個蛋</a>
+                                    </li>
+                                    <li>
+                                        <a href="/booking">
+                                            <button id="book_now_btn">線上訂房</button>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div className={this.state.dropdown? "dropdown_menu" : "dropdown_menu_hidden"}>
+                            <ul>
+                                <li>
+                                    <a href="/">首頁</a>
+                                </li>
+                                <li>
+                                    <a href="/about">關於打個蛋</a>
+                                </li>
+                                <li>
+                                    <a href="/booking">線上訂房</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </header>
+                )
+            }
+            handleDropDown=()=>{
+                this.setState({dropdown: !this.state.dropdown})
+            }
+        }
+        addEventListener("load", ()=>{
+            ReactDOM.render(<Header />, document.getElementById("header_wrap"));
+        })
     </script>
     {% block script %}{% endblock %}
 </body>

@@ -1,61 +1,61 @@
 #award{
     width: 1200px;
+    height: 160px;
     margin: 0 auto;
     padding-left: 30px;
     padding-top: 30px;
 }
 #award>img{
-    height: 170px;
-    width: 170px;
+    height: inherit;
+    width: auto;
+    border-radius: 3px;
 }
 .box{
     width: 500px;
     margin: 0 auto;
+    margin-top: 30px;
     text-align: center;
     line-height: 2;
 }
+.box>div{
+    margin: 5px auto;
+}
 .slogan{
-    font-size: 55px;
     color: #FFFFFF;
-    font-weight: 900;
-    margin-top: 15px;
-    letter-spacing: 3px;
+    letter-spacing: 1px;
 }
 .title{
-    font-size: 42px;
     color: #F39801;
-    margin: 0 auto;
-    font-weight: 900;
-    font-family: "Noto Sans", sans-serif;
 }
 .describe{
     color: #FFFFFF;
-    margin: 0 auto;
-    margin-top: 20px;
-    font-weight: lighter;
+    padding-top: 30px;
 }
 #search_wrap{
     margin-top: 40px;
 }
 /*RWD*/
 @media (max-width:1200px){
-    .box{
-        width: 90%;
-    }
+    
 }
 @media (max-width:600px){
+    .box{
+        width: 90%;
+        font-size: 14px;
+    }
+    .box>div{
+        margin: 10px auto;
+    }
     #award{
-        padding-left: 15px;
-        padding-top: 15px;
+        height: 100px;
     }
     #award>img{
-        width: 130px;
-        height: 130px;
+        display: none;
     }
-    .slogan{
-        font-size: 3em;
+    .slogan>h1{
+        font-size: 2.5em;
     }
-    .title{
-        font-size: 2em;
+    .title>h2{
+        font-size: 1.8em;
     }
 }

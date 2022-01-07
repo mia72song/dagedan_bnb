@@ -11,8 +11,6 @@
     line-height: 2;
 }
 .about>h3{
-    font-size: 25px;
-    font-weight: bold;
     color: #F39801;
     padding-top: 25px;
 }
@@ -40,7 +38,7 @@
     text-align: left;
     line-height: 2;
 }
-.info>h3{
+.info>h4{
     color: #F39801;
     margin: 10px 0;
 }
@@ -57,15 +55,22 @@
     .about>div{
         padding: 20px 35px;
     }
+    .about>h3{
+        font-size: 1.75em;
+    }
     .contact>div{
         margin: 0 auto;
         width: 90%;
     }
     .iframe_div>iframe{
         margin: 0 auto;
+        width: inherit;
     }
     .info{
-        padding-left: 60px;
         padding-bottom: 20px;
+        font-size: 14px;
+    }
+    .info>h4{
+        font-size: 1.2em;
     }
 }

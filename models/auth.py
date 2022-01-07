@@ -91,7 +91,7 @@ class Authdb(Mydb):
         return self.cur.fetchall()
 
     def updateOrderStatus(self, oid, status):
-        # status："NEW", "PAID" ,"CANCEL", "DELETE"
+        # status："NEW", "PAID" ,"CANCEL"
         sql = f"UPDATE orders SET status='{status.upper()}' WHERE oid={oid}"
         self.cur.execute(sql)
         self.conn.commit()

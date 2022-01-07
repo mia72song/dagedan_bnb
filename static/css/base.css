@@ -2,11 +2,9 @@
 
 *{
     margin:0;
-}
-body{
     font-family: 'Noto Sans TC', sans-serif;
+    font-size: 18px;
     color: #1A1A1A;
-    font-size: 16px;
 }
 a{
     text-decoration: none;
@@ -16,16 +14,30 @@ button{
     cursor: pointer;
 }
 input, select{
-    font-family: 'Noto Sans TC', sans-serif;
     line-height: 1.8;
     padding-left: 5px;
 }
+h1{
+    font-size: 44px;
+}
+h2{
+    font-size: 35px;
+}
+h3{
+    font-size: 28px;
+}
+h4{
+    font-size: 22px;
+}
 
+#header_wrap{
+    background-color: #F39801;
+    height: 75px;
+}
 /* header */
 header{
-    height: 90px;
+    height: 75px;
     background-color: #F39801;
-    margin: auto;
     position: fixed;
     top:0;
     left:0;
@@ -33,6 +45,9 @@ header{
     z-index: 50;
     overflow: hidden;
     box-shadow:0px 4px 10px -10px rgba(20%,20%,40%,0.5);
+}
+.header_dropdow{
+    background-color: #FFFFFF;
 }
 .nav{
     height: inherit;
@@ -42,38 +57,43 @@ header{
 }
 .logo{
     flex: none;
+    width: 100px;
     height: inherit;
-    width: 10%;
 }
-.logo img{
-    height: 90px;
+#logo_main{
+    height: 63px;
+    width: auto;
+    margin: 6px auto;
+}
+#logo_mobile{
+    height: 67px;
     width: inherit;
+    margin-top: 3px;
 }
-.menu{
-    flex: none;
-    width: 90%;
+#menu{
+    flex: auto;
     margin: auto 10px;
     text-align: right;
-    font-size: 18px;
 }
-.menu ul li {
+#menu ul li {
     display: inline-block;
     margin: 20px;
 }
-.menu a{
+#menu a{
     color: #1A1A1A;
 }
-.menu a:hover{
+#menu a:hover{
     color: #FFFFFF;
 }
 #book_now_btn{
     background-color: #1A1A1A;
     color: #FFFFFF;
-    font-size: 19px;
     border: #1A1A1A;
     border-radius: 50px;
     height: 36px;
     width: 120px;
+    letter-spacing: 1px;
+    font-weight: normal;
 }
 #book_now_btn:hover{
     background-color:#FFFFFF;
@@ -81,8 +101,25 @@ header{
     font-weight: bold;
     border:1.5px #FFFFFF solid;
 }
-.nav_wrap{
-    height: 90px;
+
+/* menu_toggler */
+#menu_toggler{
+    flex: auto;
+    margin: auto 0;
+    text-align: end;
+    display: none;
+}
+#menu_toggler>button{
+    margin-top: 5px;
+    background-color: inherit;
+    border: none;
+}
+#menu_toggler img:hover{
+    width: 60px;
+    height: auto;
+}
+#menu_toggler_btn_close{
+    background-color: #FFFFFF;
 }
 
 /* Main */
@@ -100,29 +137,29 @@ main{
 
 /* Search Component*/
 #available_room_search{
-    width: 600px;
+    width: 500px;
     margin: 20px auto;
     padding: 0 5px;
     background-color: #FFFFFF;
     border: 5px #FFFFFF solid;
     opacity: 0.95;
     display: flex;
-    letter-spacing: 0.8px;
+    letter-spacing: 1px;
     justify-content:space-around;
-    flex-direction:row;
     flex-wrap: wrap;
 }
 #available_room_search:hover{
     opacity: 1;
 }
 #available_room_search>div{
-    margin: 10px;
-    font-size: 14px;
+    margin: 10px 0;
 }
 #available_room_search input{
-    width: 135px;
+    width: 125px;
     margin-top: 2px;
-    margin-left: 2px;
+}
+#available_room_search input[type="number"]{
+    width: 80px;
 }
 .submit_div>button{
     height: 52px;
@@ -161,37 +198,37 @@ footer{
 }
 @media (max-width:600px){
     body{
-        font-size: 15px;
+        
     }
     main{
-        min-height:500px;
+        
     }
-    .menu ul li{
-        margin-right:5px;
+    header{
+        height: auto;
     }
-    #available_room_search{
-        width: 330px;
-        padding: 8px 0;
-        margin: 50px auto;
+
+    /* menu */
+    #menu{
+        display: none;
     }
-    #available_room_search>div{
-       width: 92%;
-       text-align: right;
-       margin-top: 3px;
-       margin-bottom: 3px;
+    #menu_toggler{
+        display: block;
     }
-    #available_room_search p{
-        display: inline;
+    .dropdown_menu_hidden{
+        display: none;
     }
-    #available_room_search input{
-        margin: 5px auto;
-        margin-left: 10px;
+    .dropdown_menu ul li {
+        text-align: center;
+        list-style: none;
+        margin: 15px auto;
     }
-    #available_room_search button[type="submit"]{
-        font-size: 14px;
-        margin-top: 5px;
-        width: 303px;
-        height: 40px;
-        letter-spacing: 8px;
+    .dropdown_menu a:hover{
+        font-size: 1.1em;
+        letter-spacing: 1px;
+    }
+    .dropdown_menu a[href="/booking"]:hover{
+        font-size: 1em;
+        color: #F39801;
+        font-weight: bold;
     }
 }
