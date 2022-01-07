@@ -13,7 +13,7 @@
 .box{
     width: 500px;
     margin: 0 auto;
-    margin-top: 30px;
+    margin-top: 40px;
     text-align: center;
     line-height: 2;
 }
@@ -22,7 +22,7 @@
 }
 .slogan{
     color: #FFFFFF;
-    letter-spacing: 1px;
+    letter-spacing: 1.2px;
 }
 .title{
     color: #F39801;
@@ -41,6 +41,8 @@
 @media (max-width:600px){
     .box{
         width: 90%;
+        max-width: 500px;
+        min-width: 300px;
         font-size: 14px;
     }
     .box>div{
