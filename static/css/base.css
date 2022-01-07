@@ -203,7 +203,7 @@ footer{
 }
 @media (max-width:600px){
     body{
-        
+        font-size: 17px;
     }
     main{
         
@@ -238,5 +238,23 @@ footer{
         font-size: 1em;
         color: #F39801;
         font-weight: bold;
+    }
+    /* available_room_search */
+    #available_room_search{
+        width: 280px;
+        margin: 5px auto;
+    }
+    #available_room_search>div{
+        width: 50%;
+        margin: 5px auto;
+        font-size: 14px;
+    }
+    #available_room_search input[type="number"]{
+        width: 125px;
+    }
+    .submit_div>button{
+        width: 130px;
+        margin: auto 5px;
+        font-size: 14px;
     }
 }
