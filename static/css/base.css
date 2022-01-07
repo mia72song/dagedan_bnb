@@ -3,6 +3,8 @@
 *{
     margin:0;
     font-family: 'Noto Sans TC', sans-serif;
+}
+body{
     font-size: 18px;
     color: #1A1A1A;
 }
@@ -18,25 +20,25 @@ input, select{
     padding-left: 5px;
 }
 h1{
-    font-size: 44px;
+    font-size: 45px;
 }
 h2{
     font-size: 35px;
 }
 h3{
-    font-size: 28px;
+    font-size: 27px;
 }
 h4{
-    font-size: 22px;
+    font-size: 21px;
 }
 
 #header_wrap{
     background-color: #F39801;
-    height: 75px;
+    height: 80px;
 }
 /* header */
 header{
-    height: 75px;
+    height: 80px;
     background-color: #F39801;
     position: fixed;
     top:0;
@@ -61,12 +63,12 @@ header{
     height: inherit;
 }
 #logo_main{
-    height: 63px;
+    height: 68px;
     width: auto;
     margin: 6px auto;
 }
 #logo_mobile{
-    height: 67px;
+    height: 72px;
     width: inherit;
     margin-top: 3px;
 }
@@ -94,6 +96,7 @@ header{
     width: 120px;
     letter-spacing: 1px;
     font-weight: normal;
+    font-size: 17px;
 }
 #book_now_btn:hover{
     background-color:#FFFFFF;
@@ -153,6 +156,7 @@ main{
 }
 #available_room_search>div{
     margin: 10px 0;
+    font-size: 15px;
 }
 #available_room_search input{
     width: 125px;
@@ -162,11 +166,12 @@ main{
     width: 80px;
 }
 .submit_div>button{
-    height: 52px;
+    height: 53px;
     background-color: #F39801;
     border: 2px #F39801 solid;
-    font-weight: bolder;
+    font-weight: normal;
     width: 80px;
+    letter-spacing: 1px;
 }
 .submit_div>button:hover{
     color: #FFFFFF;
@@ -221,6 +226,9 @@ footer{
         text-align: center;
         list-style: none;
         margin: 15px auto;
+    }
+    .dropdown_menu a{
+        color: #1A1A1A;
     }
     .dropdown_menu a:hover{
         font-size: 1.1em;
