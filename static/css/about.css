@@ -1,4 +1,4 @@
-.box{
+.content_box{
     width: 1000px;
     text-align: center;
     margin: 0 auto;
@@ -44,10 +44,10 @@
 }
 /*RWD*/
 @media (max-width:1200px){
-    .box{
+    .content_box{
         width:95%;
     }
-    .box>div{
+    .content_box>div{
         width: 100%;
     }
 }
