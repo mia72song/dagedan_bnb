@@ -51,8 +51,8 @@ class Authdb(Mydb):
             FROM orders AS o
             INNER JOIN guests AS g ON g.phone=o.Phone
         """
-        if status!="ALL":
-            sql += f"WHERE status='{status}'"
+        if status.upper()!="ALL":
+            sql += f"WHERE status='{status.upper()}'"
 
         sql += "ORDER BY create_datetime DESC"
 
