@@ -64,6 +64,12 @@ main{
 .special_price{
     margin-top: 10px;
 }
+.price{
+    color: #F39801;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    font-size: 1.1em;
+}
 .room_rate{
     flex: none;
     width: 160px;
@@ -73,11 +79,12 @@ main{
     color: blue;
     font-size: 50px;
     margin: 10px auto;
+    letter-spacing: 0.5px;
 }
 h1>span{
     font-size: 16px;
 }
-p>span{
+.currency{
     font-size: 8px;
 }
 .room_rate>div{
@@ -214,5 +221,11 @@ input:disabled{
     }
     .booker_info input[type="submit"]{
         margin-top: 10px;
+    }
+    .radio_container>input[type="radio"]{
+        height: 17px;
+    }
+    .radio_container>label{
+        font-size: 16px;
     }
 }

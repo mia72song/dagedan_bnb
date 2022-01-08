@@ -85,8 +85,15 @@
                                 </div>
                                 <div className="special_price">
                                     <h4>特價方案：</h4>
-                                    <p>平日特價：<span>NT </span>{comma(this.props.info.rate_weekday)}</p>
-                                    <p>一人入住：<span>NT </span>{comma(this.props.info.rate_weekday*this.props.info.single_discount)}<span> 起</span></p>
+                                    <p>平日特價：
+                                        <span className="currency">NT </span>
+                                        <span className="price">{comma(this.props.info.rate_weekday)}</span>
+                                    </p>
+                                    <p>一人入住：
+                                        <span className="currency">NT </span>
+                                        <span className="price">{comma(this.props.info.rate_weekday*this.props.info.single_discount)}</span>
+                                        <span className="currency"> 起</span>
+                                    </p>
                                 </div>
                             </div>
                             <div className="room_rate">
