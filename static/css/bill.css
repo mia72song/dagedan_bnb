@@ -22,6 +22,9 @@ table{
 th, td{
     padding: 5px 20px;
 }
+.reminder{
+    color: blue;
+}
 /*RWD*/
 @media (max-width:1200px){
     #bill_wrap{
@@ -29,7 +32,25 @@ th, td{
     }
 }
 @media (max-width:600px){
+    body{
+        font-size: 17px;
+    }
     #bill_wrap{
-        width:95%;
+        width:97%;
+    }
+    #bill_wrap>div{
+        padding: 15px 5px;
+        font-size: 16px;
+    }
+    table{
+        padding: 10px 0px;
+        line-height: 2;
+    }
+    th{
+        min-width: 75px;
+        padding: 5px;
+    }
+    .reminder{
+        text-align: center;
     }
 }

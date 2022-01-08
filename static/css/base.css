@@ -99,7 +99,7 @@ header{
     color: #FFFFFF;
     border: #1A1A1A;
     border-radius: 50px;
-    font-weight: 500;
+    font-weight: 600;
     font-size: 16.5px;
     letter-spacing: 1px;
 }
@@ -173,7 +173,7 @@ main{
     height: 54px;
     background-color: #F39801;
     border: 2px #F39801 solid;
-    font-weight: bold;
+    font-weight: 600;
     width: 80px;
     letter-spacing: 1px;
 }
