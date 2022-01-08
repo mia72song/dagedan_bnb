@@ -184,7 +184,7 @@
                         </p>
                     </div>
                     <div className="arrow_img_div">
-                        <img src="static\images\9XpPMJYNvm.png" alt=""/>
+                        <img src="static\images\right.png" alt=""/>
                     </div>
                     <div className="booker_info">
                         <h4>- 訂房人資訊 -</h4>
@@ -192,12 +192,12 @@
                             <label for="booker_name">訂房全名：</label>
                             <input type="text" value={this.state.name} onChange={this.handleChange("name")} pattern="^[\u4e00-\u9fa5]+$|^[a-zA-Z\s]+$" required/>
                             <span className="radio_container">
-                                <input type="radio" id="male" checked={this.state.gender==="male"} onChange={this.handelGenderCheck("male")}/>
-                                <label for="male">先生</label>
+                                <input type="radio" checked={this.state.gender==="male"} onChange={this.handelGenderCheck("male")}/>
+                                <label for="">先生</label>
                             </span>
                             <span className="radio_container">
-                                <input type="radio" id="female" checked={this.state.gender==="female"} onChange={this.handelGenderCheck("female")}/>
-                                <label for="female">小姐</label>
+                                <input type="radio" checked={this.state.gender==="female"} onChange={this.handelGenderCheck("female")}/>
+                                <label for="">小姐</label>
                             </span>
                         </div>
                         <div>
@@ -268,7 +268,6 @@
             roomInfoRequest(num_of_guests).then(respR=>{
                 ReactDOM.render(<RoomBox rooms={respR.data}/>, document.getElementById("room_box_wrap"));
             });
-            
         }
     })
 </script>

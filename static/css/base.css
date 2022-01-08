@@ -23,7 +23,6 @@ input, select{
     height: 30px;
     font-family: 'Noto Sans TC', sans-serif;
 }
-
 h1{
     font-size: 45px;
 }
@@ -41,7 +40,7 @@ h4{
     background-color: #F39801;
     height: 80px;
 }
-/* header */
+/* Header Component */
 header{
     height: 80px;
     background-color: #F39801;
@@ -77,6 +76,7 @@ header{
     width: inherit;
     margin-top: 3px;
 }
+/* Header Component:menu */
 #menu{
     flex: auto;
     margin: auto 10px;
@@ -109,8 +109,7 @@ header{
     border:1.5px #FFFFFF solid;
     font-weight: bold;
 }
-
-/* menu_toggler */
+/* Header Component:menu_toggler */
 #menu_toggler{
     flex: auto;
     margin: auto 0;
@@ -130,7 +129,7 @@ header{
     background-color: #FFFFFF;
 }
 
-/* Main */
+/* main */
 main{
     min-height: 760px;
     background-image: url('../images/index.jpg');
@@ -181,7 +180,7 @@ main{
 .submit_div>button:hover{
     color: #FFFFFF;
 }
-/* Footer */
+/* footer */
 footer{
     height: 80px;
     text-align: center;
@@ -210,8 +209,7 @@ footer{
     header{
         height: auto;
     }
-
-    /* menu */
+    /* Header Component:menu vs. dropdown_menu */
     #menu{
         display: none;
     }
@@ -238,7 +236,7 @@ footer{
         color: #F39801;
         font-weight: bold;
     }
-    /* available_search */
+    /* Search Component */
     #available_search{
         width: 300px;
         margin: 5px auto;
@@ -257,5 +255,8 @@ footer{
     .submit_div>button{
         width: 100%;
         font-size: 14px;
+    }
+    footer{
+        font-size: 15px;
     }
 }
