@@ -160,7 +160,6 @@ input:disabled{
     width: 210px;
     height: 33px;
 }
-
 .radio_container>input[type="radio"]{
     vertical-align: middle;
     height: 18px;
