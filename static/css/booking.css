@@ -5,12 +5,13 @@ main{
 
 /* Search Component*/
 #search_wrap{
-    padding: 10px;
+    margin: 15px auto;
  }
-#available_room_search{
+#available_search{
+    margin: 0 auto;
     opacity: 1;
 }
-#available_room_search input{
+#available_search input{
     background-color: #F0F0F0;
     border: 1.2px black solid;    
 }
@@ -30,7 +31,6 @@ main{
 #room_box_wrap{
     width: 1000px;
     margin: 0 auto;
-    margin-top: -15px;
 }
 #no_available_msg{
     text-align: center;
@@ -42,38 +42,41 @@ main{
     background-color: #F0F0F0;
     margin: 10px auto;
     display: flex;
+    justify-content:center;
+    flex-wrap: wrap;
     box-shadow:0px 4px 10px -10px rgba(20%,20%,40%,0.5);
 }
 .room_info_div>div{
+    margin: 0 auto;
     margin: 10px;
 }
 .room_img_div{
     flex: none;
-    width: 300px;
+    width: 290px;
 }
 .room_img_div>img{
-    width: inherit;
+    width: 100%;
+    min-width: 250px;
     height: 100%;
-    min-height: 230px;
 }
 .room_detail{
-    flex: auto;
+    width: none;
+    width: 49%;
     line-height: 2;
 }
-.room_detail>div{
-    height: 50%;
-}
+
 .special_price{
     margin-top: 10px;
 }
 .room_rate{
     flex: none;
-    width: 165px;
+    width: 160px;
     font-size: 15px;
 }
 .room_rate h1{
     color: blue;
-    font-size: 48px;
+    font-size: 50px;
+    margin: 10px auto;
 }
 h1>span{
     font-size: 16px;
@@ -83,11 +86,12 @@ p>span{
 }
 .room_rate>div{
     text-align: center;
-    height: 50%;
-    margin-top: 10px;
+    margin: 10px auto;
+    height: 110px;
+    
 }
 .room_rate button{
-    margin-top: 10px;
+    margin-top: 55px;
     background-color: #1A1A1A;
     color: #FFFFFF;
     font-size: 19px;
@@ -157,9 +161,19 @@ input[type="datetime-local"], input[type="email"]{
 }
 
 @media (max-width:1200px){
-
+    #room_box_wrap{
+        width: 90%;
+    }
+    .room_img_div{
+        
+    }
 }
 
 @media (max-width:600px){
-
+    #search_wrap{
+        width: 98%;
+    }
+    .room_info_div>div{
+        width: 95%;
+    }
 }

@@ -1,24 +1,13 @@
-#award{
-    width: 1200px;
-    height: 150px;
-    margin: 0 auto;
-    padding-left: 20px;
-    padding-top: 30px;
-}
-#award>img{
-    height: inherit;
-    width: auto;
-    border-radius: 3px;
-}
 .box{
     width: 500px;
-    margin: 0 auto;
-    margin-top: 30px;
+    height: inherit;
+    margin: auto;
+    margin-top: 125px;
     text-align: center;
     line-height: 2;
 }
 .box>div{
-    margin: 5px auto;
+    margin: 10px auto;
 }
 .slogan{
     color: #FFFFFF;
@@ -44,15 +33,6 @@
         max-width: 500px;
         min-width: 300px;
         font-size: 15px;
-    }
-    .box>div{
-        margin: 10px auto;
-    }
-    #award{
-        height: 100px;
-    }
-    #award>img{
-        display: none;
     }
     .slogan>h1{
         font-size: 2.5em;
