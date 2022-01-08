@@ -34,6 +34,9 @@
         min-width: 300px;
         font-size: 15px;
     }
+    .box>div{
+        margin: 0 auto;
+    }
     .slogan>h1{
         font-size: 2.5em;
     }

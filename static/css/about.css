@@ -31,7 +31,9 @@
     margin-left: 30px;
 }
 .iframe_div>iframe{
-    width: inherit;
+    width: 290px;
+    height: 250px;
+    border: 0;
     margin-left: 30px;
 }
 .info{

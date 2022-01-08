@@ -29,10 +29,10 @@
             <div class="social_media_icon">
                 <h3>Follow Us &thinsp;</h3>
                 <a href="https://www.facebook.com/Dagedanhouse">
-                    <img src="/static/images/icon-fb.png" alt="">
+                    <img src="/static/images/icon-fb.png" alt="https://www.facebook.com/Dagedanhouse">
                 </a>
                 <a href="https://www.instagram.com/dagedanhouse/">
-                    <img src="/static/images/icon-ig.png" alt="">
+                    <img src="/static/images/icon-ig.png" alt="https://www.instagram.com/dagedanhouse/">
                 </a>          
             </div>
             <div>
@@ -122,6 +122,11 @@
             state = {
                 dropdown: false
             }
+            componentDidMount(){
+                document.querySelector("main").addEventListener("click", (eObj)=>{
+                    this.setState({dropdown: false})
+                })
+            }
             render(){
                 return(
                     <header className={this.state.dropdown && "header_dropdown"}>
@@ -158,17 +163,21 @@
                             </div>
                         </div>
                         <div className={this.state.dropdown? "dropdown_menu" : "dropdown_menu_hidden"}>
-                            <ul>
-                                <li>
-                                    <a href="/">首頁</a>
-                                </li>
-                                <li>
-                                    <a href="/about">關於打個蛋</a>
-                                </li>
-                                <li>
-                                    <a href="/booking">線上訂房</a>
-                                </li>
-                            </ul>
+                            <div>
+                                <ul>
+                                    <li>
+                                        <a href="/">首　頁</a>
+                                    </li>
+                                    <hr/>
+                                    <li>
+                                        <a href="/about">關於打個蛋</a>
+                                    </li>
+                                    <hr/>
+                                    <li>
+                                        <a href="/booking">線上訂房</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </header>
                 )

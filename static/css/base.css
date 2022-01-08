@@ -37,7 +37,6 @@ h4{
 }
 
 #header_wrap{
-    background-color: #F39801;
     height: 80px;
 }
 /* Header Component */
@@ -140,6 +139,7 @@ main{
 }
 .mainbox{
     min-height: 680px;
+    margin: 0 auto;
 }
 
 /* Search Component*/
@@ -228,13 +228,21 @@ footer{
         color: #1A1A1A;
     }
     .dropdown_menu a:hover{
-        font-size: 1.1em;
-        letter-spacing: 1px;
+        letter-spacing: 1.5px;
     }
     .dropdown_menu a[href="/booking"]:hover{
         font-size: 1em;
         color: #F39801;
         font-weight: bold;
+    }
+    .dropdown_menu>div{
+        margin: 0 auto;
+        width: 85%;
+    }
+    .dropdown_menu hr{
+        width: inherit;
+        border: 0.8px solid #EBEBEB;
+        background-color: #EBEBEB;
     }
     /* Search Component */
     #available_search{
