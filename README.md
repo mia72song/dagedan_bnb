@@ -6,7 +6,7 @@
 
 ✔ 瀏覽民宿及客房資訊。
 
-✔ 查詢空房：以「日期區間」及「入住人數」搜尋可供預定的房型，以及最後2間(含以下)的提示。
+✔ 查詢空房：以「日期區間」及「入住人數」搜尋可供預定的房型，以及最後2間(含以下)的提示；否則顯示「搜尋期間內無空房」
 
 ✔ 線上訂房：房價結算(優惠判斷：平日、單人)，及訂房資料填寫。驗證後傳至後端資料庫建檔。
 
@@ -16,9 +16,9 @@
 
 6.第三方api串接：IG
 
-#### - API規劃 -
+✔ API規劃：
 
-ROOM
+- ROOM
 
 GET /api/rooms 取得所有房型資訊列表
 
@@ -28,7 +28,7 @@ GET /api/rooms?guests={num_of_guests} 依入住人數取得房型資訊列表
 
 GET /api/rooms/{room_type}/available/from{start_date_string}to{end_date_string} 依日期區間，搜尋可供預定的房間
 
-ORDER
+- ORDER
 
 POST /api/orders 建立新的訂房資料
 
@@ -49,9 +49,9 @@ GET /api/order/{order_id} 依據訂單編號取得訂房資料
 
 6.員工管理帳號操作紀錄
 
-#### - API規劃 -
+✔ API規劃：
 
-USER
+- USER
 
 GET /auth/user 取得目前已登入的員工資料
 
@@ -59,17 +59,21 @@ POST /auth/user 員工管理帳號登入
 
 DELETE /auth/user 員工管理帳號登出
 
-ORDER
+- ORDER
 
-GET /auth/orders 取得所有的訂房資料列表
+GET /auth/orders 取得所有的訂單資料列表
 
-GET /auth/orders/{status} 依據訂單狀態(新訂單、已付款、取消)，取得訂房資料列表
+GET /auth/orders/{status} 依據訂單狀態(新訂單、已付款、取消)，取得訂單資料列表
 
-GET /auth/order/{order_id} 依據訂單編號，取得訂房資料
+GET /auth/order/{order_id} 依據訂單編號，取得訂單資料
 
-PUT /auth/order/{order_id} 依據訂單編號，修改訂房資料
+PUT /auth/order/{order_id} 依據訂單編號，修改訂單資料
 
-PAYMENT
+- BOOKED
+
+GET /auth/booked/{order_id} 依據訂單編號，修改訂房明細
+
+- PAYMENT
 
 GET /auth/payment/{payment_id} 依據付款編號，取得付款資料
 
