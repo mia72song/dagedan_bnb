@@ -16,7 +16,7 @@
 
 6.第三方api串接：IG
 
-#### API規劃
+#### - API規劃 -
 
 ROOM
 
@@ -49,7 +49,7 @@ GET /api/order/{order_id} 依據訂單編號取得訂房資料
 
 6.員工管理帳號操作紀錄
 
-#### API規劃
+#### - API規劃 -
 
 USER
 
