@@ -18,7 +18,7 @@
 
 ✔ API規劃：
 
-- ROOM
+ROOM
 
 GET /api/rooms 取得所有房型資訊列表
 
@@ -28,7 +28,7 @@ GET /api/rooms?guests={num_of_guests} 依入住人數取得房型資訊列表
 
 GET /api/rooms/{room_type}/available/from{start_date_string}to{end_date_string} 依日期區間，搜尋可供預定的房間
 
-- ORDER
+ORDER
 
 POST /api/orders 建立新的訂房資料
 
@@ -51,7 +51,7 @@ GET /api/order/{order_id} 依據訂單編號取得訂房資料
 
 ✔ API規劃：
 
-- USER
+USER
 
 GET /auth/user 取得目前已登入的員工資料
 
@@ -59,7 +59,7 @@ POST /auth/user 員工管理帳號登入
 
 DELETE /auth/user 員工管理帳號登出
 
-- ORDER
+ORDER
 
 GET /auth/orders 取得所有的訂單資料列表
 
@@ -69,11 +69,11 @@ GET /auth/order/{order_id} 依據訂單編號，取得訂單資料
 
 PUT /auth/order/{order_id} 依據訂單編號，修改訂單資料
 
-- BOOKED
+BOOKED
 
 GET /auth/booked/{order_id} 依據訂單編號，修改訂房明細
 
-- PAYMENT
+PAYMENT
 
 GET /auth/payment/{payment_id} 依據付款編號，取得付款資料
 
