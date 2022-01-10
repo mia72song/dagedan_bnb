@@ -22,22 +22,20 @@ ROOM
 
 GET /api/rooms 取得所有房型資訊列表
 
-GET /api/rooms/<str:room_type> 依房型取得房型資訊列表
+GET /api/rooms/{room_type} 依房型取得房型資訊列表
 
-GET /api/rooms?guests=<int:num_of_guests> 依入住人數取得房型資訊列表
+GET /api/rooms?guests={num_of_guests} 依入住人數取得房型資訊列表
 
-GET /api/rooms/<str:room_type>/available/from<str:start_date_string>to<str:end_date_string> 依日期區間，搜尋可供預定的房間
+GET /api/rooms/{room_type}/available/from{start_date_string}to{end_date_string} 依日期區間，搜尋可供預定的房間
 
 ORDER
 
 POST /api/orders 建立新的訂房資料
 
-GET /api/order/<int:order_id> 依據訂單編號取得訂房資料
+GET /api/order/{order_id} 依據訂單編號取得訂房資料
 
 
 ### 管理後台(民宿員工端)：
-
-✔ 員工管理帳號登入、登出、及是否為已登入判斷。
 
 ✔ 員工管理帳號登入：含密碼加密儲存，顯示登入成功的使用者名稱(如：打個蛋總管理者)。
 
@@ -65,16 +63,16 @@ ORDER
 
 GET /auth/orders 取得所有的訂房資料列表
 
-GET /auth/orders/<str:status> 依據訂單狀態(新訂單、已付款、取消)取得的訂房資料列表
+GET /auth/orders/{status} 依據訂單狀態(新訂單、已付款、取消)，取得訂房資料列表
 
-GET /auth/order/<int:order_id> 依據訂單編號取得訂房資料
+GET /auth/order/{order_id} 依據訂單編號，取得訂房資料
 
-PUT /auth/order/<int:order_id> 依據訂單編號修改訂房資料
+PUT /auth/order/{order_id} 依據訂單編號，修改訂房資料
 
 PAYMENT
 
-GET /auth/payment/<str:payment_id> 依據付款編號取得付款資料
+GET /auth/payment/{payment_id} 依據付款編號，取得付款資料
 
-POST /auth/payment/<int:order_id> 依據訂單編號，建立新的付款資料
+POST /auth/payment/{order_id} 依據訂單編號，建立新的付款資料
 
-PUT /auth/payment/<str:payment_id> 依據付款編號修改付款資料
+PUT /auth/payment/{payment_id} 依據付款編號，修改付款資料
