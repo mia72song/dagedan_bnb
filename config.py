@@ -13,7 +13,7 @@ class Config:
 
     # JWT設置
     JWT_SECRET_KEY = secrets.token_hex()
-    JWT_TOKEN_LOCATION = ["headers", "cookies"] #"headers", "cookies", "json", "query_string"
+    JWT_TOKEN_LOCATION = ["headers"] #"headers", "cookies", "json", "query_string"
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ["access"]
     PROPAGATE_EXCEPTIONS = True

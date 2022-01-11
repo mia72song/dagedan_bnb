@@ -22,17 +22,17 @@ ROOM
 
 GET /api/rooms 取得所有房型資訊列表
 
-GET /api/rooms/<str:room_type> 依房型取得房型資訊列表
+GET /api/rooms/{room_type} 依房型取得房型資訊列表
 
-GET /api/rooms?guests=<int:num_of_guests> 依入住人數取得房型資訊列表
+GET /api/rooms?guests={num_of_guests} 依入住人數取得房型資訊列表
 
-GET /api/rooms/<str:room_type>/available/from<str:start_date_string>to<str:end_date_string> 依日期區間，搜尋可供預定的房間
+GET /api/rooms/{str:room_type}/available/from{str:start_date_string}to{str:end_date_string} 依日期區間，搜尋可供預定的房間
 
 ORDER
 
 POST /api/orders 建立新的訂房資料
 
-GET /api/order/<int:order_id> 依據訂單編號取得訂房資料
+GET /api/order/{int:order_id} 依據訂單編號取得訂房資料
 
 
 ### 管理後台(民宿員工端)：

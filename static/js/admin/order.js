@@ -12,10 +12,17 @@ function getOrders(data_type=null, keyword=null){
             url = url+`?${data_type}=${keyword}`
         }
     }
-    let p = fetch(url).then(response=>{
+    let p = fetch(url, {
+        method: "get", 
+        credentials: "include", 
+        headers: {
+            "Authorization": `Bearer ${localStorage.getItem("jwt")}`
+        }
+    }).then(response=>{
         if(response.status===200){
             return response.json()
         }else if(response.status===401){
+            //console.log(response.json())
             handleLogout()
         }else{
             console.log(response.json())
