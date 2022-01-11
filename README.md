@@ -26,7 +26,7 @@
 
     GET /api/rooms?guests={num_of_guests} 依入住人數取得房型資訊列表
 
-    GET /api/rooms/{room_type}/available/from{str:start_date_string}to{str:end_date_string} 依日期區間，搜尋可供預定的房間
+    GET /api/rooms/{room_type}/available/from{start_date_string}to{end_date_string} 依日期區間，搜尋可供預定的房間
 
 - ORDER
 
