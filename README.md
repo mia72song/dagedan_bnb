@@ -2,7 +2,7 @@
 
 ### 主要功能
 
-#### 前台(住客端)： http://54.150.241.23:8080/
+### 前台(住客端)： http://54.150.241.23:8080/
 
 ✔ 瀏覽民宿及客房資訊。
 
@@ -16,30 +16,28 @@
 
 6.第三方api串接：IG
 
-#### API規劃
+✔ API規劃如下：
 
-ROOM
+- ROOM
 
-GET /api/rooms 取得所有房型資訊列表
+    GET /api/rooms 取得所有房型資訊列表
 
-GET /api/rooms/{room_type} 依房型取得房型資訊列表
+    GET /api/rooms/{room_type} 依房型取得房型資訊列表
 
-GET /api/rooms?guests={num_of_guests} 依入住人數取得房型資訊列表
+    GET /api/rooms?guests={num_of_guests} 依入住人數取得房型資訊列表
 
-GET /api/rooms/{str:room_type}/available/from{str:start_date_string}to{str:end_date_string} 依日期區間，搜尋可供預定的房間
+    GET /api/rooms/{room_type}/available/from{str:start_date_string}to{str:end_date_string} 依日期區間，搜尋可供預定的房間
 
-ORDER
+- ORDER
 
-POST /api/orders 建立新的訂房資料
+    POST /api/orders 建立新的訂房資料
 
-GET /api/order/{int:order_id} 依據訂單編號取得訂房資料
+    GET /api/order/{order_id} 依據訂單編號取得訂房資料
 
 
 ### 管理後台(民宿員工端)：
 
-✔ 員工管理帳號登入、登出、及是否為已登入判斷。
-
-✔ 員工管理帳號登入：含密碼加密儲存，顯示登入成功的使用者名稱(如：打個蛋總管理者)。
+✔ 員工管理帳號登入：含密碼加密儲存，顯示已登入的使用者名稱，及取得JSON Web Token授權，以供後續訂房資料操作使用。
 
 2.當日(週)預定及入住資訊，彙總儀表板。
 
@@ -51,30 +49,34 @@ GET /api/order/{int:order_id} 依據訂單編號取得訂房資料
 
 6.員工管理帳號操作紀錄
 
-#### API規劃
+✔ API規劃如下：
 
-USER
+- USER
 
-GET /auth/user 取得目前已登入的員工資料
+    GET /auth/user 取得目前已登入的員工資料
 
-POST /auth/user 員工管理帳號登入
+    POST /auth/user 員工管理帳號登入
 
-DELETE /auth/user 員工管理帳號登出
+    DELETE /auth/user 員工管理帳號登出
 
-ORDER
+- ORDER 請求時，headers須夾帶jwt授權 Authorization: Bearer <jwt_token>
 
-GET /auth/orders 取得所有的訂房資料列表
+    GET /auth/orders 取得所有的訂單資料列表
 
-GET /auth/orders/<str:status> 依據訂單狀態(新訂單、已付款、取消)取得的訂房資料列表
+    GET /auth/orders/{status} 依據訂單狀態(新訂單、已付款、取消)取得的訂單列表
 
-GET /auth/order/<int:order_id> 依據訂單編號取得訂房資料
+    GET /auth/order/{order_id} 依據訂單編號，取得訂單資料
 
-PUT /auth/order/<int:order_id> 依據訂單編號修改訂房資料
+    PUT /auth/order/{order_id} 依據訂單編號，修改訂單資料
 
-PAYMENT
+- BOOKED 請求時，headers須夾帶jwt授權 Authorization: Bearer <jwt_token>
 
-GET /auth/payment/<str:payment_id> 依據付款編號取得付款資料
+    GET /auth/booked/{order_id} 依據訂單編號，取得訂房明細
 
-POST /auth/payment/<int:order_id> 依據訂單編號，建立新的付款資料
+- PAYMENT 請求時，headers須夾帶jwt授權 Authorization: Bearer <jwt_token>
 
-PUT /auth/payment/<str:payment_id> 依據付款編號修改付款資料
+    GET /auth/payment/{payment_id} 依據付款編號取得付款資料
+
+    POST /auth/payment/{order_id} 依據訂單編號，建立新的付款資料
+
+    PUT /auth/payment/{payment_id} 依據付款編號，修改付款資料
