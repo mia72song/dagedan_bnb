@@ -77,9 +77,9 @@
                         <div class="collapse navbar-collapse" id="navbarSupportedContent">
                             <ul class="navbar-nav mr-auto">
                                 { menu_content }
-                                <li class="nav-item dropdown" onMouseLeave={this.closeDropdownMenu}>
-                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">宋小惠總工程師 </a>
-                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <li class="nav-item dropdown" >
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{this.props.name} </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink" onMouseLeave={this.closeDropdownMenu}>
                                         <a class="dropdown-item" href="javascript: void(0)">修改密碼</a>
                                         <a class="dropdown-item" href="javascript: void(0)" onClick={handleLogout}>登出</a>
                                     </div>
