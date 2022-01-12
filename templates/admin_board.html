@@ -2,7 +2,6 @@
 {% block title %}Board{% endblock %}
 {% block head %}
     {{ super() }}
-    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/admin/board.css") }}>
     <!-- Load Pubsub-js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pubsub-js/1.9.3/pubsub.min.js" integrity="sha512-ASNLdxh5Knd0ESqUQE2hvUbXxOmu0y27vVVibROAKRomo+R6ocykvh0m8tE9qMEfmeVbEyNL1M6FvvyRKyZIoQ==" crossorigin="anonymous"></script>
 {% endblock %}
@@ -10,15 +9,15 @@
     <main>
         <div class="news"></div>
         <div id="board">
-            <!--由Board組件渲染-->
-        </div>        
+            由Board組件渲染
+        </div>
     </main>
     <script type="text/babel">        
         addEventListener("load", ()=>{
             currentUserPromise.then(currentUser=>{
                 if(currentUser!==null){
                     // console.log(currentUser);
-                    ReactDOM.render(<Banner id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
+                    ReactDOM.render(<Navbar id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
                 }else{
                     location.href = `/admin`
                 }

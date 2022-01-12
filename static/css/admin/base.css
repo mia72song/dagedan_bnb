@@ -1,72 +1,27 @@
-@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap&subset=chinese-traditional');
-
-*{
-    margin:0;
-}
-body{
-    font-family: 'Noto Sans TC', sans-serif;
-    color: #1A1A1A;
-}
-a{
-    text-decoration:none;
-    cursor: pointer;
-}
-a:hover{
-    text-decoration:underline;
-}
-/*header*/
-header{
-    height: 60px;
-    margin: auto;
-    position: fixed;
-    top:0;
-    left:0;
-    right: 0;
-    z-index: 50;
-    overflow: hidden;
-    background-color: white;
-}
-.nav_wrap{
-    height: 60px;
-}
-
-/*main*/
-main{
-    margin-top: 20px;
-}
-#banner{
+.navbar{
     display: flex;
-    margin: 20px 30px;
 }
-#banner>.title{
-    width: 50%;
+.navbar>div{
+    
 }
-#banner>.menu{
-    width: 50%;
-    text-align: right;
-    margin-top: 13px;
+.logo_container{
+    flex: auto;
 }
-.menu>a{
-    margin-left: 15px;
-    padding: 3px 10px;
-    padding-bottom: 20px;
-    border-radius: 13px;
-    font-weight: 600;
+#navbarDropdownMenuLink{
+    color: lightskyblue;
 }
-.menu_checked{
-    background-color: #0d6efd;    
-    color: white;
+#navbarSupportedContent{
+    flex: none;
+    width: auto;
+    padding-right: 10px;
 }
-.menu_checked:hover{
-    text-decoration:none;
-    color: white;
+#navbarSupportedContent> ul li{
+    margin: 0 5px;
 }
-.menu_not_checked{
-    color: #0d6efd;
-}
-.menu_not_checked:hover{
-    text-decoration:underline;
-}
-#logout_btn:hover{
-    color: crimson;
+
+@media (max-width:767px){
+    #navbarSupportedContent{
+        width: 100%;
+        padding-right: 0;
+    }
 }

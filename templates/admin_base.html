@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <!-- Bootstrap-->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="icon" href={{ url_for("static", filename="images/Staff-Only-Sign-PNG-Image-File.png") }} type="image/x-icon" />
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/admin/base.css") }}>
     <script type="text/javascript" src={{ url_for("static", filename="js/calendar.js") }}></script>
@@ -20,7 +22,8 @@
 </head>
 <body>
     <header>
-        <!--由Banner組件渲染 if login-->
+        <!--由Navbar組件渲染-->
+        
     </header>
     <div class="nav_wrap"></div>    
     {% block content %}
@@ -38,35 +41,56 @@
                 }
             })
         }
-        class Banner extends React.Component{
+        class Navbar extends React.Component{
             pages = {
-                board: "預約日曆",
+                board: "儀表板",
                 order: "訂單",
                 guest: "住客",
                 room: "客房"
             }
             render(){
                 // console.log(this.props);
-                let menu_content = []
+                let menu_content = [];
                 Object.keys(this.pages).forEach(page=>{
-                    let condition = location.pathname.includes(`/admin/${page}`);
-                    let href = `/admin/${page}`;
+                    const condition = location.pathname.includes(`/admin/${page}`);
                     menu_content.push(
-                        <a href={href} className={condition ? "menu_checked" : "menu_not_checked"}>{this.pages[page]}</a>
+                        <li className={condition? "nav-item active" : "nav-item" }>
+                            <a className="nav-link" href={`/admin/${page}`}>
+                                {this.pages[page]}
+                                {condition && <span class="sr-only">(current)</span>}
+                            </a>
+                        </li>
                     )
-                })
+                });
                 return(
-                    <div id="banner">
-                        <div className="title">登入成功，{this.props.name} 你好</div>
-                        <div className="menu">
-                            { menu_content }
-                            <a href="javascript: void(0)" onClick={this.clickLogout} className="menu_not_checked" id="logout_btn">登出</a>
+                    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+                        <div class="logo_container">
+                            <a class="navbar-brand" href="javascript: void(0)">
+                                <span class="h3 mx-1">Admin Booking Panel</span>
+                            </a>
                         </div>
-                    </div>
+                        <div class="toggler_container">
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                        </div>
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav mr-auto">
+                                { menu_content }
+                                <li class="nav-item dropdown" onMouseLeave={this.closeDropdownMenu}>
+                                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">宋小惠總工程師 </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                        <a class="dropdown-item" href="javascript: void(0)">修改密碼</a>
+                                        <a class="dropdown-item" href="javascript: void(0)" onClick={handleLogout}>登出</a>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </nav>
                 )
             }
-            clickLogout=()=>{
-                handleLogout()
+            closeDropdownMenu=()=>{
+                document.querySelector(".dropdown-menu").classList.remove("show");
             }
         }
     </script>
