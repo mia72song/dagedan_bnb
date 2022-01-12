@@ -26,7 +26,11 @@
 
     GET /api/rooms?guests={num_of_guests} 依入住人數取得房型資訊列表
 
+<<<<<<< HEAD
     GET /api/rooms/{room_type}/available/from{str:start_date_string}to{str:end_date_string} 依日期區間，搜尋可供預定的房間
+=======
+    GET /api/rooms/{room_type}/available/from{start_date_string}to{end_date_string} 依日期區間，搜尋可供預定的房間
+>>>>>>> eb54e43390779fac734b77197760a5e9f8d73fef
 
 - ORDER
 
@@ -79,4 +83,8 @@
 
     POST /auth/payment/{order_id} 依據訂單編號，建立新的付款資料
 
+<<<<<<< HEAD
     PUT /auth/payment/{payment_id} 依據付款編號，修改付款資料
+=======
+    PUT /auth/payment/{payment_id} 依據付款編號，修改付款資料
+>>>>>>> eb54e43390779fac734b77197760a5e9f8d73fef
