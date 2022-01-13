@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from flask_jwt_extended import jwt_required
+from flask_jwt_extended import jwt_required, get_jwt_identity
 from datetime import datetime
 
 from . import auth
@@ -14,13 +14,14 @@ status_code = 0
 def orderFormatter(result):
     cols = [
         "order_id", "create_datetime", "check_in_date", "check_out_date", "nights", "guests", "amount", 
-        "booker_name", "booker_gender", "booker_phone", "pid", "order_status"
+        "booker_name", "booker_gender", "booker_phone", "pid", "payment_deadline" , "order_status"
     ]
     data_dict = dict(zip(cols, result))
     data_dict["create_datetime"] = datetime.strftime(data_dict["create_datetime"], DATETIME_FORMATTER)
     data_dict["check_in_date"] = datetime.strftime(data_dict["check_in_date"], DATE_FORMATTER)
     data_dict["check_out_date"] = datetime.strftime(data_dict["check_out_date"], DATE_FORMATTER)
     data_dict["amount"] = int(data_dict["amount"])
+    data_dict["payment_deadline"] = datetime.strftime(data_dict["payment_deadline"], DATE_FORMATTER)
     return data_dict
 
 @auth.route("/order/<int:order_id>")
@@ -48,8 +49,41 @@ def get_order_by_id(order_id):
 @auth.route("/order/<int:order_id>", methods=["PUT"])
 @jwt_required()
 def update_order_status(order_id):
-    data = request.get_json()
-    return jsonify({"msg": "Got it"}), 200
+    if get_jwt_identity():
+        data = request.get_json()
+        current_user = get_jwt_identity()
+    else:
+        body = jsonify({
+            "error": True,
+            "message": {"login": False}
+        })
+        status_code = 403
+        return body, status_code
+
+    if data:
+        try:
+            mydb = Authdb()
+            mydb.updateOrderStatus(order_id, data["status"], current_user)
+            body = jsonify({
+                    "ok": True
+                })
+            status_code = 200
+        except Exception as e:
+            body = jsonify({
+                "error": True,
+                "message": f"伺服器內部錯誤：{e}"
+            })
+            status_code = 500
+        finally:
+            del mydb
+    else:
+        body = jsonify({
+            "error": True,
+            "message": "No Json Data"
+        })
+        status_code = 400
+
+    return body, status_code
 
 @auth.route("/orders")
 @jwt_required()

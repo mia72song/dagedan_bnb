@@ -9,10 +9,10 @@
 {% endblock %}
 {% block content %}
     <main>
-        <nav>
+        <div id="search_wrap">
             <!--由Search組件渲染-->
-        </nav>
-        <div id="databox">
+        </div>
+        <div id="databox_wrap">
             <!--由DataBox組件渲染-->
         </div>
     </main>
@@ -56,7 +56,7 @@
                     })
                 }
                 p.then(data=>{
-                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox"));
+                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox_wrap"));
                 })
             }
             render(){
@@ -73,7 +73,7 @@
                     )
                 })
                 return(
-                    <div id="wrap">
+                    <div id="search_box">
                         <div id="status_wrap">
                             <label for="">訂單狀態</label>
                             <select value={this.state.orders_status} onChange={this.filterStatus}>
@@ -88,7 +88,7 @@
                             </select>
                             <input type={this.state.select=="check_in_date" ? "date" : "text"} name="keyword" id="keyword" placeholder="請輸入關鍵字"
                                 value={this.state.keyword} onChange={this.handleChange("keyword")} required/>
-                            <button type="submit" className="btn btn-dark">搜尋</button>
+                            <button type="submit" className="btn btn-secondary">搜尋</button>
                         </form>
                     </div>
                 )
@@ -100,7 +100,7 @@
                     keyword: ""
                 })
                 getOrders("status", eObj.target.value).then(resp=>{
-                    ReactDOM.render(<DataBox data={resp.data}/>, document.querySelector("#databox"));
+                    ReactDOM.render(<DataBox data={resp.data}/>, document.querySelector("#databox_wrap"));
                 })
             }
             handleChange=(dataType)=>{
@@ -113,7 +113,7 @@
             handleSubmit=(eObj)=>{
                 eObj.preventDefault();
                 getOrders(this.state.select, this.state.keyword).then(resp=>{
-                    ReactDOM.render(<DataBox data={resp.data}/>, document.querySelector("#databox"));
+                    ReactDOM.render(<DataBox data={resp.data}/>, document.querySelector("#databox_wrap"));
                 })
             }
         }
@@ -155,12 +155,15 @@
                 const data = this.props.data;
                 let tr_class = "cancel_tr";
                 if(this.state.status!=="CANCEL"){
-                    tr_class = (this.state.status==="PAID"? "paid_tr" : "new_tr")
+                    tr_class = (this.state.status==="PAID"? "paid_tr" : "unpaid_tr")
                 }
                 return(
                     <tr className={tr_class}>
-                        <td>{data.order_id}</td>
-                        <td><p>{data.create_datetime}</p>                               
+                        <td>
+                            <p>{data.order_id}</p>
+                        </td>
+                        <td>
+                            <p>{data.create_datetime}</p>                               
                         </td>
                         <td>
                             <div>{data.check_in_date} / {data.check_out_date}</div>
@@ -171,21 +174,25 @@
                         <td>{data.amount}</td>
                         <td className="left_td">
                             <p>{data.booker_name} {data.booker_gender=="F"? "小姐" : "先生"} {data.booker_phone}</p>
-                            {this.state.status!=="CANCEL" && <PaymentInfo status={status} oid={data.order_id} pid={data.pid}/>}
+                            {this.state.status!=="CANCEL" && <PaymentInfo status={this.state.status} oid={data.order_id} pid={data.pid} payment_deadline={data.payment_deadline}/>}
                         </td>
                         <td>
                             <p>{order_status[this.state.status]}</p>
-                            {this.state.status!=="CANCEL" && <button onClick={this.handleCancel}>取消</button>}
+                            {this.state.status==="NEW" && <button onClick={this.handleCancel}>取消</button>}
+                            {this.state.status==="PAID" && <button className="paid">退款</button>}
                         </td>
                     </tr>
                 )
             }
             handleCancel=()=>{
-                console.log("取消訂單編號：" ,this.props.data.order_id);
-                if(this.props.data.payment_id){
-                    alert("已付款了，確定要取消退款嗎?")
-                }else{
-                    console.log("可以取消")
+                const check = confirm(`是否確定取消訂單編號：${this.props.data.order_id}`);
+                if(check){
+                    updateOrderStatusById(this.props.data.order_id, "CANCEL").then(resp=>{
+                        console.log(resp.ok)
+                        if(resp.ok){
+                            location.href = `/admin/order`;
+                        }
+                    })
                 }
             }
         }
@@ -223,7 +230,7 @@
                     booking_content.push(item)
                 })
                 return(
-                    <div className="booking_list_detail">
+                    <div className="booking_list">
                         { booking_content }
                     </div>
                 )
@@ -233,18 +240,19 @@
             state = {
                 on: false
             }
-            payment_status = {
-                NEW: "待確認(ATM)",
-                PAID:  "轉帳完成",
-                CANCEL: "取消"
-            }
             render(){
                 const status = this.props.status;
                 return(
                     <div className="payment_div">
-                        <button className={status=="PAID" && "paid_btn"} 
-                            onClick={this.getPaymentDetail}>
-                            {status=="PAID"? "付款資料" : "確認轉帳"}
+                        <span>
+                            付款期限：{status==="PAID"? (
+                                <span className="paid">已付款</span>
+                            ):(
+                                <span className="unpaid">{this.props.payment_deadline}</span>
+                            )}
+                        </span>
+                        <button onClick={this.getPaymentDetail}>
+                            付款資料
                         </button>
                         {this.state.on && (
                             <div className="payment_detail" id={`payment_detail_${this.props.oid}`}>
@@ -384,8 +392,8 @@
             currentUserPromise.then(currentUser=>{
                 // console.log(currentUser)
                 if(currentUser!==null){
-                    ReactDOM.render(<Banner id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
-                    ReactDOM.render(<Search />, document.querySelector("nav"));
+                    ReactDOM.render(<Navbar id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
+                    ReactDOM.render(<Search />, document.getElementById("search_wrap"));
                 }else{
                     handleLogout()
                 }

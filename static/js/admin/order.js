@@ -32,6 +32,25 @@ function getOrders(data_type=null, keyword=null){
 }
 
 // 依據訂單編號oid，修改其唯一訂單狀態
-function updateOrderStatusById(self, oid, status){
-    pass
+function updateOrderStatusById(oid, status){
+    const url = `${window.origin}/auth/order/${oid}`;
+    let p = fetch(url, {
+        method: "put", 
+        credentials: "include", 
+        headers: {
+            "Content-Type":"application/json", 
+            "Authorization": `Bearer ${localStorage.getItem("jwt")}`
+        },
+        body: JSON.stringify({status})
+    }).then(response=>{
+        if(response.status===200){
+            return response.json()
+        }else if(response.status===403){
+            //console.log(response.json())
+            handleLogout()
+        }else{
+            console.log(response.json())
+        }
+    })
+    return p
 }

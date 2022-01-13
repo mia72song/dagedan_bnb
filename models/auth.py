@@ -30,7 +30,7 @@ class Authdb(Mydb):
         today = date.today()
         date_string =  datetime.strftime(today, DATE_FORMATTER)
         sql = f"""
-            UPDATE orders SET status='CANCEL' 
+            UPDATE orders SET status='CANCEL', update_user='system' 
             WHERE PaymentId IS NULL AND status='NEW' AND payment_deadline<'{date_string}'
         """
         self.cur.execute(sql)
@@ -46,8 +46,8 @@ class Authdb(Mydb):
         self.__cancelBooking()
         sql = f"""
             SELECT oid, create_datetime, 
-            check_in_date, check_in_date, nights, num_of_guests, amount, 
-            g.name, g.gender, g.phone, PaymentId, status 
+            check_in_date, check_out_date, nights, num_of_guests, amount, 
+            g.name, g.gender, g.phone, PaymentId, payment_deadline, status 
             FROM orders AS o
             INNER JOIN guests AS g ON g.phone=o.Phone
         """
@@ -90,11 +90,15 @@ class Authdb(Mydb):
         self.cur.execute(sql)
         return self.cur.fetchall()
 
-    def updateOrderStatus(self, oid, status):
+    def updateOrderStatus(self, oid, status, current_user):
         # status："NEW", "PAID" ,"CANCEL"
-        sql = f"UPDATE orders SET status='{status.upper()}' WHERE oid={oid}"
-        self.cur.execute(sql)
+        sql_o = f"UPDATE orders SET status='{status.upper()}', update_user='{current_user}' WHERE oid={oid}"
+        self.cur.execute(sql_o)
         self.conn.commit()
+        sql_b = f"DELETE FROM booking WHERE OrderId={oid}"
+        self.cur.execute(sql_b)
+        self.conn.commit()
+        print(f"訂單編號：{oid}已取消")
     
     '''Booking'''
     def getBookingByOrderId(self, oid):

@@ -40,4 +40,4 @@ def admin(html_filename):
 #Rroduction Environment：app.run(host="0.0.0.0", port=3000)
 
 #Development Environment:
-app.run() #default host="127.0.0.1" port=5000
+app.run(port=5050) #default host="127.0.0.1" port=5000

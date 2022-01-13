@@ -13,7 +13,7 @@
             currentUserPromise.then(currentUser=>{
                 // console.log(currentUser)
                 if(currentUser!==null){
-                    ReactDOM.render(<Banner id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
+                    ReactDOM.render(<Navbar id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
 
                 }else{
                     handleLogout();

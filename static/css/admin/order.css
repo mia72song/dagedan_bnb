@@ -1,17 +1,7 @@
 main{
-    width: 1000px;
+    width: 1050px;
     margin: 0 auto;
-    height: 800px;
-}
-#wrap{
-    margin-top: 20px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-#wrap>div{
-    margin: 0 auto;
+    min-height: 800px;
 }
 input, select{
     width: 150px;
@@ -24,76 +14,95 @@ input, select{
     margin: 0 10px;
     border-radius: 8px;
 }
-
-#databox{
+/* DataBox component */
+#databox_wrap{
     margin: 0 auto;
-    margin-top: 15px;
 }
-
+/* DataBox component-thead */
 thead, th{
     text-align: center;
-    vertical-align: middle;
 }
 #order_id_col, #create_datetime_col{
-    width: 90px;
+    width: 110px;
 }
-#date_col, #booker_info_col{
-    width: 180px;
-}
-#amount_col, #order_status_col{
-    width: 60px;
-}
-#add_on_service_col{
-    width: 80px;
+#date_col{
+    width: 210px;
 }
 #nights_col, #guests_col{
-    width: 25px;
+    width: 60px;
 }
-td>select{
-    width: inherit;
+#amount_col, #order_status_col{
+    width: 90px;
 }
+#booker_info_col{
+    width: auto;
+}
+/* DataBox component-tbody */
 td{
     text-align: center;
+}
+td>.btn{
+    height: 50px;
 }
 .left_td{
     text-align: left;
     margin-left: 5px;
 }
-.booking_list_btn:hover{
-    text-decoration:none;
-}
+/* BookingDetail conponent */
 .booking_detail{
     text-align: left;
     width: inherit;
     font-size: 15px;
-    margin-top: 20px;
+    margin-top: 15px;
 }
-.booking_list_detail{
-    margin-top: 6px;
+.booking_list_btn{
+    font-weight: 600;
+}
+.booking_list_btn:hover{
+    text-decoration:none;
+}
+/* BookingList conponent */
+.booking_list{
+    margin-top: 10px;
     line-height: 1.6;
 }
-/*booker_info_col*/
-#booker_info_col{
-    width: 260px;
+
+/* Search conponent */
+#search_wrap{
+    
 }
-.payment_div>span{
-    color: red;
+#search_box{
+    margin-top: 20px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
-.payment_div>button{
-    margin-left: 20px;
-    border-radius: 3px;
+#search_box>div, form{
+    margin: 0 auto;
 }
-.paid_btn{
-    border: 2px green solid;
-    color: green;
-    background-color: white;
+#search_box label{
+    font-weight: bold;
 }
+/* PaymentInfo component */
 .payment_detail{
     margin-top: 10px;
     border-radius: 2px;
     border: 1.5px grey solid;
     background-color: blanchedalmond;
 }
+.payment_div>button{
+    margin-left: 10px;
+}
+.paid{
+    color: green;
+    font-weight: 600;
+}
+.unpaid{
+    color: red;
+    font-weight: 600;
+}
+/* PaidForm component */
 .payment_form{
     padding: 5px 0;
     margin-left: 10px;
@@ -111,19 +120,17 @@ td{
     margin-left: 0;
     width: 100px;
 }
-.update_btn{
-    color: red;
-    background-color: white;
-    border: 1.5px red solid;
-}
 #transfer_date_input{
     width: 150px;
+}
+.payment_form>.update_btn{
+    color: red;
 }
 /* DataRow */
 .paid_tr{
     background-color: #FFF3EE;
 }
-.new_tr{
+.unpaid_tr{
     background-color: #FFFCEC;
 }
 .cancel_tr{
