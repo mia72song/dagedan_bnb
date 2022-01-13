@@ -37,7 +37,11 @@ class Authdb(Mydb):
         self.conn.commit()
 
     def __cancelBooking(self):
-        sql = f"DELETE FROM booking WHERE OrderId IN(SELECT oid FROM orders WHERE status='CANCEL')"
+        sql = f"""
+            DELETE FROM booking 
+            WHERE OrderId IN(SELECT oid FROM orders WHERE status='CANCEL') 
+            OR OrderId NOT IN(SELECT oid FROM orders)
+        """
         self.cur.execute(sql)
         self.conn.commit()
 
