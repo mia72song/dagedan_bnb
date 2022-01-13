@@ -1,6 +1,6 @@
 ## Booking & Administration service for Dangedan B&B website
 
-### 主要功能 ( ✔ 為已完成功能 )
+### 主要功能 ( ✔ 為已完成 )
 
 ### 前台(住客端)： http://54.150.241.23:8080/
 
