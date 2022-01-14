@@ -175,7 +175,7 @@
                         <p>期間：{this.state.check_in_date} ~ {this.state.check_out_date}，共 {this.state.nights} 晚</p>
                         <p>房型：
                             {this.props.info.name} * 
-                            <input type="number" value={this.state.quantity} min="1" max={this.state.num_of_guests>1? this.props.available.min_quantity : 1} 
+                            <input type="number" value={this.state.quantity} min="1" max={Math.min(this.state.num_of_guests, this.props.available.min_quantity)} 
                             onChange={this.handleChange("quantity")}/>
                             間
                         </p>
@@ -233,7 +233,14 @@
                     (dataType==="num_of_guests" || dataType==="quantity")? 
                     parseInt(eOby.target.value) : eOby.target.value
                 );
-                this.setState({[dataType]: value});
+                if(dataType==="num_of_guests" && value===1){
+                    this.setState({
+                        num_of_guests: 1,
+                        quantity: 1
+                    });
+                }else{
+                    this.setState({[dataType]: value});
+                }
             }
         }
         handelGenderCheck=(gender)=>{
