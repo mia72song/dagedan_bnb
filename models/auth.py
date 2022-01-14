@@ -68,7 +68,7 @@ class Authdb(Mydb):
         sql = f"""
             SELECT oid, create_datetime, 
             check_in_date, check_in_date, nights, num_of_guests, amount, 
-            g.name, g.gender, g.phone, PaymentId, status 
+            g.name, g.gender, g.phone, PaymentId, payment_deadline, status 
             FROM orders AS o
             INNER JOIN guests AS g ON g.phone=o.Phone
         """
@@ -86,7 +86,7 @@ class Authdb(Mydb):
         sql = f"""
             SELECT oid, create_datetime, 
             check_in_date, check_in_date, nights, num_of_guests, amount, 
-            g.name, g.gender, g.phone, PaymentId, status 
+            g.name, g.gender, g.phone, PaymentId, payment_deadline, status 
             FROM orders AS o
             INNER JOIN guests AS g ON g.phone=o.Phone
             WHERE oid={oid}
