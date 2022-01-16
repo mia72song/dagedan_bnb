@@ -79,3 +79,9 @@ class Apidb(Mydb):
             self.cur.execute(sql)
             self.conn.commit()
             print("新住客資料已建立")
+
+    '''Add On Services'''
+    def getAddOnServices(self):
+        sql = f"SELECT * FROM add_on_services WHERE is_available=1"
+        self.cur.execute(sql)
+        return self.cur.fetchall()

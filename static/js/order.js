@@ -26,3 +26,15 @@ function getOrderByOid(oid){
     })
     return p
 }
+
+function getAddOnServices(){
+    const url = `${window.origin}/api/add_on_services`;
+    let p = fetch(url).then(response=>{
+        if(response.status===200){
+            return response.json()
+        }else{
+            console.log(response.json())
+        }
+    })
+    return p
+}
