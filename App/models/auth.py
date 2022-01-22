@@ -3,8 +3,8 @@ from datetime import datetime, date, timedelta
 import sys
 sys.path.append("..")
 
-from models.db import Mydb
-from constants import DATE_FORMATTER
+from App.models.db import Mydb
+from App.constants import DATE_FORMATTER
 
 class Authdb(Mydb):
     ''' User'''

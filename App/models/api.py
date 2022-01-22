@@ -2,7 +2,7 @@ from datetime import datetime, date, timedelta
 import sys
 sys.path.append("..")
 
-from models.db import Mydb
+from App.models.db import Mydb
 
 class Apidb(Mydb):
     '''Calendar'''

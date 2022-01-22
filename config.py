@@ -1,4 +1,8 @@
 import secrets
+import os
+
+from dotenv import load_dotenv
+load_dotenv()
 
 class Config:
     SECRET_KEY = secrets.token_hex()
@@ -17,6 +21,14 @@ class Config:
     JWT_BLACKLIST_ENABLED = True
     JWT_BLACKLIST_TOKEN_CHECKS = ["access"]
     PROPAGATE_EXCEPTIONS = True
+
+    # flask-mail設置
+    MAIL_SERVER = "smtp.gmail.com"
+    MAIL_PORT = 465
+    MAIL_USE_SSL = True
+    MAIL_USERNAME = os.getenv("MAIL_USERNAME")
+    MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+    MAIL_DEFAULT_SENDER = "dagedanhouse@gmail.com"
 
 class DevConfig(Config):
     ENV = "development"

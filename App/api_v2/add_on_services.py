@@ -1,7 +1,7 @@
 from flask import jsonify
 
 from . import api
-from models import Apidb
+from App.models import Apidb
 
 # 初始化response content
 body = "" #json

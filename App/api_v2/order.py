@@ -2,8 +2,9 @@ from flask import jsonify, request
 from datetime import datetime, timedelta
 
 from . import api
-from models import Apidb
-from constants import DATE_FORMATTER
+from App.models import Apidb
+from App.constants import DATE_FORMATTER
+from .email import send_email
 
 # 初始化response content
 body = "" #json
@@ -53,6 +54,8 @@ def getOrderById(oid):
         data = mydb.getOrderById(oid)
         amount = data[2]
         deadline = datetime.strftime(data[-1], DATE_FORMATTER)
+
+        send_email("mia721015@gmail.com", deadline)
         
         body = jsonify({
             "data": {

@@ -2,7 +2,7 @@ from flask import session, jsonify, request, make_response
 from flask_jwt_extended import create_access_token, set_access_cookies, unset_jwt_cookies
 
 from . import auth
-from models import Authdb
+from App.models import Authdb
 
 @auth.route("/user", methods=["POST"])
 def login():

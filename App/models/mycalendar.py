@@ -2,8 +2,8 @@ import csv
 import sys
 sys.path.append("..")
 
-from models.db import Mydb
-from constants import DATE_FORMATTER
+from App.models.db import Mydb
+from App.constants import DATE_FORMATTER
 
 class MyCalendar(Mydb):
     def updateCalendarFromCSV(self, csv_file_mane):
