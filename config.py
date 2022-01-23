@@ -27,7 +27,6 @@ class Config:
     MAIL_USE_SSL = True
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
-    MAIL_DEFAULT_SENDER = "dagedanhouse@gmail.com"
 
 class DevConfig(Config):
     ENV = "development"
