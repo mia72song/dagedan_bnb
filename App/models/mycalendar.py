@@ -2,7 +2,7 @@ import csv
 import sys
 sys.path.append("..")
 
-from App.models.db import Mydb
+from .db import Mydb
 from App.constants import DATE_FORMATTER
 
 class MyCalendar(Mydb):
