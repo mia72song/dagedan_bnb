@@ -1,7 +1,7 @@
 import csv
 
 from App import db, create_app
-from App.models import Calendar
+from App.models import Calendar, User
 
 def updateCalendarFromCSV(csv_file_mane):    
     with open(csv_file_mane, "r") as f:
@@ -23,4 +23,6 @@ csv_file_mane = "111年中華民國政府行政機關辦公日曆表.csv"
 if __name__=="__main__": 
     app = create_app()
     app.app_context().push()
-    updateCalendarFromCSV(csv_file_mane)
+    u = User.query.filter_by(username="mia72song").first()
+    result = u.checkPassword("721015")
+    print(result)
