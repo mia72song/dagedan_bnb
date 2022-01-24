@@ -1,5 +1,4 @@
 import csv
-from re import M
 
 from App import db, create_app
 from App.models import Calendar, User, RoomType, Booking, Room
