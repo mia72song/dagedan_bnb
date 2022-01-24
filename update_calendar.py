@@ -1,7 +1,9 @@
 import csv
+from re import M
 
 from App import db, create_app
-from App.models import Calendar, User
+from App.models import Calendar, User, RoomType, Booking, Room
+from App.mydb import Mydb
 
 def updateCalendarFromCSV(csv_file_mane):    
     with open(csv_file_mane, "r") as f:
@@ -21,8 +23,13 @@ def updateCalendarFromCSV(csv_file_mane):
 csv_file_mane = "111年中華民國政府行政機關辦公日曆表.csv"
 
 if __name__=="__main__": 
-    app = create_app()
-    app.app_context().push()
-    u = User.query.filter_by(username="mia72song").first()
-    result = u.checkPassword("721015")
-    print(result)
+    from datetime import datetime
+    DATE_FORMATTER = "%Y-%m-%d"
+    #app = create_app()
+    #app.app_context().push()
+    try:
+        mydb = Mydb()
+        data = mydb.getAvailableRoomNos("Double", "2022-01-30")
+        print(data)
+    except Exception as e:
+        print(e)
