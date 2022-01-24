@@ -1,8 +1,11 @@
 import pymysql
 import os
+from datetime import date, datetime
 
 from dotenv import load_dotenv
 load_dotenv()
+
+from App.constants import DATE_FORMATTER
 
 db_info = {
     "host": os.getenv("DB_HOST", default="localhost"),
@@ -30,7 +33,32 @@ class Mydb:
         self.cur = self.conn.cursor()
         print("資料庫已開啟…")
 
+    # 將超過期限未付款的訂單，修改狀態為「取消」
+    def updateStatus(self):
+        today = date.today()
+        date_string =  datetime.strftime(today, DATE_FORMATTER)
+        sql = f"""
+            UPDATE orders SET status='CANCEL', update_user='system' 
+            WHERE payment_id IS NULL AND status='NEW' AND payment_deadline<'{date_string}'
+        """
+        self.cur.execute(sql)
+        self.conn.commit()
+
+    # 物理刪除 已「取消」的訂單的訂房明細
+    def cancelBooking(self):
+        sql = f"""
+            DELETE FROM booking 
+            WHERE order_id IN(SELECT oid FROM orders WHERE status='CANCEL') 
+            OR order_id NOT IN(SELECT oid FROM orders)
+        """
+        self.cur.execute(sql)
+        self.conn.commit()
+
     def getAvailableRoomNos(self, room_type, date):
+        # 自動取消過期訂單及釋出空房
+        self.updateStatus()
+        self.cancelBooking()
+        
         sql = f"""
             SELECT room_no FROM rooms 
             WHERE is_available=1 AND room_type='{room_type}' 
