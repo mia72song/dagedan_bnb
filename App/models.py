@@ -76,7 +76,6 @@ class Room(db.Model):
 class RoomType(db.Model):
     __tablename__ = "room_types"
     type = db.Column(db.String(128), primary_key=True)
-    rooms = db.relationship("Room", backref="room_type", lazy="dynamic")
     name = db.Column(db.String(128))
     accommodate = db.Column(db.Integer)
     rate_weekday = db.Column(db.Integer, nullable=False)
@@ -89,7 +88,6 @@ class RoomType(db.Model):
 class PaymentAtm(db.Model):
     __tablename__ = "payment_atm"
     pid = db.Column(db.String(32), primary_key=True)
-    order = db.relationship("Order", backref="payment", lazy="dynamic")
     bank = db.Column(db.String(128), nullable=False)
     account_no = db.Column(db.String(20), nullable=False)
     name = db.Column(db.String(64), nullable=False)
