@@ -5,13 +5,11 @@
     <title>Booking Email</title>
 </head>
 <body>
-    <h4>親愛的 {{ data["booker_name"] }} 您好， 打個蛋海旅 通知您：</h4>
-    <p>您的訂房(訂單編號：{{ oid }})已經確認。</p>
-    <h4>期間：{{ data["check_in_date"] }}-{{ data["check_out_date"] }} ，共{{ data["nights"] }}晚。</h4>
-    <h4>人數：{{ data["num_of_guests"] }}</h4>
+    <h4>親愛的 {{ data.booker_name }} 您好， 打個蛋海旅 通知您：</h4>
+    <p>您的訂房(訂單編號：{{ data.oid }})已經確認。</p>
     <br>
     <h5>Step1(步驟1).</h5>
-    <p>麻煩請在 {{ data["payment_deadline"] }} 之前(含該日)繳付訂金 NT$ {{ data["amount"] }} ，如果逾期您的訂房將會取消，請記得時間喔。</p>
+    <p>麻煩請在 {{ data.payment_deadline }} 之前(含該日)繳付訂金 NT$ {{ data.amount }} ，如果逾期您的訂房將會取消，請記得時間喔。</p>
     <h5>Step2(步驟2).</h5>
     <p>匯款完成後，請一定要填寫「匯款確認」單，<a href="#">匯款確認單網頁（（（請點我）））</a></p>
     <br>
