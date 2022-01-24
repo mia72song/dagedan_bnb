@@ -34,7 +34,6 @@ class Booking(db.Model):
     date = db.Column(db.Date, db.ForeignKey("calendar.date"), primary_key=True)
     room_no = db.Column(db.String(64), db.ForeignKey("rooms.room_no"), primary_key=True)
     order_id = db.Column(db.String(64), db.ForeignKey("orders.oid"), nullable=False)
-    room_name = db.Column(db.String(128))
 
 class Order(db.Model):
     __tablename__ = "orders"
@@ -45,6 +44,8 @@ class Order(db.Model):
     check_out_date = db.Column(db.Date, nullable=False)
     nights = db.Column(db.Integer, server_default=text("1"))
     num_of_guests = db.Column(db.Integer, server_default=text("1"))
+    room_type = db.Column(db.String(128), db.ForeignKey("room_types.type"), nullable=False)
+    room_quantity = db.Column(db.Integer, server_default=text("1"))
     amount = db.Column(db.Integer, nullable=False)
 
     booker_name = db.Column(db.String(128), nullable=False)
