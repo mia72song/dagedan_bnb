@@ -85,6 +85,23 @@ class RoomType(db.Model):
     images = db.Column(db.Text)
     is_del = db.Column(db.Boolean, default=False, server_default=text("0"))
 
+    def getDataDict(self):
+        if not self.is_del:
+            data_dict = {
+                "type": self.type,
+                "name": self.name,
+                "accommodate": self.accommodate,
+                "rate_weekday": self.rate_weekday,
+                "rate_holiday": self.rate_holiday,
+                "single_discount": self.single_discount,
+                "description": self.description,
+                "images": self.images,
+                "is_del": self.is_del
+            }
+            return data_dict
+        else:
+            return None
+
 class PaymentAtm(db.Model):
     __tablename__ = "payment_atm"
     pid = db.Column(db.String(32), primary_key=True)
