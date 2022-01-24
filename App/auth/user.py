@@ -15,24 +15,22 @@ def login():
             }), 400
         
         try:
-            user = User.query.filter_by(username=login_data["username"]).first()
-            if user:
-                result = user.checkPassword(login_data["password"])
-                if result:
-                    session["user"] = (user.username, user.name)
-                    access_token = create_access_token(identity=user.username)
-                    resp = make_response(jsonify({
-                        "ok": True,
-                        "access_token": access_token
-                    }), 200)                
-                    set_access_cookies(resp, access_token)
+            user = User.query.filter_by(username=login_data["username"]).one_or_none()
+            if (user is None) or (not user.checkPassword(login_data["password"])):
+                return jsonify({
+                    "error": True,
+                    "message": "帳號或密碼錯誤"
+                }), 400
+            else:
+                session["user"] = (user.username, user.name)
+                access_token = create_access_token(identity=user.username)
+                resp = make_response(jsonify({
+                    "ok": True,
+                    "access_token": access_token
+                }), 200)                
+                set_access_cookies(resp, access_token)
 
-                    return resp
-            
-            return jsonify({
-                "error": True,
-                "message": "帳號或密碼錯誤"
-            }), 400
+                return resp
         
         except Exception as e:
             return jsonify({
