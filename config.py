@@ -28,6 +28,15 @@ class Config:
     MAIL_USERNAME = os.getenv("MAIL_USERNAME")
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 
+    # flask_sqlalchemy設置
+    HOSTNAME = os.getenv("DB_HOST", default="localhost")
+    PORT = 3306
+    DATABASE = os.getenv("DB_DATABASE")
+    USERNAME = os.getenv("DB_USER", default="root")
+    PASSWORD = os.getenv("DB_PASSWORD")
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8"
+    SQLALCHEMY_TRACK_MODIFICATIONS = True
+
 class DevConfig(Config):
     ENV = "development"
     DEBUG = True
