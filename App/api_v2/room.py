@@ -2,9 +2,8 @@ from flask import jsonify, request
 from datetime import datetime
 
 from . import api
-from App.models import RoomType, Calendar
+from App.models import RoomType, Calendar, Mydb
 from App.constants import DATE_FORMATTER
-from App.mydb import Mydb
 
 # 初始化response content
 body = "" #json

@@ -1,11 +1,10 @@
 from flask import jsonify, request
 from datetime import date, datetime, timedelta
 
+from . import api
 from App.models import Order, Booking
 from App import db
-from . import api
 from App.constants import DATE_FORMATTER
-from .email import send_email
 
 # 初始化response content
 body = "" #json

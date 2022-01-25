@@ -1,8 +1,8 @@
 import csv
 
-from App import db, create_app
-from App.models import Calendar, User, RoomType, Booking, Room
-from App.mydb import Mydb
+from App import db
+from models import Calendar
+from models import Mydb
 
 def updateCalendarFromCSV(csv_file_mane):    
     with open(csv_file_mane, "r") as f:
