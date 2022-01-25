@@ -10,7 +10,6 @@ app = create_app()
 
 manager = Manager(app)
 manager.add_command("db", MigrateCommand)
-manager.add_command("runserver", Server())
 
 '''依賴降级：
 pip install Flask-Migrate==2.6.0
