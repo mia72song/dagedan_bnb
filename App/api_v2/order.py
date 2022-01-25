@@ -72,6 +72,7 @@ def create_new_order():
 def getOrderById(oid):
     try:
         order = Order.query.get(oid)
+        from .email import send_email
         send_email(order)
         
         body = jsonify({

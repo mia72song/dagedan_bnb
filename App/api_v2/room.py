@@ -121,7 +121,7 @@ def check_available_room_by_type(start_date_string, end_date_string, room_type):
             "room_type": room_type.capitalize(),
             "min_quantity": min_quantity,
             "data": data_list
-            })
+        })
         status_code = 200
 
     except Exception as e:

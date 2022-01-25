@@ -4,15 +4,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 import enum
 
 from App import db
+from .mydb import Mydb
 
 class Calendar(db.Model):
     date = db.Column(db.Date, primary_key=True)
+    booked = db.relationship("Booking", backref="c", lazy="dynamic")
     day = db.Column(db.String(3), comment="星期")
     is_holiday = db.Column(db.Boolean, default=False, server_default=text('0'))
     note = db.Column(db.String(128))
     is_closed = db.Column(db.Boolean, default=False, server_default=text('0'))
-    #  設置關聯relationship：一對多的『一』，relationship("類名")
-    booked = db.relationship("Booking", backref="calendar", lazy="dynamic")
 
 class User(db.Model):
     __tablename__ = "users"
@@ -38,13 +38,14 @@ class Booking(db.Model):
 class Order(db.Model):
     __tablename__ = "orders"
     oid = db.Column(db.String(64), primary_key=True)
-    blist = db.relationship("Booking", backref="order", lazy="dynamic")
+    #  設置關聯relationship：一對多的『一』，relationship("類名")
+    booked = db.relationship("Booking", backref="o", lazy="dynamic")
     create_datetime = db.Column(db.DateTime, default=datetime.now)
     check_in_date = db.Column(db.Date, nullable=False)
     check_out_date = db.Column(db.Date, nullable=False)
     nights = db.Column(db.Integer, server_default=text("1"))
     num_of_guests = db.Column(db.Integer, server_default=text("1"))
-    room_type = db.Column(db.String(128), db.ForeignKey("room_types.type"), nullable=False)
+    room_type = db.Column(db.String(64), db.ForeignKey("room_types.type"), nullable=False)
     room_quantity = db.Column(db.Integer, server_default=text("1"))
     amount = db.Column(db.Integer, nullable=False)
 
@@ -55,7 +56,7 @@ class Order(db.Model):
     arrival_datetime = db.Column(db.DateTime)
 
     payment_deadline = db.Column(db.Date, nullable=False)
-    payment_id = db.Column(db.String(32))
+    payment_id = db.Column(db.String(32), db.ForeignKey("payment_atm.pid"))
 
     class OrderStatus(enum.Enum):
         NEW = "新訂單"
@@ -68,15 +69,24 @@ class Order(db.Model):
     update_datetime = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     update_user = db.Column(db.String(64))
 
+    def getDataDict(self):
+        table_name = self.__tablename__
+        pk_col = "oid"
+        pk_value = self.oid
+        mydb = Mydb()
+        data_dict = mydb.getAllByPk(table_name, (pk_col, pk_value))
+        return data_dict
+
 class Room(db.Model):
     __tablename__ = "rooms"
     room_no = db.Column(db.String(64), primary_key=True)
-    room_type = db.Column(db.String(128), db.ForeignKey("room_types.type"), nullable=False)
+    booked = db.relationship("Booking", backref="r", lazy="dynamic")
+    room_type = db.Column(db.String(64), db.ForeignKey("room_types.type"), nullable=False)
     is_available = db.Column(db.Boolean, default=False, server_default=text("1"))
 
 class RoomType(db.Model):
     __tablename__ = "room_types"
-    type = db.Column(db.String(128), primary_key=True)
+    type = db.Column(db.String(64), primary_key=True)
     name = db.Column(db.String(128))
     accommodate = db.Column(db.Integer)
     rate_weekday = db.Column(db.Integer, nullable=False)
@@ -85,23 +95,19 @@ class RoomType(db.Model):
     description = db.Column(db.Text)
     images = db.Column(db.Text)
     is_del = db.Column(db.Boolean, default=False, server_default=text("0"))
+    rooms = db.relationship("Room", backref="rt", lazy="dynamic")
 
     def getDataDict(self):
+        table_name = self.__tablename__
+        pk_col = "type"
+        pk_value = self.type
         if not self.is_del:
-            data_dict = {
-                "type": self.type,
-                "name": self.name,
-                "accommodate": self.accommodate,
-                "rate_weekday": self.rate_weekday,
-                "rate_holiday": self.rate_holiday,
-                "single_discount": self.single_discount,
-                "description": self.description,
-                "images": self.images,
-                "is_del": self.is_del
-            }
+            mydb = Mydb()
+            data_dict = mydb.getAllByPk(table_name, (pk_col, pk_value))
             return data_dict
         else:
             return None
+        
 
 class PaymentAtm(db.Model):
     __tablename__ = "payment_atm"
@@ -113,3 +119,12 @@ class PaymentAtm(db.Model):
     transfer_date = db.Column(db.Date, nullable=False)
     update_datetime = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     update_user = db.Column(db.String(64))
+    orders = db.relationship("Order", backref="p", lazy="dynamic")
+
+    def getDataDict(self):
+        table_name = self.__tablename__
+        pk_col = "pid"
+        pk_value = self.pid
+        mydb = Mydb()
+        data_dict = mydb.getAllByPk(table_name, (pk_col, pk_value))
+        return data_dict

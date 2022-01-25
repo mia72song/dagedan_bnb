@@ -33,6 +33,23 @@ class Mydb:
         self.cur = self.conn.cursor()
         print("資料庫已開啟…")
 
+    def __getColumns(self, table_name):
+        sql = f"desc {table_name}"
+        self.cur.execute(sql)
+        return list(item[0] for item in self.cur.fetchall())
+
+    def getAllByPk(self, table_name, pk:tuple):
+        # pk = (pk_col, pk_value)
+        pk_col = pk[0]
+        pk_value = pk[1]
+        cols = self.__getColumns(table_name)
+        
+        sql = f"SELECT * FROM {table_name} WHERE {pk_col}='{pk_value}'"
+        self.cur.execute(sql)
+        result = self.cur.fetchone()
+        
+        return dict(zip(cols, result))
+
     # 將超過期限未付款的訂單，修改狀態為「取消」
     def updateStatus(self):
         today = date.today()

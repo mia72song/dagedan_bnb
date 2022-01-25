@@ -2,10 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import csv
+import sys
+import os
 
-from App import db
-from models import Calendar
-from models import Mydb
+from App.models.model import RoomType
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+
+from App import create_app, db
+from App.models import Calendar, Mydb
 
 def updateCalendarFromCSV(csv_file_mane):    
     with open(csv_file_mane, "r") as f:
@@ -25,13 +31,8 @@ def updateCalendarFromCSV(csv_file_mane):
 csv_file_mane = "111年中華民國政府行政機關辦公日曆表.csv"
 
 if __name__=="__main__": 
-    from datetime import datetime
-    DATE_FORMATTER = "%Y-%m-%d"
-    #app = create_app()
-    #app.app_context().push()
-    try:
-        mydb = Mydb()
-        data = mydb.getAvailableRoomNos("Double", "2022-01-30")
-        print(data)
-    except Exception as e:
-        print(e)
+    app = create_app()
+    app.app_context().push()
+    r = RoomType.query.get("Twin")
+    data = r.getDataDict()
+    print(data)
