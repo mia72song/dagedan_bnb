@@ -1,4 +1,7 @@
-from flask_script import Manager
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+from flask_script import Manager, Server
 from flask_migrate import MigrateCommand
 
 from App import create_app
@@ -7,6 +10,7 @@ app = create_app()
 
 manager = Manager(app)
 manager.add_command("db", MigrateCommand)
+manager.add_command("runserver", Server())
 
 '''依賴降级：
 pip install Flask-Migrate==2.6.0
@@ -22,8 +26,12 @@ pip install "werkzeug==1.0.1"
 '''
 
 if __name__=="__main__":
-    #Rroduction Environment：
-    #manager.run(host="0.0.0.0", port=3000)
-
-    #Development Environment:default host="127.0.0.1" port=5000
+    '''生產環境啟動：
+    $ export FLASK_ENV=production
+    $ export FLASK_APP=main.py
+    $ flask run --reload --debugger --host 0.0.0.0 --port 80
+    OR
+    $ python main.py runserver --host 0.0.0.0 --port 80
+    '''
+    #Development Environment:
     manager.run()

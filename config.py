@@ -3,6 +3,13 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
+# flask_sqlalchemy設置
+DB_HOST = os.getenv("DB_HOST", default="localhost")
+DB_PORT = 3306
+DB_USER = os.getenv("DB_USER", default="root")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_DATABASE = os.getenv("DB_DATABASE")
+
 class Config:
     SECRET_KEY = secrets.token_hex()
     PERMANENT_SESSION_LIFETIME = 86400
@@ -29,12 +36,7 @@ class Config:
     MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 
     # flask_sqlalchemy設置
-    HOSTNAME = os.getenv("DB_HOST", default="localhost")
-    PORT = 3306
-    DATABASE = os.getenv("DB_DATABASE")
-    USERNAME = os.getenv("DB_USER", default="root")
-    PASSWORD = os.getenv("DB_PASSWORD")
-    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{USERNAME}:{PASSWORD}@{HOSTNAME}:{PORT}/{DATABASE}?charset=utf8"
+    SQLALCHEMY_DATABASE_URI = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_DATABASE}?charset=utf8"
     SQLALCHEMY_TRACK_MODIFICATIONS = True
 
 class DevConfig(Config):
@@ -44,6 +46,9 @@ class DevConfig(Config):
 class ProConfig(Config):
     ENV = "production"
     DEBUG = False
+
+    HOST = "0.0.0.0"
+    PORT = 80
 
     # If true this will only allow the cookies that contain your JWTs to be sent over https.
     # In production, this should always be set to True
