@@ -72,6 +72,14 @@ def create_new_order():
 def getOrderById(oid):
     try:
         order = Order.query.get(oid)
+        if not order:
+            body = jsonify({
+                "error": True,
+                "message": "Invalid Order"
+            })
+            status_code = 403
+            return body, status_code
+            
         from .email import send_email
         send_email(order)
         

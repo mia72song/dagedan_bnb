@@ -44,10 +44,15 @@
         }
     }
     addEventListener("load", ()=>{
-        const oid = window.location.search.split("?")[1].split("=")[1];
+        const search_string = location.search.split("?")[1].split("=");
+        const oid = (search_string[0]==="oid" && search_string[1]);
         if(oid){
             getOrderByOid(oid).then(resp=>{
-                ReactDOM.render(<Bill oid={oid} data={resp.data}/>, document.getElementById("bill_wrap"));
+                if(resp.ok){
+                    ReactDOM.render(<Bill oid={oid} data={resp.data}/>, document.getElementById("bill_wrap"));
+                }else if(resp.error){
+                    console.log(`${resp.message}:${oid}`)
+                }
             })
         }
     })
