@@ -1,6 +1,6 @@
 from flask_mail import Message
 from threading import Thread
-from flask import current_app, render_template
+from flask import current_app, render_template, request
 
 from App import mail
 
@@ -15,7 +15,8 @@ def send_email(order_query):
         sender = ("DagedanBooking", "noreply@dagedan.com"),
         reply_to = "dagedanhouse@gmail.com"
     )
-    msg.html = render_template("email.html", data=order_query)
+    payment_page = f"{request.url_root}payment?oid=${order_query.oid}"
+    msg.html = render_template("email.html", data=order_query, link=payment_page)
 
     Thread(
         target=send_async_email, 

@@ -11,7 +11,7 @@
     <h5>Step1(步驟1).</h5>
     <p>麻煩請在 {{ data.payment_deadline }} 之前(含該日)繳付訂金 NT$ {{ data.amount }} ，如果逾期您的訂房將會取消，請記得時間喔。</p>
     <h5>Step2(步驟2).</h5>
-    <p>匯款完成後，請一定要填寫「匯款確認」單，<a href="#">匯款確認單網頁（（（請點我）））</a></p>
+    <p>匯款完成後，請一定要填寫「匯款確認」單，<a href="{{ link }}">匯款確認單網頁（（（請點我）））</a></p>
     <br>
     <p>請將款項匯入下方指定帳號：</p>
     <h4>玉山銀行 中山分行 (代碼808)</h4>
@@ -23,4 +23,8 @@
     <p>Best Regards, 祝您事事如意</p>
     <p>打個蛋海旅 敬上</p>
 </body>
+    <script>
+        let payment_link = document.querySelector("a[id$=payment_link]");
+        payment_link.href = `${{ link }}`;
+    </script>
 </html>
