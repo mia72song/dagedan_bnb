@@ -78,18 +78,18 @@ def getOrderById(oid):
                 "message": "Invalid Order"
             })
             status_code = 403
-            return body, status_code
+        else:
+            from .email import send_email
+            send_email(order)
             
-        from .email import send_email
-        send_email(order)
-        
-        body = jsonify({
-            "data": {
-                "amount": order.amount,
-                "deadline": datetime.strftime(order.payment_deadline, DATE_FORMATTER)
-            }
-        })
-        status_code = 200
+            body = jsonify({
+                "ok": True, 
+                "data": {
+                    "amount": order.amount,
+                    "deadline": datetime.strftime(order.payment_deadline, DATE_FORMATTER)
+                }
+            })
+            status_code = 200
 
     except Exception as e:
         body = jsonify({
