@@ -15,7 +15,7 @@ def send_email(order_query):
         sender = ("DagedanBooking", "noreply@dagedan.com"),
         reply_to = "dagedanhouse@gmail.com"
     )
-    payment_page = f"{request.url_root}payment?oid=${order_query.oid}"
+    payment_page = f"{request.url_root}payment?oid={order_query.oid}"
     msg.html = render_template("email.html", data=order_query, link=payment_page)
 
     Thread(
