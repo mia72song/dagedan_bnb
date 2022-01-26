@@ -59,11 +59,11 @@ class Order(db.Model):
     payment_id = db.Column(db.String(32), db.ForeignKey("payment_atm.pid"))
 
     class OrderStatus(enum.Enum):
-        NEW = "新訂單"
-        PENDING = "查帳中"
-        PAID = "已付款"
-        CANCEL = "取消"
-        REFUND = "退款"
+        NEW = "NEW"
+        PENDING = "PENDING"
+        PAID = "PAID"
+        CANCEL = "CANCEL"
+        REFUND = "REFUND"
 
     status = db.Column(db.Enum(OrderStatus), server_default="NEW")
     update_datetime = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
