@@ -79,8 +79,9 @@ def getOrderById(oid):
             })
             status_code = 403
         else:
-            from .email import send_email
-            send_email(order)
+            if order.status=="NEW":
+                from .email import send_email
+                send_email(order)
             
             body = jsonify({
                 "ok": True, 
