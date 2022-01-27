@@ -10,12 +10,14 @@ main{
 }
 #payment_wrap form{
     padding: 20px;
-    margin: 20px;
+    margin: 15px;
 }
 #payment_wrap input{
     margin: 5px;
     line-height: 1.5;
     font-size: 16px;
+    width: 160px;
+    height: 33px;
 }
 input[type="submit"]{
     width: 90px;
