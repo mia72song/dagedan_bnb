@@ -1,5 +1,5 @@
 from flask import jsonify, request
-from datetime import date
+from datetime import date, datetime
 
 from . import api
 from App.models import Order, PaymentAtm, Mydb
@@ -13,8 +13,39 @@ status_code = 0
 def createPayment(oid):
     data = request.get_json()
     if data:
-        body = jsonify({"ok": True})
-        status_code = 200
+        try:
+            order = Order.query.get(oid)
+            if order and order.payment_id is None:
+                pid = f"A{int(datetime.timestamp(datetime.now()))}"
+                p = PaymentAtm(pid=pid)
+                p.bank = data["bank"]
+                p.account_no = data["account_no"]
+                p.name = data["account_name"]
+                p.amount = data["amount"]
+                p.transfer_date = data["transfer_date"]
+                p.update_user = "guest"
+                db.session.add(p)
+
+                order.payment_id = pid
+                order.status = "PENDING"
+                order.update_user = "guest"
+                
+                db.session.commit()
+
+                body = jsonify({"ok": True})
+                status_code = 200
+            else:
+                body = jsonify({
+                    "error": True,
+                    "message": "Invalid Order"
+                })
+                status_code = 400
+        except Exception as e:
+            body = jsonify({
+                "error": True,
+                "message": f"伺服器內部錯誤：{e}"
+            })
+            status_code = 500
     else:
         body = jsonify({
             "error": True,

@@ -47,7 +47,6 @@ class Mydb:
         sql = f"SELECT * FROM {table_name} WHERE {pk_col}='{pk_value}'"
         self.cur.execute(sql)
         result = self.cur.fetchone()
-        
         return dict(zip(cols, result))
 
     # 將超過期限未付款的訂單，修改狀態為「取消」
@@ -83,6 +82,20 @@ class Mydb:
         """
         self.cur.execute(sql)
         return list(item[0] for item in self.cur.fetchall())
+
+    def getOrdersByStatus(self, status=None):
+        # 自動取消過期訂單及釋出空房
+        self.updateStatus()
+        self.cancelBooking()
+        
+        if status:
+            sql = f"SELECT * FROM orders WHERE status='{status}'"
+        else:
+            sql = f"SELECT * FROM orders"
+
+        self.cur.execute(sql)
+        results = self.cur.fetchall()
+        return results
 
     def __del__(self):
         self.cur.close()

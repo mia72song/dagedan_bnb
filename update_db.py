@@ -1,17 +1,13 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 import csv
 import sys
 import os
-
-from App.models.model import RoomType
+from datetime import datetime, date, timedelta
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from App import create_app, db
-from App.models import Calendar, Mydb
+from App.models import Calendar, User, Booking, Order, Room, RoomType, PaymentAtm, Mydb
 
 def updateCalendarFromCSV(csv_file_mane):    
     with open(csv_file_mane, "r") as f:
@@ -33,6 +29,7 @@ csv_file_mane = "111年中華民國政府行政機關辦公日曆表.csv"
 if __name__=="__main__": 
     app = create_app()
     app.app_context().push()
-    r = RoomType.query.get("Twin")
-    data = r.getDataDict()
-    print(data)
+    #db.create_all()
+    today = date.today()
+    orders = Order.query.filter_by(status='NEW').filter(Order.payment_id.is_(None)).filter(Order.payment_deadline<today)
+    print(orders.count())

@@ -69,6 +69,7 @@ class Order(db.Model):
     status = db.Column(db.Enum(OrderStatus), server_default="NEW")
     update_datetime = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     update_user = db.Column(db.String(64))
+    note = db.Column(db.String(255))
         
     def getDataDict(self):
         table_name = self.__tablename__
