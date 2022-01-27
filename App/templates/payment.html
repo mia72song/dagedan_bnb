@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}匯款確認頁面{% endblock %}
+{% block head %}
+    {{ super() }}
+    <link rel="stylesheet" type="text/css" href="static/css/payment.css">
+{% endblock %}
+{% block content %}
+<div id="payment_wrap">
+    <!--由/static/components/bill.jsx組件渲染-->
+</div>
+<script type="text/babel" src="/static/components/Payment.jsx"></script>
+{% endblock %}
