@@ -83,8 +83,9 @@ class Payment extends React.Component{
                 if(resp.ok){
                     alert("提交成功!!民宿將於24小時內確認後，以電話及EMail通知");
                     location.href = "/";
-                }else if(resp.error){
-                    alert("提交付款資料失敗，請電洽089-771551確認")
+                }else{
+                    console.log(resp);
+                    alert("提交付款資料失敗，請電洽089-771551確認");
                 }
             })
         }
