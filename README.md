@@ -31,7 +31,12 @@
     POST /api/orders 建立新的訂房資料
 
     GET /api/order/{order_id} 依據訂單編號取得訂房資料
+    
+- PAYMENT
 
+    POST /api/payment/{order_id} 建立新的付款資料
+
+    GET /api/payment/{order_id} 確認訂單付款狀態
 
 #### 管理後台(民宿員工端)：
 
