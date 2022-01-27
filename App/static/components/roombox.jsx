@@ -251,7 +251,7 @@ class BookingForm extends React.Component{
         let booking_data = this.state;
         booking_data["booking"] = booking;
         booking_data["amount"] = parseInt(amount);
-        console.log(booking_data);
+        // console.log(booking_data);
         createNewOrder(booking_data).then(resp=>{
             // console.log(resp)
             if(resp.ok){
