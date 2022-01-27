@@ -45,6 +45,9 @@ def create_new_order():
                 booking = Booking(date=booking_list[0], room_no=booking_list[1], order_id=oid)
                 db.session.add(booking)
                 db.session.commit()
+
+            from .email import send_email
+            send_email(order)
             
             body = jsonify({
                 "ok": True,
@@ -78,11 +81,7 @@ def getOrderById(oid):
                 "message": "Invalid Order"
             })
             status_code = 403
-        else:
-            if order.status=="NEW":
-                from .email import send_email
-                send_email(order)
-            
+        else:           
             body = jsonify({
                 "ok": True, 
                 "data": {
