@@ -15,7 +15,7 @@ def login():
             }), 400
         
         try:
-            user = User.query.filter_by(username=login_data["username"]).one_or_none()
+            user = User.query.filter_by(username=login_data["username"]).first()
             if (user is None) or (not user.checkPassword(login_data["password"])):
                 return jsonify({
                     "error": True,

@@ -17,22 +17,26 @@ def create_new_order():
         try:
             oid = int(datetime.timestamp(datetime.now()))
             order = Order(oid=oid)
-            order.check_in_date = data["check_in_date"]
-            order.check_out_date = data["check_out_date"]
-            order.nights = data["nights"]
-            order.num_of_guests = data["num_of_guests"]
-            order.amount = data["amount"]
-            order.room_type = data["room_type"]
-            order.room_quantity = data["quantity"]
-            order.booker_name = data["name"]
+            
+            detail = OrderDetail()
+            detail.check_in_date = data["check_in_date"]
+            detail.check_out_date = data["check_out_date"]
+            detail.nights = data["nights"]
+            detail.num_of_guests = data["num_of_guests"]
+            detail.room_type = data["room_type"]
+            detail.room_quantity = data["quantity"]
+            detail.booker_name = data["name"]
 
             gender = "M"
             if data["gender"]=="female" : gender = "F"
-            order.booker_gender = gender
+            detail.booker_gender = gender
 
-            order.booker_phone = data["phone"]
-            order.booker_email = data["email"]
-            order.arrival_datetime = data["arrival_datetime"]
+            detail.booker_phone = data["phone"]
+            detail.booker_email = data["email"]
+            detail.arrival_datetime = data["arrival_datetime"]
+
+            order.detail = detail
+            order.amount = data["amount"]
             order.payment_deadline = date.today()+timedelta(days=1)
             order.update_user = "guest"
             

@@ -11,7 +11,7 @@ def send_async_email(app, msg):
 def send_email(order_query):
     msg = Message(
         subject = f"打個蛋海旅來信：訂房編號{order_query.oid}內容及匯款通知", 
-        recipients = [order_query.booker_email, ],
+        recipients = [order_query.detail.booker_email, ],
         sender = ("DagedanBooking", "noreply@dagedan.com"),
         reply_to = "dagedanhouse@gmail.com"
     )
