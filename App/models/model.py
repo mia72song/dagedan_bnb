@@ -5,7 +5,6 @@ import enum
 
 from App import db
 from .mydb import Mydb
-from App.models import mydb
 
 class Calendar(db.Model):
     date = db.Column(db.Date, primary_key=True)
