@@ -1,4 +1,3 @@
-from turtle import back
 from sqlalchemy import text
 from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
