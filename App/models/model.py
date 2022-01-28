@@ -38,43 +38,58 @@ class Booking(db.Model):
 class Order(db.Model):
     __tablename__ = "orders"
     oid = db.Column(db.String(64), primary_key=True)
-    create_datetime = db.Column(db.DateTime, default=datetime.now)
-    check_in_date = db.Column(db.Date, nullable=False)
-    check_out_date = db.Column(db.Date, nullable=False)
-    nights = db.Column(db.Integer, server_default=text("1"))
-    num_of_guests = db.Column(db.Integer, server_default=text("1"))
-    room_type = db.Column(db.String(64), db.ForeignKey("room_types.type"), nullable=False)
-    room_quantity = db.Column(db.Integer, server_default=text("1"))
+    create_datetime = db.Column(db.DateTime, default=datetime.now)    
     amount = db.Column(db.Integer, nullable=False)
-
-    booker_name = db.Column(db.String(128), nullable=False)
-    booker_gender = db.Column(db.String(2), server_default="M")
-    booker_phone = db.Column(db.String(10), nullable=False)
-    booker_email = db.Column(db.String(128), nullable=False)
-    arrival_datetime = db.Column(db.DateTime)
-
     payment_deadline = db.Column(db.Date, nullable=False)
     payment_id = db.Column(db.String(32), db.ForeignKey("payment_atm.pid"))
-
-    booked = db.relationship("Booking", backref="o", lazy="dynamic")
-    room = db.relationship("RoomType", backref="o", uselist=False)
-
     class OrderStatus(enum.Enum):
         NEW = "NEW"
         PENDING = "PENDING"
         PAID = "PAID"
         CANCEL = "CANCEL"
         REFUND = "REFUND"
-
     status = db.Column(db.Enum(OrderStatus), server_default="NEW")
     update_datetime = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     update_user = db.Column(db.String(64))
     note = db.Column(db.String(255))
+
+    booked = db.relationship("Booking", backref="o", lazy="dynamic")
+    detail = db.relationship("OrderDetail", backref="o", uselist=False)
         
     def getDataDict(self):
         table_name = self.__tablename__
         pk_col = "oid"
         pk_value = self.oid
+        mydb = Mydb()
+        data_dict = mydb.getAllByPk(table_name, (pk_col, pk_value))
+        return data_dict
+
+class OrderDetail(db.Model):
+    __tablename__ = "order_details"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    order_id = db.Column(db.String(64), db.ForeignKey("orders.oid"), nullable=False)
+    check_in_date = db.Column(db.Date, nullable=False)
+    check_out_date = db.Column(db.Date, nullable=False)
+    nights = db.Column(db.Integer, server_default=text("1"))
+    num_of_guests = db.Column(db.Integer, server_default=text("1"))
+    room_type = db.Column(db.String(64), db.ForeignKey("room_types.type"), nullable=False)
+    room_quantity = db.Column(db.Integer, server_default=text("1"))
+
+    booker_name = db.Column(db.String(128), nullable=False)
+    class Gender(enum.Enum):
+        M = "先生"
+        F = "小姐"
+    booker_gender = db.Column(db.Enum(Gender), server_default="M")
+    booker_phone = db.Column(db.String(10), nullable=False)
+    booker_email = db.Column(db.String(128), nullable=False)
+    arrival_datetime = db.Column(db.DateTime)
+
+    room = db.relationship("RoomType", backref="od", uselist=False)
+
+    def getDataDict(self):
+        table_name = self.__tablename__
+        pk_col = "id"
+        pk_value = self.id
         mydb = Mydb()
         data_dict = mydb.getAllByPk(table_name, (pk_col, pk_value))
         return data_dict

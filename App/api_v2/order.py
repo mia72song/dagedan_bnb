@@ -2,7 +2,7 @@ from flask import jsonify, request
 from datetime import date, datetime, timedelta
 
 from . import api
-from App.models import Order, Booking
+from App.models import Order, Booking, OrderDetail
 from App import db
 from App.constants import DATE_FORMATTER
 
