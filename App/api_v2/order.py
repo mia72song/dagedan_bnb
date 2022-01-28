@@ -16,7 +16,6 @@ def create_new_order():
     if data:
         try:
             oid = int(datetime.timestamp(datetime.now()))
-
             order = Order(oid=oid)
             order.check_in_date = data["check_in_date"]
             order.check_out_date = data["check_out_date"]
@@ -36,15 +35,14 @@ def create_new_order():
             order.arrival_datetime = data["arrival_datetime"]
             order.payment_deadline = date.today()+timedelta(days=1)
             order.update_user = "guest"
-
-            db.session.add(order)
-            db.session.commit()
             
             for b in data["booking"]:
                 booking_list = b.split("_")
-                booking = Booking(date=booking_list[0], room_no=booking_list[1], order_id=oid)
-                db.session.add(booking)
-                db.session.commit()
+                booking = Booking(date=booking_list[0], room_no=booking_list[1])
+                order.booked.append(booking)
+                
+            db.session.add(order)  
+            db.session.commit()
 
             from .email import send_email
             send_email(order)

@@ -30,6 +30,5 @@ if __name__=="__main__":
     app = create_app()
     app.app_context().push()
     #db.create_all()
-    today = date.today()
-    orders = Order.query.filter_by(status='NEW').filter(Order.payment_id.is_(None)).filter(Order.payment_deadline<today)
-    print(orders.count())
+    order = Order.query.get("1643346182")
+    print(order.room.name)

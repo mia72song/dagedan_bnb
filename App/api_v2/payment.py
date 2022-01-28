@@ -17,18 +17,16 @@ def createPayment(oid):
             order = Order.query.get(oid)
             if order and order.payment_id is None:
                 pid = f"A{int(datetime.timestamp(datetime.now()))}"
-                p = PaymentAtm(pid=pid)
-                p.bank = data["bank"]
-                p.account_no = data["account_no"]
-                p.name = data["account_name"]
-                p.amount = data["amount"]
-                p.transfer_date = data["transfer_date"]
-                p.update_user = "guest"
-                db.session.add(p)
+                payment = PaymentAtm(pid=pid)
+                payment.bank = data["bank"]
+                payment.account_no = data["account_no"]
+                payment.name = data["account_name"]
+                payment.amount = data["amount"]
+                payment.transfer_date = data["transfer_date"]
 
-                order.payment_id = pid
+                order.p = payment                
                 order.status = "PENDING"
-                order.update_user = "guest"
+                order.update_user = payment.update_user = "guest"
                 
                 db.session.commit()
 

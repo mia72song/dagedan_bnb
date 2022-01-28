@@ -1,3 +1,4 @@
+from turtle import back
 from sqlalchemy import text
 from datetime import datetime, date
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -12,7 +13,7 @@ class Calendar(db.Model):
     is_holiday = db.Column(db.Boolean, default=False, server_default=text('0'))
     note = db.Column(db.String(128))
     is_closed = db.Column(db.Boolean, default=False, server_default=text('0'))
-
+    
     booked = db.relationship("Booking", backref="c", lazy="dynamic")
 
 class User(db.Model):
@@ -57,6 +58,7 @@ class Order(db.Model):
     payment_id = db.Column(db.String(32), db.ForeignKey("payment_atm.pid"))
 
     booked = db.relationship("Booking", backref="o", lazy="dynamic")
+    room = db.relationship("RoomType", backref="o", uselist=False)
 
     class OrderStatus(enum.Enum):
         NEW = "NEW"
@@ -122,7 +124,7 @@ class PaymentAtm(db.Model):
     update_datetime = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     update_user = db.Column(db.String(64))
 
-    orders = db.relationship("Order", backref="p", lazy="dynamic")
+    orders = db.relationship("Order", backref="p", uselist=False)
 
     def getDataDict(self):
         table_name = self.__tablename__
