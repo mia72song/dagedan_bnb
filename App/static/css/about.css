@@ -38,11 +38,10 @@
 }
 .info{
     text-align: left;
-    line-height: 2;
 }
 .info>h4{
     color: #F39801;
-    margin: 10px 0;
+    margin: 10px 0 20px 0;
 }
 /*RWD*/
 @media (max-width:1200px){
