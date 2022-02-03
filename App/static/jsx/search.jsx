@@ -1,11 +1,11 @@
 class Search extends React.Component{
-    state={
+    state = {
         check_in_date: "",
         check_out_date: "",
         guests: 1
     }
     componentDidMount(){
-        if(location.search){
+        if(location.pathname=="/booking" && location.search){
             const search_string_1st = location.search.split("&")[0].split("?")[1].split("=");
             const search_string_2nd = location.search.split("&")[1].split("=");
             const search_string_3th = location.search.split("&")[2].split("=");
@@ -24,26 +24,26 @@ class Search extends React.Component{
     render(){
         const check_in_index = dateStringToIndex(this.state.check_in_date);
         return(
-            <div id="available_search">
-                <div className="check_in_date_div">
-                    <p>入住日期</p>
-                    <input type="date" name="check_in_date" id="check_in_date" min={dateIndexToString(1)} max={dateIndexToString(12*7)}
+            <form className="row g-1 w-95" onSubmit={this.handleSubmit}>
+                <div className="col-6 col-md-4 px-1 mt-1">
+                    <label for="inputCheckIn" className="form-label">入住日期</label>
+                    <input type="date" className="form-control" id="inputCheckIn" min={dateIndexToString(1)} max={dateIndexToString(12*7)} 
                         value={this.state.check_in_date} onChange={this.handleChange("check_in_date")}/>
                 </div>
-                <div className="check_out_date_div">
-                    <p>退房日期</p>
-                    <input type="date" name="check_out_date" id="check_out_date" min={dateIndexToString(check_in_index+1)} max={dateIndexToString(12*7+1)}
+                <div className="col-6 col-md-4 px-1 mt-1">
+                    <label for="inputCheckOut" className="form-label">退房日期</label>
+                    <input type="date" className="form-control" id="inputCheckOut" min={dateIndexToString(check_in_index+1)} max={dateIndexToString(12*7+1)}
                         value={this.state.check_out_date} onChange={this.handleChange("check_out_date")}/>
                 </div>
-                <div className="num_of_guests_div">
-                    <p>住宿人數</p>
-                    <input type="number" name="guests" id="guests" min="1" max="99" 
+                <div className="col-6 col-md-2 px-1 mt-2 mt-md-1">
+                    <label for="inputNum" className="form-label">住宿人數</label>
+                    <input type="number" className="form-control" id="inputNum" min="1" max="99"
                         value={this.state.guests} onChange={this.handleChange("guests")}/>
                 </div>
-                <div className="submit_div">
-                    <button type="submit" onClick={this.handleSubmit}>查詢空房</button>
+                <div className="col-6 col-md-2 px-1 mt-2 mt-md-1">
+                    <button type="submit" className="btn btn-primary px-md-3 h-100 w-100">查詢空房</button>
                 </div>
-            </div>
+            </form>
         )
     }
     handleChange=(dataType)=>{         
@@ -61,7 +61,8 @@ class Search extends React.Component{
             }
         }
     }
-    handleSubmit=()=>{
+    handleSubmit=(eObj)=>{
+        eObj.preventDefault();
         const {check_in_date, check_out_date, guests} = this.state
         if(dateStringToIndex(check_out_date)>dateStringToIndex(check_in_date)){
             let search_string = "checkin="+check_in_date+"&checkout="+check_out_date+"&guests="+guests
@@ -72,5 +73,4 @@ class Search extends React.Component{
         }
     }
 }
-
 ReactDOM.render(<Search />, document.getElementById("search_wrap"));

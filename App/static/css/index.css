@@ -1,27 +1,35 @@
 .box{
     width: 500px;
-    height: inherit;
     margin: auto;
-    margin-top: 125px;
+    margin-top: 130px;
+    padding-bottom: 20px;
     text-align: center;
     line-height: 2;
 }
 .box>div{
-    margin: 10px auto;
+    margin: 25px auto;
 }
 .slogan{
     color: #FFFFFF;
-    letter-spacing: 1.2px;
 }
 .title{
     color: #F39801;
 }
 .describe{
     color: #FFFFFF;
-    padding-top: 30px;
 }
+/* Search Component*/
 #search_wrap{
-    margin-top: 40px;
+    width: 520px;
+    margin: auto;
+    background-color: #FFFFFF;
+    padding: 12px 8px 8px 8px;
+    border: 2px #FFFFFF solid;
+    border-radius: 4px;
+    opacity: 0.95;
+}
+#search_wrap:hover{
+    opacity: 1;
 }
 /*RWD*/
 @media (max-width:1200px){
@@ -42,5 +50,8 @@
     }
     .title>h2{
         font-size: 1.8em;
+    }
+    #search_wrap{
+        width: 92%;
     }
 }
