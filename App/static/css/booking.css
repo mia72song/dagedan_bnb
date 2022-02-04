@@ -40,7 +40,7 @@ div[id^="booking_detail_"] .card{
     border-top-right-radius: 0rem!important;
     border-top: none;
 }
-.card-header{
+div[id^="booking_detail_"] .card-header{
     background-color: #E6E6F2;
 }
 @media (max-width:1200px){
