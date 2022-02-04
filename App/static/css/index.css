@@ -23,9 +23,9 @@
     width: 520px;
     margin: auto;
     background-color: #FFFFFF;
-    padding: 12px 8px 8px 8px;
+    padding: 10px 8px;
     border: 2px #FFFFFF solid;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     opacity: 0.95;
 }
 #search_wrap:hover{

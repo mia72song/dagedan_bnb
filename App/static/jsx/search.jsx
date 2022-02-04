@@ -9,6 +9,11 @@ class Search extends React.Component{
             const search_string_1st = location.search.split("&")[0].split("?")[1].split("=");
             const search_string_2nd = location.search.split("&")[1].split("=");
             const search_string_3th = location.search.split("&")[2].split("=");
+            const available_search_btn = document.getElementById("available_search_btn");
+            //console.log(available_search_btn);
+            available_search_btn.classList.remove("btn-search");
+            available_search_btn.classList.add("btn-dark");
+            
             this.setState({
                 check_in_date: (search_string_1st[0]==="checkin" && search_string_1st[1]),
                 check_out_date: (search_string_2nd[0]==="checkout" && search_string_2nd[1]),
@@ -41,7 +46,7 @@ class Search extends React.Component{
                         value={this.state.guests} onChange={this.handleChange("guests")}/>
                 </div>
                 <div className="col-6 col-md-2 px-1 mt-2 mt-md-1">
-                    <button type="submit" className="btn btn-primary px-md-3 h-100 w-100">查詢空房</button>
+                    <button type="submit" className="btn btn-search px-md-3 h-100 w-100" id="available_search_btn">查詢空房</button>
                 </div>
             </form>
         )

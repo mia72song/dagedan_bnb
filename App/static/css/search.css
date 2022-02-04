@@ -1,0 +1,19 @@
+#search_wrap .form-label{
+    margin-bottom: 4px;
+}
+
+#search_wrap .form-control:focus{
+    border-color: #3C3C3C;
+}
+
+.btn-search {
+    color: #fff;
+    background-color: #F39801;
+    border-color: #F39801;
+}
+
+.btn-search:hover, .btn-dark:hover{
+    color: #000;
+    background-color: #fff;
+    border: 1.3px solid #3C3C3C;
+}

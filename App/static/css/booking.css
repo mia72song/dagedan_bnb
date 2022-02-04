@@ -5,27 +5,13 @@
 }
 #search_wrap{
     margin: 0 auto;
- }
-/* Search Component*/
-#available_search{
-    margin: 0 auto;
-    opacity: 1;
-}
-#available_search input{
-    background-color: #F0F0F0;
-    border: 1.2px black solid;    
-}
-.submit_div>button{
-    background-color: #1a1a1a;
-    border: 1.2px #F0F0F0 solid;
-    color: #FFFFFF;
-    border-radius: 2px;
-}
-.submit_div>button:hover{
+    width: 520px;
     background-color: #FFFFFF;
-    color: #1A1A1A;
-    border: 1.8px #1A1A1A solid;
-}
+    padding: 12px 8px 8px 8px;
+    border: 2px #FFFFFF solid;
+    border-radius: 4px;
+ }
+
 /* RoomBox Component */
 #room_box_wrap{
     width: 1100px;
@@ -94,16 +80,7 @@ h1>span{
     margin: 10px auto;
     height: 110px;    
 }
-.room_rate button{
-    margin-top: 55px;
-    background-color: #1A1A1A;
-    color: #FFFFFF;
-    font-size: 19px;
-    border: #1A1A1A;
-    border-radius: 50px;
-    height: 36px;
-    width: 120px;
-}
+
 /* BookingForm Component */
 div[id^="booking_detail_"]{
     display: none;

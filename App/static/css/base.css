@@ -19,6 +19,17 @@ h4{
     font-size: 21px;
     font-weight: 600;
 }
+
+.form-control, .btn{
+    padding: 0.3rem 0.5rem;
+}
+.form-control:focus, .btn:focus{
+    box-shadow: none;
+}
+.book_now_btn{
+    border-radius:50px;
+    width: 110px;
+}
 /* header */
 .navbar{
     background-color: #F39801;
@@ -30,9 +41,16 @@ h4{
 .navbar-brand img{
     height: 62px;
 }
-#book_now_btn{
-    border-radius:50px;
-    width: 110px;
+header .book_now_btn:hover{
+    color: #F39801;
+    background-color: #fff;
+    border-color: #fff;
+}
+.navbar-dark .navbar-nav .nav-link{
+    color: #212529;
+}
+.navbar-dark .navbar-nav .nav-link:hover{
+    color: #fff; 
 }
 /* main */
 main{
