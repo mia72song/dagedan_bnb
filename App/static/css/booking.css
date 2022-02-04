@@ -3,207 +3,63 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
-#search_wrap{
-    margin: 0 auto;
-    width: 520px;
-    background-color: #FFFFFF;
-    padding: 12px 8px 8px 8px;
-    border: 2px #FFFFFF solid;
-    border-radius: 4px;
- }
-
 /* RoomBox Component */
 #room_box_wrap{
-    width: 1100px;
+    width: 95vw;
+    max-width: 1100px;
     margin: 0 auto;
 }
-#no_available_msg{
-    margin-top: 40px;
-    text-align: center;
-    color: green;
-}
-/* RoomInfo Component*/
-.room_info_div{
-    background-color: #F0F0F0;
-    margin: 10px auto;
-    display: flex;
-    justify-content:center;
-    flex-wrap: wrap;
-    box-shadow:0px 4px 10px -10px rgba(20%,20%,40%,0.5);
-}
-.room_info_div>div{
-    margin: 0 auto;
-    margin: 10px;
-}
-.room_img_div{
-    flex: none;
-    width: 30%;
-}
-.room_img_div>img{
-    width: 100%;
-    min-width: 250px;
+.img-fluid{
+    object-fit: cover;
     height: 100%;
 }
-.room_detail{
-    width: none;
-    width: 49%;
+.badge{
+    border-radius:50px;
+    font-weight: 400;
+}
+.room_description{
     line-height: 2;
 }
-.special_price{
-    margin-top: 10px;
-}
-.price{
-    color: #F39801;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    font-size: 1.1em;
-}
-.room_rate{
-    flex: none;
-    width: 160px;
-    font-size: 15px;
-}
-.room_rate h1{
+#price>.card-subtitle{
     color: blue;
-    font-size: 50px;
-    margin: 10px auto;
-    letter-spacing: 0.5px;
 }
-h1>span{
-    font-size: 16px;
-}
-.currency{
-    font-size: 8px;
-}
-.room_rate>div{
-    text-align: center;
-    margin: 10px auto;
-    height: 110px;    
+.card-subtitle>span{
+    font-size: 15px;
 }
 
 /* BookingForm Component */
 div[id^="booking_detail_"]{
     display: none;
     width: 92%;
-    background-color: #E6E6F2;
     margin: 0 auto;
-    margin-top: -10px;
     line-height: 2.2;
     padding-left: 10px;    
 }
-.booking_form{
-    margin: 10px auto;
-    display: flex;
-    justify-content:center;
-    flex-wrap: wrap;
+div[id^="booking_detail_"] .card{
+    border-top-left-radius: 0rem!important;
+    border-top-right-radius: 0rem!important;
+    border-top: none;
 }
-.booking_form>div{
-    margin: 10px 15px;
+.card-header{
+    background-color: #E6E6F2;
 }
-.booking_form h4{
-    margin-left: -5px;
-    letter-spacing: 3px;
-}
-.booking_detail input{
-    width: 50px;
-    font-size: 14px;
-    margin: 3px 5px;
-}
-input:disabled{
-    font-weight: bolder;
-    font-size: 18px;
-    width: 100px;
-    height: 36px;
-    padding: 0 2px;
-    text-align: center;
-    color: blue;
-    letter-spacing: 1px;
-}
-.arrow_img_div{
-    width: 60px;
-}
-.arrow_img_div>img{
-    margin-top: 80px;
-    width: 60px;
-    height: auto;
-}
-.booker_info input{
-    width: 120px;
-    font-size: 14px;
-    margin: 3px 5px;
-}
-.booker_info input[type="email"]{
-    width: 210px;
-}
-.booker_info input[type="datetime-local"]{
-    width: 210px;
-    height: 33px;
-}
-.radio_container>input[type="radio"]{
-    vertical-align: middle;
-    height: 18px;
-    margin: 0 -40px 0 -30px;
-}
-.radio_container>label{
-    vertical-align: middle;
-    font-size: 17px;
-}
-
 @media (max-width:1200px){
     #room_box_wrap{
-        width: 90%;
-    }
-    .room_img_div{
-        width: 90%;
+        width: 95%;
     }
 }
 
 @media (max-width:600px){
-    #search_wrap{
-        width: 98%;
-        margin-bottom: 0;
-    }
     #room_box_wrap{
         width: 97%;
         font-size: 16px;
     }
-    #room_box_wrap h3{
-        font-size: 1.4em;
+    #price>.card-subtitle{
+        font-size: 42px;
     }
-    #room_box_wrap h4{
-        font-size: 1.1em;
-    }
-    /* RoomBox Component */
-    .room_info_div>div{
-        width: 95%;
-    }
-    .room_rate>div{
-        height: auto;    
-    }
-    .room_rate button{
-        margin-top: 10px;
-    }
-    /* BookingForm Component */
-    div[id^="booking_detail_"]{
-        width: 95%;
-    }
-    .booking_form>div{
-        width: 95%;
-    }
-    .arrow_img_div{
-        height: 60px;
-    }
-    .arrow_img_div>img{
-        transform: rotate(90deg);
-        margin: auto;
-    }
-    .booker_info input[type="submit"]{
-        margin-top: 10px;
-    }
-    .radio_container>input[type="radio"]{
-        height: 17px;
-    }
-    .radio_container>label{
-        font-size: 16px;
+    .rounded-start{
+        border-bottom-left-radius: 0rem!important;
+        border-bottom-right-radius: 0rem!important;
+        border-top-right-radius: 0.25rem!important;
     }
 }

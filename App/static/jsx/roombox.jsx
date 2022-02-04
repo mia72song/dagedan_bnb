@@ -59,38 +59,41 @@ class RoomInfo extends React.Component{
         return(
             <div>
                 {this.state && (
-                    <div className="room_info_div">
-                        <div className="room_img_div">
-                            <img src={this.props.info.images && this.props.info.images[0]} alt=""/>    
-                        </div>
-                        <div className="room_detail">
-                            <div>
-                                <h3 id={`room_type_${this.props.type}`}>{this.props.info.name}</h3>
-                                <p>{this.props.info.description}<a href="#">更多詳情</a></p>
+                    <div className="card mt-3">
+                        <div className="row g-0">
+                            <div className="col-md-4">
+                                <img src={this.props.info.images && this.props.info.images[0]} class="img-fluid rounded-start" alt="..."/>
                             </div>
-                            <div className="special_price">
-                                <h4>特價方案：</h4>
-                                <p>平日特價：
-                                    <span className="currency">NT </span>
-                                    <span className="price">{comma(this.props.info.rate_weekday)}</span>
-                                </p>
-                                <p>一人入住：
-                                    <span className="currency">NT </span>
-                                    <span className="price">{comma(this.props.info.rate_weekday*this.props.info.single_discount)}</span>
-                                    <span className="currency"> 起</span>
-                                </p>
-                            </div>
-                        </div>
-                        <div className="room_rate">
-                            <div>
-                                <p>每晚定價：(適用{this.props.info.accommodate}人)</p>
-                                <h1><span>NT </span>{comma(this.props.info.rate_holiday)}</h1>
-                            </div>
-                            <div>
-                                <a href={`#room_type_${this.props.type}`}>
-                                    <button type="button" class="btn btn-dark book_now_btn" onClick={this.handleBookingForm}>Book Now</button>
-                                </a>
-                                {this.state.min_quantity<=2 && <p>最後{this.state.min_quantity}間</p>}
+                            <div className="col-md-8">
+                                <div className="card-body">
+                                    <h4 className="card-title" id={`room_type_${this.props.type}`}>
+                                        {this.props.info.name}
+                                        <span className="badge bg-secondary mx-3">適用{this.props.info.accommodate}人</span>
+                                    </h4>
+                                    <p className="card-text room_description">{this.props.info.description}</p>
+                                    <p className="card-subtitle my-2 text-secondary">
+                                        優惠方案：
+                                        <span>單人入住 {this.props.info.single_discount*100} 折</span>
+                                    </p>
+                                </div>
+                                <div className="card-body row text-center">
+                                    <div className="col-7" id="price">
+                                        <h1 className="card-subtitle">
+                                            <span>NT </span>
+                                            {Math.min(this.props.info.rate_holiday, this.props.info.rate_weekday)}
+                                            <span> UP</span>
+                                        </h1>
+                                    </div>
+                                    <div className="col-5">
+                                        <a href={`#room_type_${this.props.type}`} className="btn btn-dark book_now_btn" onClick={this.handleBookingForm}>Book Now</a>
+                                        <p className="card-text">
+                                            {
+                                            this.state.min_quantity<=2 && 
+                                            <small className="text-secondary">最後{this.state.min_quantity}間</small>
+                                            }                                            
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -143,8 +146,25 @@ class BookingForm extends React.Component{
         //console.log(this.props.info);
         //console.log(this.props.available);
         return(
-            <div>
-                BookingForm
+            <div class="card text-center">
+                <div class="card-header">
+                    <ul class="nav nav-tabs card-header-tabs">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="true" href="#">Active</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Link</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link disabled">Disabled</a>
+                    </li>
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Special title treatment</h5>
+                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
             </div>
         )
     }

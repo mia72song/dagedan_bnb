@@ -20,12 +20,6 @@
 }
 /* Search Component*/
 #search_wrap{
-    width: 520px;
-    margin: auto;
-    background-color: #FFFFFF;
-    padding: 10px 8px;
-    border: 2px #FFFFFF solid;
-    border-radius: 0.25rem;
     opacity: 0.95;
 }
 #search_wrap:hover{
@@ -50,8 +44,5 @@
     }
     .title>h2{
         font-size: 1.8em;
-    }
-    #search_wrap{
-        width: 92%;
     }
 }

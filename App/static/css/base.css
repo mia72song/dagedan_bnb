@@ -19,9 +19,9 @@ h4{
     font-size: 21px;
     font-weight: 600;
 }
-
 .form-control, .btn{
     padding: 0.3rem 0.5rem;
+    border-radius: 0.15rem;
 }
 .form-control:focus, .btn:focus{
     box-shadow: none;
@@ -36,7 +36,8 @@ h4{
     min-height: 75px;
 }
 .container{
-    width: 1200px;
+    width: 95vw;
+    max-width: 1200px;
 }
 .navbar-brand img{
     height: 62px;
@@ -85,4 +86,19 @@ footer{
 }
 .icon img{
     width: 30px;
+}
+
+/* Search Component*/
+#search_wrap{
+    width: 520px;
+    margin: auto;
+    background-color: #FFFFFF;
+    padding: 10px 8px;
+    border: 2px #FFFFFF solid;
+    border-radius: 0.15rem;
+}
+@media (max-width:600px){
+    #search_wrap{
+        width: 92%;
+    }
 }
