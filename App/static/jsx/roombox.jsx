@@ -56,6 +56,10 @@ class RoomInfo extends React.Component{
         })
     }
     render(){
+        let best_price;
+        if(this.state){
+            best_price = (this.state.data[0].is_holiday ? this.props.info.rate_holiday: this.props.info.rate_weekday)
+        }
         return(
             <div>
                 {this.state && (
@@ -66,7 +70,7 @@ class RoomInfo extends React.Component{
                             </div>
                             <div className="col-md-8">
                                 <div className="card-body">
-                                    <h4 className="card-title" id={`room_type_${this.props.type}`}>
+                                    <h4 className="card-title" id={`Book_${this.props.type}`}>
                                         {this.props.info.name}
                                         <span className="badge bg-secondary mx-3">適用{this.props.info.accommodate}人</span>
                                     </h4>
@@ -80,12 +84,12 @@ class RoomInfo extends React.Component{
                                     <div className="col-7" id="price">
                                         <h1 className="card-subtitle">
                                             <span>NT </span>
-                                            {Math.min(this.props.info.rate_holiday, this.props.info.rate_weekday)}
-                                            <span> UP</span>
+                                            { comma(best_price) }
+                                            { best_price<this.props.info.rate_holiday && <span> UP</span> }
                                         </h1>
                                     </div>
                                     <div className="col-5">
-                                        <a href={`#room_type_${this.props.type}`} className="btn btn-dark book_now_btn" onClick={this.handleBookingForm}>Book Now</a>
+                                        <a href={`#Book_${this.props.type}`} className="btn btn-dark book_now_btn" onClick={this.handleBookingForm}>Book Now</a>
                                         <p className="card-text">
                                             {
                                             this.state.min_quantity<=2 && 
@@ -146,22 +150,22 @@ class BookingForm extends React.Component{
         //console.log(this.props.info);
         //console.log(this.props.available);
         return(
-            <div class="card text-center">
+            <div class="card text-center w-100">
                 <div class="card-header">
                     <ul class="nav nav-tabs card-header-tabs">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="true" href="#">Active</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Link</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link disabled">Disabled</a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="true" href="#step1">Step 1</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#step2">Step 2</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#step3">Step 3</a>
+                        </li>
                     </ul>
                 </div>
                 <div class="card-body">
-                    <h5 class="card-title">Special title treatment</h5>
+                    <h5 class="card-title">確認房型與住宿人數</h5>
                     <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
                     <a href="#" class="btn btn-primary">Go somewhere</a>
                 </div>
