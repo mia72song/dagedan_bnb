@@ -1,13 +1,23 @@
 import csv
+from random import random
 import sys
 import os
 from datetime import datetime, date, timedelta
+
+from App.api_v2.captcha import captcha
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
 
 from App import create_app, db
 from App.models import Calendar, User, Booking, Order, Room, RoomType, PaymentAtm, Mydb
+
+def generate_captcha(n):
+    import string, random
+    samples = string.ascii_letters+string.digits
+    print(samples)
+    captcha = random.choices(list(samples), k=n)
+    print("".join(captcha))
 
 def updateCalendarFromCSV(csv_file_mane):    
     with open(csv_file_mane, "r") as f:
@@ -30,5 +40,4 @@ if __name__=="__main__":
     app = create_app()
     app.app_context().push()
     #db.create_all()
-    order = Order.query.get("1643346182")
-    print(order.room.name)
+    generate_captcha(6)

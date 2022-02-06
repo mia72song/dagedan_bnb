@@ -14,6 +14,7 @@ class BookingForm extends React.Component{
         arrival_datetime: ""
     }
     componentDidMount(){
+        document.getElementById("send_captcha_btn").setAttribute("disabled", "true");
         const check_in_date = (search_string_1st[0]==="checkin" && search_string_1st[1]);
         const check_out_date = (search_string_2nd[0]==="checkout" && search_string_2nd[1]);
         this.setState({
@@ -100,7 +101,7 @@ class BookingForm extends React.Component{
                                 </div>
                                 <div class="col-auto">
                                     <input type="email" id="booker_email" class="form-control form-control-sm col-input-longtext" 
-                                    value={this.state.email} onChange={this.handelEmailChange} required/>
+                                    value={this.state.email} onChange={this.handelEmailChange} placeholder="請輸入EMail" required/>
                                 </div>
                             </div>
                             <div class="row g-0 align-items-center">
@@ -109,11 +110,11 @@ class BookingForm extends React.Component{
                                 </div>
                                 <div class="col-auto col-input-text">
                                     <input type="text" id="captcha" value={this.state.captcha} onChange={this.handleChange("captcha")} 
-                                    class="form-control form-control-sm" required/>
+                                    class="form-control form-control-sm" placeholder="請輸入驗證碼" required/>
                                 </div>
                                 <div class="col-4 px-2">
                                     <button type="button" class="btn btn-sm btn-outline-secondary" id="send_captcha_btn"
-                                    disabled onClick={this.sendCaptcha}>發送驗證碼</button>
+                                    onClick={this.sendCaptcha}>發送驗證碼</button>
                                 </div>
                             </div>
                             <div class="row g-0 align-items-center">
@@ -168,7 +169,17 @@ class BookingForm extends React.Component{
     }
     //發送驗證碼
     sendCaptcha=()=>{
-        
+        const url = `${window.origin}/api/captcha?email=${this.state.email}`;
+        fetch(url).then(response=>{
+            const resp = response.json();
+            if(response.status===200){
+                alert("驗證碼已發送")
+            }else if(response.status===400){
+                alert("驗證碼發送失敗，原因：信箱錯誤")
+            }else{
+                console.log(resp);
+            }
+        })
     }
     //其他資料欄位輸入
     handleChange=(dataType)=>{

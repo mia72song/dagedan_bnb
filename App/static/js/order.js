@@ -7,7 +7,9 @@ function createNewOrder(data){
         },
         body: JSON.stringify(data)
     }).then(response=>{
-        if(response.status!==500){
+        if(response.status==403){
+            alert("驗證碼錯誤!!")
+        }else if(response.status!==500){
             return response.json()
         }else{
             console.log(response.json())

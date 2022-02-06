@@ -58,6 +58,7 @@ class RoomInfo extends React.Component{
     render(){
         let best_price;
         if(this.state){
+            //console.log(this.state.min_quantity);
             best_price = (this.state.data[0].is_holiday ? this.props.info.rate_holiday: this.props.info.rate_weekday)
         }
         return(
