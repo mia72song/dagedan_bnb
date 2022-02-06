@@ -66,7 +66,7 @@ class RoomInfo extends React.Component{
                     <div className="card mt-3">
                         <div className="row g-0">
                             <div className="col-md-4">
-                                <img src={this.props.info.images && this.props.info.images[0]} class="img-fluid rounded-start" alt="..."/>
+                                <img src={this.props.info.images && this.props.info.images[0]} class="img-fluid rounded-start w-100" alt="..."/>
                             </div>
                             <div className="col-md-8">
                                 <div className="card-body">
@@ -103,13 +103,14 @@ class RoomInfo extends React.Component{
                     </div>
                 )}
                 {this.state && (
-                    <div id={`booking_detail_${this.props.type}`}>
-                        <BookingForm info={this.props.info} available={this.state}/>
+                    <div id={`booking_detail_${this.props.type}`} className="px-1 px-md-3">
+                        {"<!--由/static/jsx/roombox.jsx渲染-->"}
                     </div>
                 )}
             </div>
         )
     }
+    //打開訂房表單
     handleBookingForm=()=>{
         document.querySelectorAll("div[id^='booking_detail_']").forEach(div=>{
             div.style.display="";
@@ -117,74 +118,8 @@ class RoomInfo extends React.Component{
         let booking_form = document.getElementById(`booking_detail_${this.props.type}`);
         if(booking_form.style.display===""){
             booking_form.style.display="block";
+            ReactDOM.render(<BookingForm info={this.props.info} available={this.state}/>, booking_form);
         }
-    }
-}
-class BookingForm extends React.Component{
-    state = {
-        room_type: "",
-        check_in_date: "",
-        check_out_date: "",
-        nights: 1,
-        num_of_guests: 1,
-        quantity: 1,
-        name: "",
-        gender: "male",
-        phone: "",
-        email: "",
-        arrival_datetime: ""
-    }
-    componentDidMount(){
-        const check_in_date = (search_string_1st[0]==="checkin" && search_string_1st[1]);
-        const check_out_date = (search_string_2nd[0]==="checkout" && search_string_2nd[1]);
-        this.setState({
-            room_type: this.props.available.room_type,
-            check_in_date,
-            check_out_date,
-            nights: dateStringToIndex(check_out_date)-dateStringToIndex(check_in_date),
-            num_of_guests: parseInt(search_string_3th[0]==="guests" && search_string_3th[1]),
-            arrival_datetime: `${check_in_date}T15:00`
-        })
-    }
-    render(){
-        //console.log(this.props.info);
-        //console.log(this.props.available);
-        return(
-            <div class="card text-center w-100">
-                <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="true" href="#step1">Step 1</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#step2">Step 2</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#step3">Step 3</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">確認房型與住宿人數</h5>
-                    <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-                    <a href="#" class="btn btn-primary">Go somewhere</a>
-                </div>
-            </div>
-        )
-    }
-    updateAmount=(quantity, guests)=>{
-        let amount = 0;
-        this.props.available.data.forEach(date=>{
-            if(date.is_holiday){
-                amount = amount+this.props.info.rate_holiday*quantity
-            }else{
-                amount = amount+this.props.info.rate_weekday*quantity
-            }
-            if(parseInt(guests)===1){
-                amount = amount*this.props.info.single_discount
-            }
-        })
-        return parseInt(amount)
     }
 }
 if(window.location.search!==""){

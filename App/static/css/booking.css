@@ -28,28 +28,84 @@
 }
 
 /* BookingForm Component */
+.form-control-inline{
+    display: inline;
+}
+
 div[id^="booking_detail_"]{
     display: none;
-    width: 92%;
+    width: 95%;
     margin: 0 auto;
-    line-height: 2.2;
-    padding-left: 10px;    
-}
-div[id^="booking_detail_"] .card{
-    border-top-left-radius: 0rem!important;
-    border-top-right-radius: 0rem!important;
-    border-top: none;
-}
-div[id^="booking_detail_"] .card-header{
     background-color: #E6E6F2;
 }
+
+div[id^="booking_detail_"] .form-control:focus{
+    border-color: #3C3C3C;
+}
+
+div[id^="booking_detail_"] p{
+    margin-block-start: 0.25em;
+    margin-block-end: 0.25em;
+}
+
+div[id^="booking_detail_"] h6{
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.booking_detail{
+    width: 320px;
+    margin: auto;
+}
+.booking_detail input[type="number"]{
+    width: 55px;
+}
+.booking_detail input:disabled{
+    font-weight: bolder;
+    font-size: 18px;
+    width: 100px;
+    height: 36px;
+    padding: 0 2px;
+    text-align: center;
+    color: blue;
+    letter-spacing: 1px;
+}
+.booking_detail input{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+.arrow_img_div>img{
+    width: 45px; 
+    margin-top:60px;
+}
+.bg-mark{
+    background-color: pink;
+}
+.booker_info{
+    width: 100%;
+    max-width: 450px;
+}
+.booker_info .col-input-text{
+    width: 125px;
+}
+.booker_info input{
+    margin-left: 5px;
+}
+.booker_info .col-input-longtext{
+    width: 220px;
+}
+.radio_container{
+    margin-left: 20px !important; 
+    max-width: 40vw;
+}
+
 @media (max-width:1200px){
     #room_box_wrap{
         width: 95%;
     }
 }
 
-@media (max-width:600px){
+@media (max-width:768px){
     #room_box_wrap{
         width: 97%;
         font-size: 16px;
@@ -57,9 +113,22 @@ div[id^="booking_detail_"] .card-header{
     #price>.card-subtitle{
         font-size: 42px;
     }
-    .rounded-start{
-        border-bottom-left-radius: 0rem!important;
-        border-bottom-right-radius: 0rem!important;
-        border-top-right-radius: 0.25rem!important;
+    #room_box_wrap .rounded-start{
+        border-bottom-left-radius: 0rem !important;
+        border-bottom-right-radius: 0rem !important;
+        border-top-right-radius: 0.25rem !important;
+    }
+    .arrow_img_div>img{
+        margin-top: 0;
+        margin-bottom: 10px;
+    }
+    .arrow_img_div>img{
+        transform: rotate(90deg);
+    }
+}
+@media (max-width:370px){
+    .booker_info{
+        padding-left: 0px !important;
+        padding-right: 0px !important;
     }
 }
