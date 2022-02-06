@@ -3,6 +3,11 @@
     padding-top: 10px;
     padding-bottom: 10px;
 }
+#no_available_msg{
+    margin-top: 40px;
+    text-align: center;
+    color: green;
+}
 /* RoomBox Component */
 #room_box_wrap{
     width: 95vw;

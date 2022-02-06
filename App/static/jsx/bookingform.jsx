@@ -126,7 +126,8 @@ class BookingForm extends React.Component{
                                     value={this.state.arrival_datetime} onChange={this.handleChange("arrival_datetime")} />
                                 </div>
                             </div>
-                            <input type="submit" class="btn btn-outline-primary mt-2" value="確認訂房"/>
+                            <input type="submit" class="btn btn-outline-primary mt-2" value="確認訂房"
+                            disabled={(this.state.name===""||this.state.phone===""||this.state.email===""||this.state.captcha==="")}/>
                         </div>
                     </div>
                 </div>
@@ -154,7 +155,7 @@ class BookingForm extends React.Component{
             this.setState({gender})
         }
     }
-    //訂房人EMail輸入及正則驗證，驗證通過則「發送驗證碼」按鍵有效，否則無效(disabled)
+    //訂房人EMail輸入及驗證，驗證通過則「發送驗證碼」按鍵有效，否則無效(disabled)
     handelEmailChange=(eObj)=>{
         const pattern = /[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$/;
         let email = eObj.target.value;
