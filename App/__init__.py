@@ -30,6 +30,8 @@ def create_app():
 
     from App.view import view
     app.register_blueprint(view, url_prefix = "/")
+    from App.admin import admin
+    app.register_blueprint(admin, url_prefix = "/admin")
     from App.auth import auth
     app.register_blueprint(auth, url_prefix = "/auth")
     from App.api_v2 import api

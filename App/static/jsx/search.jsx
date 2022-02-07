@@ -47,14 +47,14 @@ class Search extends React.Component{
                     <input type="date" className="form-control form-control-sm" id="inputCheckOut" min={dateIndexToString(check_in_index+1)} max={dateIndexToString(12*7+1)}
                         value={this.state.check_out_date} onChange={this.handleChange("check_out_date")}/>
                 </div>
-                <div className="col-6 col-md-2 px-1 mt-2 mt-md-1">
+                <div className="col-6 col-md-2 px-1 mt-1">
                     <label for="inputNum" className="form-label">住宿人數</label>
                     <select className="form-select form-select-sm" value={this.state.guests} onChange={this.handleChange("guests")}>
                         { select_items }
                     </select>
                 </div>
                 <div className="col-6 col-md-2 px-1 mt-2 mt-md-1">
-                    <button type="submit" className="btn btn-search px-md-3 h-100 w-100" id="available_search_btn">查詢空房</button>
+                    <button type="submit" className="btn btn-sm btn-search px-0 h-100 w-100" id="available_search_btn">查詢空房</button>
                 </div>
             </form>
         )

@@ -55,7 +55,7 @@ class BookingForm extends React.Component{
                                 <div className="col-auto">
                                 房型：{this.props.info.name} * 
                                 </div>
-                                <div className="col-3 mx-1">
+                                <div className="col-2 mx-2">
                                     <select className="form-select form-select-sm form-control-inline" value={this.state.quantity} onChange={this.handleChange("quantity")}>
                                         { quantity_options }
                                     </select>
@@ -66,7 +66,7 @@ class BookingForm extends React.Component{
                                 <div className="col-auto">
                                 人數：
                                 </div>
-                                <div className="col-3 mx-1">
+                                <div className="col-2 mx-2">
                                     <select className="form-select form-select-sm form-control-inline" value={Math.min(this.state.num_of_guests, this.props.info.accommodate)} onChange={this.handleChange("num_of_guests")}>
                                         { num_of_guests_options }
                                     </select>
@@ -86,7 +86,7 @@ class BookingForm extends React.Component{
                             </div>
                         </div>
                     </div>
-                    <div className="col-12 col-md-1 arrow_img_div">
+                    <div className="col-12 col-md-1 my-3 arrow_img_div">
                         <img src="/static/images/right.png" className="mx-auto d-block"alt=""/>
                     </div>
                     <div className="col-12 col-md-6 my-3">

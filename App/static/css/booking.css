@@ -84,7 +84,7 @@ div[id^="booking_detail_"] h6{
 }
 
 .booker_info{
-    width: 390px;
+    width: 385px;
     margin: auto;
     line-height: 2;
 }
@@ -108,7 +108,7 @@ div[id^="booking_detail_"] h6{
     }
 }
 
-@media (max-width:768px){
+@media (max-width:767px){
     #room_box_wrap{
         width: 97%;
         font-size: 16px;
@@ -131,7 +131,10 @@ div[id^="booking_detail_"] h6{
 }
 
 @media (max-width:400px){
+    .booker_info, .booking_detail{
+        width: 98%;
+    }
     .radio_container{
-        width: 80vw;
+        width: 90%;
     }
 }

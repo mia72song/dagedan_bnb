@@ -1,69 +1,43 @@
-{% extends "admin_base.html" %}
-{% block title %}Staff Only{% endblock %}
-{% block head %}
-    {{ super() }}
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Only</title>
+    <!-- Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!--Load React and React DOM-->
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <!-- Load Babel -->
+    <script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/admin/admin.css") }}>
-{% endblock %}
-{% block content %}
-    <main>
-        <!--由LoginForm組件渲染-->
-    </main>
-    <script type="text/babel">
-        class LoginForm extends React.Component{
-            state = {
-                username:"",
-                password:""
-            }
-            render(){
-                return(
-                    <div id="login_box">
-                        <div id="logo_box">
-                            <img src="../static/images/logo1.jpg" alt=""/>
-                        </div>
-                        <form method="post" onSubmit={this.handleSubmit}>
-                        <div className="mb-3">
-                            <label for="" className="form-label">帳號</label>
-                            <input type="text" className="form-control" name="username" id="username"
-                                value={this.state.username} onChange={this.handleChange("username")} required/>
-                        </div>
-                        <div className="mb-3">
-                            <label for="" className="form-label">密碼</label>
-                            <input type="password" className="form-control" name="password" id="password"
-                                value={this.state.password} onChange={this.handleChange("password")} required/>
-                        </div>
-                        <button type="submit" className="btn btn-primary">登入</button>
-                        </form>
-                    </div>
-                )
-            }
-            handleChange=(dataType)=>{
-                return(eObj=>{
-                    this.setState({[dataType]:eObj.target.value});
-                })
-            }
-            handleSubmit=(eObj)=>{
-                eObj.preventDefault()
-                const data = this.state
-                let p = userRequest("post", data)
-                p.then(resp=>{
-                    if(resp.ok){
-                        localStorage.setItem("jwt", resp.access_token)
-                        location.href = `/admin/board`
-                    }else if(resp.error){
-                        alert(resp.message)
-                        location.reload()
-                    }
-                })
-            }
-        }
-        addEventListener("load", ()=>{
-            currentUserPromise.then(currentUser=>{
-                if(currentUser==null){
-                    ReactDOM.render(<LoginForm/>, document.querySelector("main"));
-                }else{
-                    location.href = `/admin/board`
-                }  
-            })
-        })
-    </script>
-{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <form method="post">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}" required/>
+            <div class="text-center my-3">
+                <img src={{ url_for("static", filename="images/logo1.jpg") }} class="rounded" alt="logo">
+            </div>
+            <div class="form-group my-3">
+                <label for="username">帳號</label>
+                <input type="text" class="form-control my-2" id="username" name="username" required>
+            </div>
+            <div class="form-group my-3">
+                <label for="password">密碼</label>
+                <input type="password" class="form-control my-2" id="password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-primary my-2">登入</button>
+        </form>
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for msg in messages %}
+                    <script>alert("{{ msg }}")</script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
