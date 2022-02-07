@@ -18,28 +18,24 @@ def login_required(func):
             return redirect(url_for("admin.index"))
     return wrapper
 
-# 登入頁面渲染
-@admin.route("/")
-def index():
+# 登入
+@admin.route("/", methods=["GET", "POST"])
+def login():
     if session.get("user"):
         return redirect("/admin/board")
-        
-    return render_template("admin.html")
 
-# 登入
-@admin.route("/", methods=["POST"])
-def login():
-    if request.form.get("username") and request.form.get("password"):
-        user = User.query.filter_by(username=request.form.get("username")).first()
-        if (user is None) or (not user.checkPassword(request.form.get("password"))):
-            flash("帳號或密碼錯誤")
+    if request.method == "POST":
+        if request.form.get("username") and request.form.get("password"):
+            user = User.query.filter_by(username=request.form.get("username")).first()
+            if (user is None) or (not user.checkPassword(request.form.get("password"))):
+                flash("帳號或密碼錯誤")
+            else:
+                session["user"] = (user.username, user.name)
+                return redirect("/admin/board")
         else:
-            session["user"] = (user.username, user.name)
-            return redirect("/admin/board")
-    else:
-        flash("帳號及密碼皆不得為空值")
-
-    return redirect(url_for("admin.index"))
+            flash("帳號及密碼皆不得為空值")
+    
+    return render_template("admin.html")
 
 # 登出
 @admin.route("/logout", methods=["DELETE"])
