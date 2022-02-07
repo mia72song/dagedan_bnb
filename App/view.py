@@ -1,12 +1,15 @@
 from flask import Blueprint, render_template
 import os
 
+from App import csrf
+
 view = Blueprint("view", __name__)
 
 templates_dir = f"{os.path.dirname(os.path.abspath(__file__))}/templates"
 
 # 前台頁面
 @view.route("/<re(r'.*'):html_filename>")
+@csrf.exempt
 def index(html_filename):
     status_code = 200
     if not html_filename:

@@ -3,11 +3,13 @@ from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect
 
 jwt = JWTManager()
 mail = Mail()
 db = SQLAlchemy()
 migrate = Migrate()
+csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__)
@@ -21,6 +23,7 @@ def create_app():
     mail.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
+    csrf.init_app(app)
 
     from App.utils import ReConverter
     app.url_map.converters["re"] = ReConverter
