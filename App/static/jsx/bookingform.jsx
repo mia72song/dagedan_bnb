@@ -14,7 +14,9 @@ class BookingForm extends React.Component{
         arrival_datetime: ""
     }
     componentDidMount(){
-        document.getElementById("send_captcha_btn").setAttribute("disabled", "true");
+        document.querySelectorAll("button[id^='captcha_btn_']").forEach(btn=>{
+            btn.setAttribute("disabled", "true");
+        })
         const check_in_date = (search_string_1st[0]==="checkin" && search_string_1st[1]);
         const check_out_date = (search_string_2nd[0]==="checkout" && search_string_2nd[1]);
         this.setState({
@@ -140,7 +142,7 @@ class BookingForm extends React.Component{
                                     className="form-control form-control-sm" placeholder="請輸入驗證碼" required/>
                                 </div>
                                 <div className="mx-2">
-                                    <button type="button" className="btn btn-sm btn-outline-secondary" id="send_captcha_btn"
+                                    <button type="button" className="btn btn-sm btn-outline-secondary" id={`captcha_btn_${this.props.available.room_type}`}
                                     onClick={this.sendCaptcha}>發送驗證碼</button>
                                 </div>
                             </div>
@@ -189,9 +191,9 @@ class BookingForm extends React.Component{
         let email = eObj.target.value;
         this.setState({email});
         if(email.match(pattern)){
-            document.getElementById("send_captcha_btn").removeAttribute("disabled");
+            document.getElementById(`captcha_btn_${this.props.available.room_type}`).removeAttribute("disabled");
         }else{
-            document.getElementById("send_captcha_btn").setAttribute("disabled", "true");
+            document.getElementById(`captcha_btn_${this.props.available.room_type}`).setAttribute("disabled", "true");
         }
     }
     //發送驗證碼
