@@ -84,8 +84,9 @@ div[id^="booking_detail_"] h6{
 }
 
 .booker_info{
-    width: 100%;
-    max-width: 450px;
+    width: 390px;
+    margin: auto;
+    line-height: 2;
 }
 .booker_info .col-input-text{
     width: 125px;
@@ -98,8 +99,7 @@ div[id^="booking_detail_"] h6{
 }
 
 .radio_container{
-    margin-left: 20px !important; 
-    max-width: 40vw;
+    
 }
 
 @media (max-width:1200px){
@@ -130,9 +130,8 @@ div[id^="booking_detail_"] h6{
     }
 }
 
-@media (max-width:370px){
-    .booker_info{
-        padding-left: 0px !important;
-        padding-right: 0px !important;
+@media (max-width:400px){
+    .radio_container{
+        width: 80vw;
     }
 }

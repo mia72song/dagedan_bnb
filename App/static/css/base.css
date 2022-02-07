@@ -23,7 +23,7 @@ h4{
     padding: 0.3rem 0.5rem;
     border-radius: 0.15rem;
 }
-.form-control:focus, .btn:focus, .form-check-input:focus{
+.form-control:focus, .btn:focus, .form-check-input:focus, .form-select:focus{
     box-shadow: none;
 }
 .book_now_btn{

@@ -12,13 +12,6 @@ sys.path.append(os.path.dirname(SCRIPT_DIR))
 from App import create_app, db
 from App.models import Calendar, User, Booking, Order, Room, RoomType, PaymentAtm, Mydb
 
-def generate_captcha(n):
-    import string, random
-    samples = string.ascii_letters+string.digits
-    print(samples)
-    captcha = random.choices(list(samples), k=n)
-    print("".join(captcha))
-
 def updateCalendarFromCSV(csv_file_mane):    
     with open(csv_file_mane, "r") as f:
         rows = csv.DictReader(f)
@@ -40,4 +33,4 @@ if __name__=="__main__":
     app = create_app()
     app.app_context().push()
     #db.create_all()
-    generate_captcha(6)
+    

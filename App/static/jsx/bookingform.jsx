@@ -29,105 +29,132 @@ class BookingForm extends React.Component{
     render(){
         //console.log(this.props.info);
         //console.log(this.props.available);
+        const max_quantity = Math.min(Math.min(this.state.num_of_guests, this.props.available.min_quantity));
+        const quantity_options = [];
+        for(let i=1; i<=max_quantity; i++){
+            quantity_options.push(
+                <option value={i}>{i}</option>
+            )
+        }
+        const num_of_guests_options = [];
+        for(let i=1; i<=this.props.info.accommodate; i++){
+            num_of_guests_options.push(
+                <option value={i}>{i}</option>
+            )
+        }
         return(
             <form className="booking_form" onSubmit={this.handelSubmit}>
-                <div class="row g-0">
-                    <div class="col-12 col-md-5 my-3">
-                        <div class="booking_detail">
-                            <h6 class="mb-3 text-center">- 訂房明細 -</h6>
-                            <p class="my-3">期間：{this.state.check_in_date} ~ {this.state.check_out_date}，共 {this.state.nights} 晚</p>
-                            <p>房型：
-                                {this.props.info.name} * 
-                                <input type="number" value={this.state.quantity} min="1" max={Math.min(this.state.num_of_guests, this.props.available.min_quantity)} 
-                                class="form-control form-control-sm form-control-inline"
-                                onChange={this.handleChange("quantity")}/>
-                                間
-                            </p>
-                            <p>人數：
-                                <input type="number" value={this.state.num_of_guests} min="1" max={this.props.info.accommodate} 
-                                class="form-control form-control-sm form-control-inline"
-                                onChange={this.handleChange("num_of_guests")}/>
-                                人
-                            </p>
-                            <p>總金額：新台幣
-                                <input type="text" disabled="true" readOnly="true" class="form-control form-control-inline"
-                                value={this.updateAmount(this.state.quantity, this.state.num_of_guests)} 
-                                id={`total_amount_${this.state.room_type}`}/>
-                                元    
-                            </p>
+                <div className="row g-0">
+                    <div className="col-12 col-md-5 my-3">
+                        <div className="booking_detail">
+                            <h6 className="mb-4 text-center">- 訂房明細 -</h6>
+                            <p className="mb-3">期間：{this.state.check_in_date} ~ {this.state.check_out_date}，共 {this.state.nights} 晚</p>
+                            <div className="row g-0 align-items-center my-2">
+                                <div className="col-auto">
+                                房型：{this.props.info.name} * 
+                                </div>
+                                <div className="col-3 mx-1">
+                                    <select className="form-select form-select-sm form-control-inline" value={this.state.quantity} onChange={this.handleChange("quantity")}>
+                                        { quantity_options }
+                                    </select>
+                                </div>
+                                <div className="col-auto">間</div>
+                            </div>
+                            <div className="row g-0 align-items-center my-2">
+                                <div className="col-auto">
+                                人數：
+                                </div>
+                                <div className="col-3 mx-1">
+                                    <select className="form-select form-select-sm form-control-inline" value={Math.min(this.state.num_of_guests, this.props.info.accommodate)} onChange={this.handleChange("num_of_guests")}>
+                                        { num_of_guests_options }
+                                    </select>
+                                </div>
+                                <div className="col-auto">人</div>
+                            </div>
+                            <div className="row g-0 align-items-center my-2">
+                                <div className="col-auto">
+                                總金額：新台幣
+                                </div>
+                                <div className="col-4 mx-1">
+                                    <input type="text" disabled="true" readOnly="true" className="form-control form-control-inline"
+                                    value={this.updateAmount(this.state.quantity, this.state.num_of_guests)} 
+                                    id={`total_amount_${this.state.room_type}`}/>
+                                </div>
+                                <div className="col-auto">元</div>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-12 col-md-1 arrow_img_div">
-                        <img src="/static/images/right.png" class="mx-auto d-block"alt=""/>
+                    <div className="col-12 col-md-1 arrow_img_div">
+                        <img src="/static/images/right.png" className="mx-auto d-block"alt=""/>
                     </div>
-                    <div class="col-12 col-md-6 my-3">
-                        <div class="booker_info mx-auto px-1 px-sm-auto">
-                            <h6 class="mb-3 text-center">- 訂房人資料 -</h6>
-                            <div class="row g-0 align-items-center">
-                                <div class="col-auto">
-                                    <label for="booker_name" class="col-form-label">訂房全名：</label>
+                    <div className="col-12 col-md-6 my-3">
+                        <div className="booker_info">
+                            <h6 className="text-center mb-3">- 訂房人資料 -</h6>
+                            <div className="d-flex align-items-center flex-wrap">
+                                <div className="">
+                                    <label for="booker_name" className="col-form-label">訂房全名：</label>
                                 </div>
-                                <div class="col-auto col-input-text">
+                                <div className="col-input-text">
                                     <input type="text" id="booker_name" value={this.state.name} onChange={this.handleChange("name")}
-                                    class="form-control form-control-sm" pattern="^[\u4e00-\u9fa5]+$|^[a-zA-Z\s]+$" required/>
+                                    className="form-control form-control-sm" pattern="^[\u4e00-\u9fa5]+$|^[a-zA-Z\s]+$" required/>
                                 </div>
-                                <div class="col-6 col-sm-auto radio_container">
-                                    <div class="form-check form-check-inline my-auto">
-                                        <input class="form-check-input" type="radio" name="booker_gender" id="male" value="male" 
+                                <div className="mx-3 radio_container">
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input my-2" type="radio" name="booker_gender" id="male" value="male" 
                                         checked={this.state.gender==="male"} onChange={this.handelGenderCheck("male")}/>
-                                        <label class="form-check-label" for="male">先生</label>
+                                        <label className="form-check-label" for="male">先生</label>
                                     </div>
-                                    <div class="form-check form-check-inline my-auto">
-                                        <input class="form-check-input" type="radio" name="booker_gender" id="female" value="female"
+                                    <div className="form-check form-check-inline">
+                                        <input className="form-check-input my-2" type="radio" name="booker_gender" id="female" value="female"
                                         checked={this.state.gender==="female"} onChange={this.handelGenderCheck("female")}/>
-                                        <label class="form-check-label" for="female">小姐</label>
+                                        <label className="form-check-label" for="female">小姐</label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row g-0 align-items-center">
-                                <div class="col-auto">
-                                    <label for="booker_phone" class="col-form-label">聯絡手機：</label>
+                            <div className="d-flex align-items-center">
+                                <div className="">
+                                    <label for="booker_phone" className="col-form-label">聯絡手機：</label>
                                 </div>
-                                <div class="col-auto col-input-text">
+                                <div className="col-input-text">
                                     <input type="tel" minlength="10" maxlength="20" id="booker_phone" value={this.state.phone} onChange={this.handleChange("phone")} 
-                                    class="form-control form-control-sm" required/>
+                                    className="form-control form-control-sm" required/>
                                 </div>
-                                <div class="col-5">
+                                <div className="">
                                 </div>
                             </div>
-                            <div class="row g-0 align-items-center">
-                                <div class="col-auto">
-                                    <label for="booker_email" class="col-form-label">電子信箱：</label>
+                            <div className="d-flex align-items-center">
+                                <div className="">
+                                    <label for="booker_email" className="col-form-label">電子信箱：</label>
                                 </div>
-                                <div class="col-auto">
-                                    <input type="email" id="booker_email" class="form-control form-control-sm col-input-longtext" 
+                                <div className="">
+                                    <input type="email" id="booker_email" className="form-control form-control-sm col-input-longtext" 
                                     value={this.state.email} onChange={this.handelEmailChange} placeholder="請輸入EMail" required/>
                                 </div>
                             </div>
-                            <div class="row g-0 align-items-center">
-                                <div class="col-auto">
-                                    <label for="captcha" class="col-form-label">信箱驗證：</label>
+                            <div className="d-flex align-items-center">
+                                <div className="">
+                                    <label for="captcha" className="col-form-label">信箱驗證：</label>
                                 </div>
-                                <div class="col-auto col-input-text">
+                                <div className="col-input-text">
                                     <input type="text" id="captcha" value={this.state.captcha} onChange={this.handleChange("captcha")} 
-                                    class="form-control form-control-sm" placeholder="請輸入驗證碼" required/>
+                                    className="form-control form-control-sm" placeholder="請輸入驗證碼" required/>
                                 </div>
-                                <div class="col-4 px-2">
-                                    <button type="button" class="btn btn-sm btn-outline-secondary" id="send_captcha_btn"
+                                <div className="mx-2">
+                                    <button type="button" className="btn btn-sm btn-outline-secondary" id="send_captcha_btn"
                                     onClick={this.sendCaptcha}>發送驗證碼</button>
                                 </div>
                             </div>
-                            <div class="row g-0 align-items-center">
-                                <div class="col-auto">
-                                    <label for="arrival_datetime" class="col-form-label">預計抵達：</label>
+                            <div className="d-flex align-items-center">
+                                <div className="">
+                                    <label for="arrival_datetime" className="col-form-label">預計抵達：</label>
                                 </div>
-                                <div class="col-auto">
-                                    <input type="datetime-local" id="arrival_datetime" class="form-control form-control-sm col-input-longtext"
+                                <div className="">
+                                    <input type="datetime-local" id="arrival_datetime" className="form-control form-control-sm col-input-longtext"
                                     min={`${this.state.check_in_date}T15:00`} max={`${this.state.check_in_date}T21:00`} 
                                     value={this.state.arrival_datetime} onChange={this.handleChange("arrival_datetime")} />
                                 </div>
                             </div>
-                            <input type="submit" class="btn btn-outline-primary mt-2" value="確認訂房"
+                            <input type="submit" className="btn btn-outline-primary mt-2" value="確認訂房"
                             disabled={(this.state.name===""||this.state.phone===""||this.state.email===""||this.state.captcha==="")}/>
                         </div>
                     </div>

@@ -28,6 +28,13 @@ class Search extends React.Component{
     }
     render(){
         const check_in_index = dateStringToIndex(this.state.check_in_date);
+        const max_accommodate = 8;
+        let select_items = [];
+        for(let i=1; i<=max_accommodate; i++){
+            select_items.push(
+                <option value={i}>{i}</option>
+            )
+        }
         return(
             <form className="row g-1 w-95" onSubmit={this.handleSubmit}>
                 <div className="col-6 col-md-4 px-1 mt-1">
@@ -42,8 +49,9 @@ class Search extends React.Component{
                 </div>
                 <div className="col-6 col-md-2 px-1 mt-2 mt-md-1">
                     <label for="inputNum" className="form-label">住宿人數</label>
-                    <input type="number" className="form-control form-control-sm" id="inputNum" min="1" max="99"
-                        value={this.state.guests} onChange={this.handleChange("guests")}/>
+                    <select className="form-select form-select-sm" value={this.state.guests} onChange={this.handleChange("guests")}>
+                        { select_items }
+                    </select>
                 </div>
                 <div className="col-6 col-md-2 px-1 mt-2 mt-md-1">
                     <button type="submit" className="btn btn-search px-md-3 h-100 w-100" id="available_search_btn">查詢空房</button>
@@ -51,7 +59,7 @@ class Search extends React.Component{
             </form>
         )
     }
-    handleChange=(dataType)=>{         
+    handleChange=(dataType)=>{       
         return (eObj)=>{
             if(dataType==="check_in_date"){
                 const check_in_date = eObj.target.value;
