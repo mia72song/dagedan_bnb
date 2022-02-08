@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, render_template, redirect, session, url_for, request, flash
+from flask import Blueprint, render_template, redirect, session, url_for, request, flash
 import os
 import functools
 
@@ -15,6 +15,7 @@ def login_required(func):
         if session.get("user"):
             return func(*args, **kwargs)
         else:
+            flash("請先登入")
             return redirect(url_for("admin.index"))
     return wrapper
 

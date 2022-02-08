@@ -1,11 +1,9 @@
 from flask import Flask
-from flask_jwt_extended import JWTManager
 from flask_mail import Mail
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect
 
-jwt = JWTManager()
 mail = Mail()
 db = SQLAlchemy()
 migrate = Migrate()
@@ -19,7 +17,6 @@ def create_app():
     env_config = envs.get("dev")
     app.config.from_object(env_config)
 
-    jwt.init_app(app)
     mail.init_app(app)
     db.init_app(app)
     migrate.init_app(app, db)
