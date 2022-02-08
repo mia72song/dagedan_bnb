@@ -18,3 +18,10 @@ header{
 #navbarSupportedContent> ul li{
     margin: 0 5px;
 }
+.dropdown-menu{
+    min-width: 130px;
+}
+main{
+    max-width: 1200px;
+    margin: auto;
+}

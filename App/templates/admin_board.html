@@ -5,9 +5,110 @@
 
     {% endblock %}
 {% block content %}
-    <main>
-        <div id="board">
-            This is Board
+    <div class="container">
+        <div class="row my-4">
+            <div class="col-12 col-sm-4">
+                <div class="card ms-auto my-1 text-white bg-primary" style="width: 14rem;">
+                    <div class="card-body">
+                        <h1 class="card-title fw-bolder">7</h1>
+                        <p class="card-text">近七日內的新訂房</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="#" class="card-link text-white text-decoration-none">查看詳情</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4">
+                <div class="card mx-auto my-1 text-white bg-success" style="width: 14rem;">
+                    <div class="card-body">
+                        <h1 class="card-title fw-bolder">7</h1>
+                        <p class="card-text">待確認的訂房</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="#" class="card-link text-white text-decoration-none">查看詳情</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4">
+                <div class="card me-auto my-1 text-white bg-warning" style="width: 14rem;">
+                    <div class="card-body">
+                        <h1 class="card-title fw-bolder">7</h1>
+                        <p class="card-text">已付款訂房</p>
+                    </div>
+                    <div class="card-footer text-center">
+                        <a href="#" class="card-link text-white text-decoration-none">查看詳情</a>
+                    </div>
+                </div>
+            </div>
         </div>
-    </main>
+        <div class="table-responsive">
+            <caption>訂房行事曆</caption>
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Sun.</th>
+                        <th scope="col">Mon.</th>
+                        <th scope="col">Tue.</th>
+                        <th scope="col">Wed.</th>
+                        <th scope="col">Thr.</th>
+                        <th scope="col">Fri.</th>
+                        <th scope="col">Sat.</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">4</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">5</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                        <td>@mdo</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 {% endblock %}

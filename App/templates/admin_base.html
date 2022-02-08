@@ -48,7 +48,9 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">宋小惠工程師</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="">修改密碼</a>
+                                <!--
+                                    <a class="dropdown-item" href="">修改密碼</a>
+                                -->
                                 <a class="dropdown-item" href="/admin/logout">登出</a>
                             </div>
                         </li>
@@ -57,10 +59,11 @@
             </div>
         </nav>
     </header>
-    <div class="nav_wrap"></div>    
-    {% block content %}
-
-    {% endblock %}
+    <div class="nav_wrap"></div>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
     <script type="text/babel">
         const current_user = `{{ current_user }}`;
         class Menu extends React.Component{
@@ -95,7 +98,6 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{ current_user }</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                                <a class="dropdown-item" href="">修改密碼</a>
                                 <a class="dropdown-item" href="/admin/logout">登出</a>
                             </div>
                         </li>
