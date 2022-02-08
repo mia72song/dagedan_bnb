@@ -2,7 +2,7 @@
 {% block title %}Board{% endblock %}
 {% block head %}
     {{ super() }}
-
+    <link rel="stylesheet" type="text/css" href={{ url_for("static", filename="css/admin/board.css") }}>
     {% endblock %}
 {% block content %}
     <div class="container">

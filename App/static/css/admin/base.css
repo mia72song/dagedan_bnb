@@ -25,3 +25,6 @@ main{
     max-width: 1200px;
     margin: auto;
 }
+.form-control:focus, .btn:focus, .form-check-input:focus, .form-select:focus{
+    box-shadow: none;
+}
