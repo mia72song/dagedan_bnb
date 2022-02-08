@@ -388,16 +388,5 @@
                 }
             }
         }
-        addEventListener("load", ()=>{
-            currentUserPromise.then(currentUser=>{
-                // console.log(currentUser)
-                if(currentUser!==null){
-                    ReactDOM.render(<Navbar id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
-                    ReactDOM.render(<Search />, document.getElementById("search_wrap"));
-                }else{
-                    handleLogout()
-                }
-            })
-        })
     </script>
 {% endblock %}

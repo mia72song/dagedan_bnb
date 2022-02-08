@@ -9,17 +9,6 @@
         This is Guest List 
     </main>
     <script type="text/babel">
-        addEventListener("load", ()=>{
-            currentUserPromise.then(currentUser=>{
-                // console.log(currentUser)
-                if(currentUser!==null){
-                    ReactDOM.render(<Navbar id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
-
-                }else{
-                    handleLogout();
-                }
-            })
-        })
                 
     </script>
 {% endblock %}

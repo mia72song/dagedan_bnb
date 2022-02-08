@@ -7,21 +7,8 @@
 {% endblock %}
 {% block content %}
     <main>
-        <div class="news"></div>
         <div id="board">
-            
+            This is Board
         </div>
     </main>
-    <script type="text/babel">        
-        addEventListener("load", ()=>{
-            currentUserPromise.then(currentUser=>{
-                if(currentUser!==null){
-                    // console.log(currentUser);
-                    ReactDOM.render(<Navbar id={currentUser[0]} name={currentUser[1]}/>, document.querySelector("header"));
-                }else{
-                    location.href = `/admin`
-                }
-            })
-        })       
-    </script>
 {% endblock %}

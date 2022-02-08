@@ -1,5 +1,4 @@
 header{
-    background-color: #F39801;
     position: fixed;
     top:0;
     left:0;
@@ -10,27 +9,12 @@ header{
 .nav_wrap{
     height: 55px;
 }
-.navbar{
-    display: flex;
-}
-.logo_container{
-    flex: auto;
-}
-.collapse{
-    margin-right: 15px;
+.container{
+    max-width: 1200px;
 }
 #navbarDropdownMenuLink{
     color: lightskyblue;
 }
-#navbarSupportedContent{
-    flex: none;
-    width: auto;
-}
 #navbarSupportedContent> ul li{
     margin: 0 5px;
-}
-@media (max-width:767px){
-    #navbarSupportedContent{
-        width: 100%;
-    }
 }

@@ -20,7 +20,7 @@ def login_required(func):
 
 # 登入
 @admin.route("/", methods=["GET", "POST"])
-def login():
+def index():
     if session.get("user"):
         return redirect("/admin/board")
 
@@ -38,7 +38,7 @@ def login():
     return render_template("admin.html")
 
 # 登出
-@admin.route("/logout", methods=["DELETE"])
+@admin.route("/logout")
 def logout():
     if session.get("user"):
         del session["user"]
@@ -56,4 +56,4 @@ def get_views(html_filename):
         html_filename = "404.html"
         status_code = 404
 
-    return render_template(html_filename), status_code
+    return render_template(html_filename, current_user=session.get("user")[1]), status_code
