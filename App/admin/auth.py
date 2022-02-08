@@ -1,15 +1,11 @@
-from flask import Blueprint, render_template, redirect, session, url_for, request, flash
-import os
-import functools
+from flask import render_template, redirect, session, url_for, request, flash
 
+from . import admin
 from App.models import User
-
-admin = Blueprint("admin", __name__)
-
-templates_dir = f"{os.path.dirname(os.path.abspath(__file__))}/templates"
 
 # 判斷user帳號是否登入，否則重定向至登入頁面
 def login_required(func):
+    import functools
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
         if session.get("user"):
@@ -45,16 +41,3 @@ def logout():
         del session["user"]
 
     return redirect(url_for("admin.index"))
-
-# 管理後台頁面
-@admin.route("/<html_filename>")
-@login_required
-def get_views(html_filename):
-    status_code = 200
-    html_filename = f"admin_{html_filename}.html"
-
-    if not os.path.exists(f"{templates_dir}/{html_filename}"):
-        html_filename = "404.html"
-        status_code = 404
-
-    return render_template(html_filename, current_user=session.get("user")[1]), status_code
