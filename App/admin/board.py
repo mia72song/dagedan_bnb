@@ -1,11 +1,9 @@
 from flask import jsonify, render_template, session, request
 from datetime import date, timedelta, datetime
-import json
 
 from . import admin
 from .auth import login_required
-from App.constants import DATE_FORMATTER
-from App.models import Calendar, Booking, Order, OrderDetail, Mydb, Room
+from App.models import Booking, Order, Mydb, Room
 
 @admin.route("/board")
 @login_required
