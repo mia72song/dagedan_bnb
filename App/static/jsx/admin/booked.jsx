@@ -18,7 +18,7 @@ class Booked extends React.Component{
 const start_date_string = dateIndexToString(0);
 const end_date_string = dateIndexToString(6);
 //console.log(csrf_token);
-fetch(`${window.origin}/auth/booked?start=${start_date_string}&end=${end_date_string}`).then(response=>{
+fetch(`${window.origin}/admin/api/booked?start=${start_date_string}&end=${end_date_string}`).then(response=>{
     if(response.status===500){
         console.log(response.json())
     }else{

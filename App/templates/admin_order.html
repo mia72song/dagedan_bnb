@@ -52,50 +52,150 @@
     <div id="databox_wrap">
         <!--由DataBox組件渲染-->
         <div class="table-responsive-xl">
-            <table class="table table-sm text-center my-3">
+            <table class="table text-center my-3">
                 <thead>
                     <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Sun.</th>
-                        <th scope="col">Mon.</th>
-                        <th scope="col">Tue.</th>
-                        <th scope="col">Wed.</th>
-                        <th scope="col">Thr.</th>
-                        <th scope="col">Fri.</th>
-                        <th scope="col">Sat.</th>
+                        <th scope="col">訂單編號</th>
+                        <th scope="col">建立時間</th>
+                        <th scope="col">入住 / 退房日期</th>
+                        <th scope="col">天數</th>
+                        <th scope="col">人數</th>
+                        <th scope="col">總金額</th>
+                        <th scope="col">訂房 / 付款資訊</th>
+                        <th scope="col">狀態</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <td scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                        <td>@mdo</td>
-                    </tr>
+                <tbody style="line-height: 1.8;">
+                    {% if orders %}
+                        {% for order in orders %}
+                            <!--已付款-->
+                            {% if order.status.value=="PAID" %}
+                            <tr class="bg-mark">
+                                <td scope="row">{{ order.oid }}</th>
+                                <td>{{ order.create_datetime }}</td>
+                                <td>
+                                    {{ order.detail.check_in_date }} / {{ order.detail.check_out_date }}
+                                    <br>
+                                    {% if order.detail %}
+                                    {{ order.detail.room.name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.detail.nights }}</td>
+                                <td>{{ order.detail.num_of_guests }}</td>
+                                <td>{{ order.amount }}</td>
+                                <td>
+                                    {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
+                                    <br>
+                                    付款期限：
+                                    <a href="" class="text-decoration-none py-1">{{ order.payment_deadline }}</a>
+                                </td>
+                                <td>
+                                    {{ order.status.value }}
+                                </td>
+                            </tr>
+                            <!--待確認-->
+                            {% elif order.status.value=="PENDING" %}
+                            <tr>
+                                <td scope="row">{{ order.oid }}</th>
+                                <td>{{ order.create_datetime }}</td>
+                                <td>
+                                    {{ order.detail.check_in_date }} / {{ order.detail.check_out_date }}
+                                    <br>
+                                    {% if order.detail %}
+                                    {{ order.detail.room.name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.detail.nights }}</td>
+                                <td>{{ order.detail.num_of_guests }}</td>
+                                <td>{{ order.amount }}</td>
+                                <td>
+                                    {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
+                                    <br>
+                                    付款期限：
+                                    <a href="" class="text-decoration-none py-1">{{ order.payment_deadline }}</a>
+                                    <button type="button" class="btn btn-sm btn-outline-info my-2 mx-1" style="font-weight: bold; ">確認</button>
+                                </td>
+                                <td>
+                                    {{ order.status.value }}
+                                    <br>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary my-2" style="font-weight: bold; ">取消</button>
+                                </td>
+                            </tr>
+                            <!--取消-->
+                            {% elif order.status.value=="CANCEL" %}
+                            <tr class="bg-light text-muted">
+                                <td scope="row">{{ order.oid }}</th>
+                                <td>{{ order.create_datetime }}</td>
+                                <td>
+                                    {{ order.detail.check_in_date }} / {{ order.detail.check_out_date }}
+                                    <br>
+                                    {% if order.detail %}
+                                    {{ order.detail.room.name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.detail.nights }}</td>
+                                <td>{{ order.detail.num_of_guests }}</td>
+                                <td>{{ order.amount }}</td>
+                                <td>
+                                    {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
+                                    <br>
+                                    付款期限：<span>已取消</span>
+                                </td>
+                                <td>{{ order.status.value }}</td>
+                            </tr>
+                            <!--新訂單-->
+                            {% elif order.status.value=="NEW" %}
+                            <tr>
+                                <td scope="row">{{ order.oid }}</th>
+                                <td>{{ order.create_datetime }}</td>
+                                <td>
+                                    {{ order.detail.check_in_date }} / {{ order.detail.check_out_date }}
+                                    <br>
+                                    {% if order.detail %}
+                                    {{ order.detail.room.name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.detail.nights }}</td>
+                                <td>{{ order.detail.num_of_guests }}</td>
+                                <td>{{ order.amount }}</td>
+                                <td>
+                                    {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
+                                    <br>
+                                    付款期限：
+                                    <a href="" class="text-decoration-none py-1">{{ order.payment_deadline }}</a>
+                                </td>
+                                <td>
+                                    <mark>{{ order.status.value }}</mark>
+                                    <br>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary my-2" style="font-weight: bold; ">取消</button>
+                                </td>
+                            </tr>
+                            <!--其他狀態-->
+                            {% else %}
+                            <tr>
+                                <td scope="row">{{ order.oid }}</th>
+                                <td>{{ order.create_datetime }}</td>
+                                <td>
+                                    {{ order.detail.check_in_date }} / {{ order.detail.check_out_date }}
+                                    <br>
+                                    {% if order.detail %}
+                                    {{ order.detail.room.name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.detail.nights }}</td>
+                                <td>{{ order.detail.num_of_guests }}</td>
+                                <td>{{ order.amount }}</td>
+                                <td>
+                                    {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
+                                    <br>
+                                    付款期限：
+                                    <a href="" class="text-decoration-none py-1">{{ order.payment_deadline }}</a>
+                                </td>
+                                <td>{{ order.status.value }}</td>
+                            </tr>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </tbody>
             </table>
         </div>
@@ -473,15 +573,4 @@
             }
         }
     </script>
-    {% if order %}
-        <div>{{ order.oid }}</div>
-        <div>{{ order.detail }}</div>
-        <div>{{ order.booked }}</div>
-    {% elif orders %}
-        {% for order in orders %}
-            <div>{{ order.oid }}</div>
-            <div>{{ order.detail }}</div>
-            <div>{{ order.booked }}</div>
-        {% endfor %}
-    {% endif %}
 {% endblock %}

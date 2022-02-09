@@ -1,12 +1,12 @@
 from flask import jsonify, request
 from datetime import datetime
 
-from . import auth
+from . import admin
 from App.models import Booking
 from App.constants import DATETIME_FORMATTER, DATE_FORMATTER
-from App.admin.auth import login_required
+from .auth import login_required
 
-@auth.route("/booked")
+@admin.route("/api/booked")
 @login_required
 def get_booked_list():
     if request.args.get("start") and request.args.get("end"):
@@ -28,3 +28,5 @@ def get_booked_list():
 
     else:
         return jsonify({"data": None})
+
+
