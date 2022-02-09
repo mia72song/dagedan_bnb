@@ -33,7 +33,8 @@ class User(db.Model):
 class Booking(db.Model):
     date = db.Column(db.Date, db.ForeignKey("calendar.date"), primary_key=True)
     room_no = db.Column(db.String(64), db.ForeignKey("rooms.room_no"), primary_key=True)
-    order_id = db.Column(db.String(64), db.ForeignKey("orders.oid"), nullable=False)
+    order_id = db.Column(db.String(64), db.ForeignKey("orders.oid"), primary_key=True)
+    is_del = db.Column(db.Boolean, default=False, server_default=text("0"))
 
 class Order(db.Model):
     __tablename__ = "orders"
@@ -137,8 +138,9 @@ class PaymentAtm(db.Model):
     transfer_date = db.Column(db.Date, nullable=False)
     update_datetime = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     update_user = db.Column(db.String(64))
+    is_del = db.Column(db.Boolean, default=False, server_default=text("0"))
 
-    orders = db.relationship("Order", backref="p", uselist=False)
+    order = db.relationship("Order", backref="p", uselist=False)
 
     def getDataDict(self):
         table_name = self.__tablename__

@@ -73,26 +73,6 @@ class Mydb:
             
         return {"year": year, "days": data}
 
-    def getRooms(self):
-        cols = ["room_no", "room_type", "room_name", "accommodate", "rate_weekday", "rate_holiday", "single_discount", "description", "images"]
-
-        sql = """
-            SELECT r.room_no, r.room_type, rt.name, 
-            rt.accommodate, rt.rate_weekday, rt.rate_holiday, rt.single_discount, rt.description, rt.images 
-            FROM rooms AS r 
-            INNER JOIN room_types AS rt ON r.room_type=rt.type 
-            WHERE r.is_available=1 
-        """
-        self.cur.execute(sql)
-        results = self.cur.fetchall()
-        
-        data = []
-        for r in results:
-            data_dict = dict(zip(cols, r))
-            data.append(data_dict)
-        
-        return data
-
     # 將超過期限未付款的訂單，修改狀態為「取消」
     def updateStatus(self):
         today = date.today()
@@ -104,10 +84,10 @@ class Mydb:
         self.cur.execute(sql)
         self.conn.commit()
 
-    # 物理刪除 已「取消」的訂單的訂房明細
+    # 邏輯刪除 已「取消」的訂單的訂房明細
     def cancelBooking(self):
         sql = f"""
-            DELETE FROM booking 
+            UPDATE booking SET is_del=1 
             WHERE order_id IN(SELECT oid FROM orders WHERE status='CANCEL') 
             OR order_id NOT IN(SELECT oid FROM orders)
         """
@@ -122,24 +102,12 @@ class Mydb:
         sql = f"""
             SELECT room_no FROM rooms 
             WHERE is_available=1 AND room_type='{room_type}' 
-            AND room_no NOT IN(SELECT room_no FROM booking WHERE date='{date}')
+            AND room_no NOT IN(SELECT room_no FROM booking WHERE date='{date}' AND is_del=0)
         """
         self.cur.execute(sql)
         return list(item[0] for item in self.cur.fetchall())
 
-    def getOrdersByStatus(self, status=None):
-        # 自動取消過期訂單及釋出空房
-        self.updateStatus()
-        self.cancelBooking()
-        
-        if status:
-            sql = f"SELECT * FROM orders WHERE status='{status}'"
-        else:
-            sql = f"SELECT * FROM orders"
 
-        self.cur.execute(sql)
-        results = self.cur.fetchall()
-        return results
 
     def __del__(self):
         self.cur.close()

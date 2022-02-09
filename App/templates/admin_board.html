@@ -30,7 +30,7 @@
                 <div class="card ms-auto my-1 text-white bg-primary" style="width: 14rem;">
                     <div class="card-body">
                         <h1 class="card-title fw-bolder">{{ counts.new }}</h1>
-                        <p class="card-text">近七日內的新訂房</p>
+                        <p class="card-text">近七日內新增訂房</p>
                     </div>
                     <div class="card-footer text-center">
                         <a href="/admin/order?status=new" class="card-link text-white text-decoration-none">查看詳情</a>
@@ -41,7 +41,7 @@
                 <div class="card mx-auto my-1 text-white bg-success" style="width: 14rem;">
                     <div class="card-body">
                         <h1 class="card-title fw-bolder">{{ counts.pending }}</h1>
-                        <p class="card-text">待確認的訂單</p>
+                        <p class="card-text">待確認匯款</p>
                     </div>
                     <div class="card-footer text-center">
                         <a href="/admin/order?status=pending" class="card-link text-white text-decoration-none">查看詳情</a>
@@ -92,7 +92,7 @@
                 <tbody>
                 {% for r in rooms %}
                     <tr>
-                        <th scope="row" class="align-middle">{{ r.room_name }}</th>
+                        <th scope="row" class="align-middle">{{ r.rt.name }}</th>
                         {% for d in calendar.days %}
                         <td id="{{ calendar.year+'-'+d.date+'_'+r.room_no }}"></td>
                         {% endfor %}
