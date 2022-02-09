@@ -1,3 +1,4 @@
+from time import monotonic
 import pymysql
 import os
 from datetime import date, datetime
@@ -48,6 +49,49 @@ class Mydb:
         self.cur.execute(sql)
         result = self.cur.fetchone()
         return dict(zip(cols, result))
+
+    def getCalendar(self, start_date, end_date):
+        cols = self.__getColumns("calendar")
+
+        start_date_string =  datetime.strftime(start_date, DATE_FORMATTER)
+        end_date_string =  datetime.strftime(end_date, DATE_FORMATTER)
+
+        sql = f"SELECT * FROM calendar WHERE date between '{start_date_string}' AND '{end_date_string}'"
+        self.cur.execute(sql)
+        results = self.cur.fetchall()
+        data = []
+        year = ""
+        for r in results:
+            data_dict = dict(zip(cols, r))
+            date_string = datetime.strftime(data_dict["date"], DATE_FORMATTER)
+            if not year:
+                year = date_string[:4]
+
+            data_dict["date"] = date_string[5:]
+
+            data.append(data_dict)
+            
+        return {"year": year, "days": data}
+
+    def getRooms(self):
+        cols = ["room_no", "room_type", "room_name", "accommodate", "rate_weekday", "rate_holiday", "single_discount", "description", "images"]
+
+        sql = """
+            SELECT r.room_no, r.room_type, rt.name, 
+            rt.accommodate, rt.rate_weekday, rt.rate_holiday, rt.single_discount, rt.description, rt.images 
+            FROM rooms AS r 
+            INNER JOIN room_types AS rt ON r.room_type=rt.type 
+            WHERE r.is_available=1 
+        """
+        self.cur.execute(sql)
+        results = self.cur.fetchall()
+        
+        data = []
+        for r in results:
+            data_dict = dict(zip(cols, r))
+            data.append(data_dict)
+        
+        return data
 
     # 將超過期限未付款的訂單，修改狀態為「取消」
     def updateStatus(self):

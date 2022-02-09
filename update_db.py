@@ -33,4 +33,8 @@ if __name__=="__main__":
     app = create_app()
     app.app_context().push()
     #db.create_all()
+    today = date.today()
+    mydb = Mydb()
+    calendar = mydb.getCalendar(today, today+timedelta(days=6))
+    print(calendar)
     
