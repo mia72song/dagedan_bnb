@@ -70,7 +70,7 @@
                         {% for order in orders %}
                             <!--已付款-->
                             {% if order.status.value=="PAID" %}
-                            <tr class="bg-mark">
+                            <tr class="bg-paid">
                                 <td scope="row">{{ order.oid }}</th>
                                 <td>{{ order.create_datetime }}</td>
                                 <td>
@@ -85,12 +85,41 @@
                                 <td>{{ order.amount }}</td>
                                 <td>
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
-                                    <br>
-                                    付款期限：
-                                    <a href="" class="text-decoration-none py-1">{{ order.payment_deadline }}</a>
+                                    <div class="mt-2">
+                                        付款：<span class="text-success fw-bold">轉帳完成</span>
+                                        <button type="button" class="btn btn-sm btn-outline-success fw-bold mx-1">查看資料</button>
+                                    </div>
                                 </td>
+                                <td class="fw-bold">
+                                    已付款
+                                </td>
+                            </tr>
+                            <!--新訂單-->
+                            {% elif order.status.value=="NEW" %}
+                            <tr>
+                                <td scope="row">{{ order.oid }}</th>
+                                <td>{{ order.create_datetime }}</td>
                                 <td>
-                                    {{ order.status.value }}
+                                    {{ order.detail.check_in_date }} / {{ order.detail.check_out_date }}
+                                    <br>
+                                    {% if order.detail %}
+                                    {{ order.detail.room.name }}
+                                    {% endif %}
+                                </td>
+                                <td>{{ order.detail.nights }}</td>
+                                <td>{{ order.detail.num_of_guests }}</td>
+                                <td>{{ order.amount }}</td>
+                                <td>
+                                    {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
+                                    <div class="mt-2">
+                                        付款：<span class="text-decoration-none text-primary">{{ order.payment_deadline }}</span>
+                                        <button type="button" class="btn btn-sm btn-outline-primary fw-bold mx-1">確認匯款</button>
+                                    </div>
+                                </td>
+                                <td class="fw-bold">
+                                    <mark>新訂單</mark>
+                                    <br>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold mt-2">取消</button>
                                 </td>
                             </tr>
                             <!--待確認-->
@@ -110,15 +139,15 @@
                                 <td>{{ order.amount }}</td>
                                 <td>
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
-                                    <br>
-                                    付款期限：
-                                    <a href="" class="text-decoration-none py-1">{{ order.payment_deadline }}</a>
-                                    <button type="button" class="btn btn-sm btn-outline-info my-2 mx-1" style="font-weight: bold; ">確認</button>
+                                    <div class="mt-2">
+                                        付款：<span class="text-decoration-none text-primary">{{ order.payment_deadline }}</span>
+                                        <button type="button" class="btn btn-sm btn-outline-primary fw-bold mx-1">確認匯款</button>
+                                    </div>
                                 </td>
-                                <td>
-                                    {{ order.status.value }}
+                                <td class="fw-bold text-primary">
+                                    待確認
                                     <br>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary my-2" style="font-weight: bold; ">取消</button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold mt-2">取消</button>
                                 </td>
                             </tr>
                             <!--取消-->
@@ -138,60 +167,13 @@
                                 <td>{{ order.amount }}</td>
                                 <td>
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
-                                    <br>
-                                    付款期限：<span>已取消</span>
+                                    <div class="mt-2">
+                                        付款：<span>已取消</span>
+                                    </div>
                                 </td>
-                                <td>{{ order.status.value }}</td>
-                            </tr>
-                            <!--新訂單-->
-                            {% elif order.status.value=="NEW" %}
-                            <tr>
-                                <td scope="row">{{ order.oid }}</th>
-                                <td>{{ order.create_datetime }}</td>
-                                <td>
-                                    {{ order.detail.check_in_date }} / {{ order.detail.check_out_date }}
-                                    <br>
-                                    {% if order.detail %}
-                                    {{ order.detail.room.name }}
-                                    {% endif %}
+                                <td class="fw-bold">
+                                    取消
                                 </td>
-                                <td>{{ order.detail.nights }}</td>
-                                <td>{{ order.detail.num_of_guests }}</td>
-                                <td>{{ order.amount }}</td>
-                                <td>
-                                    {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
-                                    <br>
-                                    付款期限：
-                                    <a href="" class="text-decoration-none py-1">{{ order.payment_deadline }}</a>
-                                </td>
-                                <td>
-                                    <mark>{{ order.status.value }}</mark>
-                                    <br>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary my-2" style="font-weight: bold; ">取消</button>
-                                </td>
-                            </tr>
-                            <!--其他狀態-->
-                            {% else %}
-                            <tr>
-                                <td scope="row">{{ order.oid }}</th>
-                                <td>{{ order.create_datetime }}</td>
-                                <td>
-                                    {{ order.detail.check_in_date }} / {{ order.detail.check_out_date }}
-                                    <br>
-                                    {% if order.detail %}
-                                    {{ order.detail.room.name }}
-                                    {% endif %}
-                                </td>
-                                <td>{{ order.detail.nights }}</td>
-                                <td>{{ order.detail.num_of_guests }}</td>
-                                <td>{{ order.amount }}</td>
-                                <td>
-                                    {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
-                                    <br>
-                                    付款期限：
-                                    <a href="" class="text-decoration-none py-1">{{ order.payment_deadline }}</a>
-                                </td>
-                                <td>{{ order.status.value }}</td>
                             </tr>
                             {% endif %}
                         {% endfor %}

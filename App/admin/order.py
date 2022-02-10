@@ -43,9 +43,9 @@ def get_orders():
 def get_order_by_id(oid):
     # 請求網址：/admin/order/XXXXX
     order = Order.query.get(oid)
-    print(order.status)
+    print(order.status.value)
     print(order.booked)
-    print(order.p)
+    print(order.payment)
     
     # 修改訂單狀態為：PAID，及付款資料
     if request.method == "PUT":

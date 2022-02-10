@@ -56,6 +56,7 @@ class Order(db.Model):
 
     booked = db.relationship("Booking", backref="o", lazy="dynamic")
     detail = db.relationship("OrderDetail", backref="o", uselist=False)
+    payment = db.relationship("PaymentAtm", backref="o", uselist=False)
         
     def getDataDict(self):
         table_name = self.__tablename__
@@ -139,8 +140,6 @@ class PaymentAtm(db.Model):
     update_datetime = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
     update_user = db.Column(db.String(64))
     is_del = db.Column(db.Boolean, default=False, server_default=text("0"))
-
-    order = db.relationship("Order", backref="p", uselist=False)
 
     def getDataDict(self):
         table_name = self.__tablename__
