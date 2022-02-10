@@ -2,9 +2,7 @@
 {% block title %}Order List{% endblock %}
 {% block head %}
     {{ super() }}
-    <script type="text/javascript" src={{ url_for("static", filename="js/admin/order.js") }}></script>
-    <script type="text/javascript" src={{ url_for("static", filename="js/admin/booked.js") }}></script>
-    <script type="text/javascript" src={{ url_for("static", filename="js/admin/payment.js") }}></script>
+
     <style>
         #search_wrap{
             max-width: 95%;
@@ -96,7 +94,7 @@
                             </tr>
                             <!--新訂單-->
                             {% elif order.status.value=="NEW" %}
-                            <tr>
+                            <tr class="bg-new">
                                 <td scope="row">{{ order.oid }}</th>
                                 <td>{{ order.create_datetime }}</td>
                                 <td>
@@ -117,14 +115,14 @@
                                     </div>
                                 </td>
                                 <td class="fw-bold">
-                                    <mark>新訂單</mark>
+                                    新訂單
                                     <br>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold mt-2">取消</button>
+                                    <button type="button" class="btn btn-sm btn-outline-dark fw-bold mt-2" id="cancel_btn_{{ order.oid }}">取消</button>
                                 </td>
                             </tr>
                             <!--待確認-->
                             {% elif order.status.value=="PENDING" %}
-                            <tr>
+                            <tr class="bg-pending">
                                 <td scope="row">{{ order.oid }}</th>
                                 <td>{{ order.create_datetime }}</td>
                                 <td>
@@ -147,12 +145,12 @@
                                 <td class="fw-bold text-primary">
                                     待確認
                                     <br>
-                                    <button type="button" class="btn btn-sm btn-outline-secondary fw-bold mt-2">取消</button>
+                                    <button type="button" class="btn btn-sm btn-outline-dark fw-bold mt-2" id="cancel_btn_{{ order.oid }}">取消</button>
                                 </td>
                             </tr>
                             <!--取消-->
                             {% elif order.status.value=="CANCEL" %}
-                            <tr class="bg-light text-muted">
+                            <tr class="text-muted">
                                 <td scope="row">{{ order.oid }}</th>
                                 <td>{{ order.create_datetime }}</td>
                                 <td>
@@ -165,9 +163,9 @@
                                 <td>{{ order.detail.nights }}</td>
                                 <td>{{ order.detail.num_of_guests }}</td>
                                 <td>{{ order.amount }}</td>
-                                <td>
+                                <td class="fst-italic">
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
-                                    <div class="mt-2">
+                                    <div>
                                         付款：<span>已取消</span>
                                     </div>
                                 </td>
@@ -183,254 +181,26 @@
         </div>
     </div>
     <script type="text/babel">
-        const order_status = {
-            ALL: "所有訂單",
-            NEW: "新訂單",
-            PAID: "已付款",
-            CANCEL: "取消"
-        }
-        const search_select = {
-            order_id: "訂單編號",
-            phone: "聯絡電話",
-            check_in_date: "入住日期"
-        }
-        class Search extends React.Component{
-            state = {
-                orders_status: "NEW", // NEW, PAID, CANCEL, ALL
-                select: "", // order_id, phone, check_in_date
-                keyword: ""
-            }
-            componentDidMount(){
-                // 訪問路徑：/order, /order?id=<oid>
-                let p;
-                if(location.search){
-                    const query_string = location.search.replace("?", "");
-                    const oid = (query_string.split("=")[0]==="id" && query_string.split("=")[1]);
-                    if(oid){
-                        p = getOrders("order_id", oid).then(resp=>{
-                            this.setState({
-                                orders_status: "ALL",
-                                select: "order_id",
-                                keyword: oid
-                            })
-                            return resp.data
-                        })
-                    }
+        const cancel_btns = document.querySelectorAll("button[id^='cancel_btn_']");
+        document.querySelectorAll("button[id^='cancel_btn_']").forEach(btn=>{
+            const id = btn.id.split("_")[2];
+            btn.addEventListener("click", cancelOrderById);
+        })
+        function cancelOrderById(eObj){
+            //console.log(csrf_token);
+            const oid = eObj.target.id.split("_")[2];
+            const url = `${window.origin}/admin/order/${oid}`;
+            fetch(`${window.origin}/admin/order/${oid}`, {
+                method: "delete",
+                credentials: "include",
+                headers: {"X-CSRFToken": csrf_token}
+            }).then(response=>{
+                if(response.status==200){
+                    location.href = "/admin/order";
                 }else{
-                    p = getOrders("status", this.state.orders_status).then(resp=>{
-                        return resp.data
-                    })
+                    console.log(response.json())
                 }
-                p.then(data=>{
-                    ReactDOM.render(<DataBox data={data}/>, document.querySelector("#databox_wrap"));
-                })
-            }
-            render(){
-                let status_options = [];
-                Object.keys(order_status).forEach(option=>{
-                    status_options.push(
-                        <option value={option}>{order_status[option]}</option>
-                    )
-                })
-                let searcht_options = [];
-                Object.keys(search_select).forEach(option=>{
-                    searcht_options.push(
-                        <option value={option}>{search_select[option]}</option>
-                    )
-                })
-                return(
-                    <div id="search_box">
-                        <div id="status_wrap">
-                            <label for="">訂單狀態</label>
-                            <select value={this.state.orders_status} onChange={this.filterStatus}>
-                                { status_options }
-                            </select>
-                        </div>
-                        <form id="keyword_wrap" onSubmit={this.handleSubmit}>
-                            <label for="">搜尋項目</label>
-                            <select value={this.state.select} onChange={this.handleChange("select")} required>
-                                <option value="">請選取搜尋項目</option>
-                                { searcht_options }
-                            </select>
-                            <input type={this.state.select=="check_in_date" ? "date" : "text"} name="keyword" id="keyword" placeholder="請輸入關鍵字"
-                                value={this.state.keyword} onChange={this.handleChange("keyword")} required/>
-                            <button type="submit" className="btn btn-secondary">搜尋</button>
-                        </form>
-                    </div>
-                )
-            }
-            filterStatus=(eObj)=>{
-                this.setState({
-                    orders_status: eObj.target.value,
-                    select: "",
-                    keyword: ""
-                })
-                getOrders("status", eObj.target.value).then(resp=>{
-                    ReactDOM.render(<DataBox data={resp.data}/>, document.querySelector("#databox_wrap"));
-                })
-            }
-            handleChange=(dataType)=>{
-                return(eObj=>{
-                    this.setState({
-                        [dataType]: eObj.target.value
-                    });
-                })
-            }
-            handleSubmit=(eObj)=>{
-                eObj.preventDefault();
-                getOrders(this.state.select, this.state.keyword).then(resp=>{
-                    ReactDOM.render(<DataBox data={resp.data}/>, document.querySelector("#databox_wrap"));
-                })
-            }
-        }
-        class DataBox extends React.Component{
-            cols = [
-                {id: "order_id_col", name: "訂單編號"},
-                {id: "create_datetime_col", name: "建立時間"},
-                {id: "date_col", name: "入住 / 退房日期"},
-                {id: "nights_col", name: "天數"},
-                {id: "guests_col", name: "人數"},
-                {id: "amount_col", name: "總金額"},
-                {id: "booker_info_col", name: "訂房 / 付款資訊"},
-                // {id: "add_on_service_col", name: "附加服務"},
-                {id: "order_status_col", name: "狀態"}
-            ]
-            render(){
-                return(
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                { this.cols.map(col=><th id={col.id}>{col.name}</th>) }
-                            </tr>
-                        </thead>
-                        <tbody>
-                            { this.props.data && this.props.data.map(d=><DataRow key={d.order_id} data={d}/>) }
-                        </tbody>
-                    </table>
-                )
-            }
-        }
-        class DataRow extends React.Component{
-            state = {
-                status: ""
-            }
-            componentDidMount(){
-                this.setState({status: this.props.data.order_status})
-            }
-            render(){
-                const data = this.props.data;
-                let tr_class = "cancel_tr";
-                if(this.state.status!=="CANCEL"){
-                    tr_class = (this.state.status==="PAID"? "paid_tr" : "unpaid_tr")
-                }
-                return(
-                    <tr className={tr_class}>
-                        <td>
-                            <p>{data.order_id}</p>
-                        </td>
-                        <td>
-                            <p>{data.create_datetime}</p>                               
-                        </td>
-                        <td>
-                            <div>{data.check_in_date} / {data.check_out_date}</div>
-                            {this.state.status!=="CANCEL" && <BookingInfo oid={data.order_id}/>}
-                        </td>
-                        <td>{data.nights}</td>
-                        <td>{data.guests}</td>
-                        <td>{data.amount}</td>
-                        <td className="left_td">
-                            <p>{data.booker_name} {data.booker_gender=="F"? "小姐" : "先生"} {data.booker_phone}</p>
-                            {this.state.status!=="CANCEL" && <PaymentInfo status={this.state.status} oid={data.order_id} pid={data.pid} payment_deadline={data.payment_deadline}/>}
-                        </td>
-                        <td>
-                            <p>{order_status[this.state.status]}</p>
-                            {this.state.status==="NEW" && <button onClick={this.handleCancel}>取消</button>}
-                            {this.state.status==="PAID" && <button className="paid">退款</button>}
-                        </td>
-                    </tr>
-                )
-            }
-            handleCancel=()=>{
-                const check = confirm(`是否確定取消訂單編號：${this.props.data.order_id}`);
-                if(check){
-                    updateOrderStatusById(this.props.data.order_id, "CANCEL").then(resp=>{
-                        console.log(resp.ok)
-                        if(resp.ok){
-                            location.href = `/admin/order`;
-                        }
-                    })
-                }
-            }
-        }
-        class BookingInfo extends React.Component{
-            state = {
-                on: false
-            }
-            render(){
-                return(
-                    <div className="booking_detail">
-                        <a href="javascript: void(0)" onClick={this.getBookingList} className="booking_list_btn">
-                            {this.state.on? "房間明細🔼" : "🔽房間明細" }
-                        </a>
-                        {this.state.on && <BookingList oid={this.props.oid}/>}
-                    </div> 
-                )
-            }
-            getBookingList=()=>{
-                this.setState({on: !this.state.on})
-            }
-        }
-        class BookingList extends React.Component{
-            state = {
-                booked_list: []
-            }
-            componentDidMount(){
-                getBookedListByOrderId(this.props.oid).then(resp=>{
-                    this.setState({booked_list : resp.data})
-                })
-            }
-            render(){
-                let booking_content = []
-                this.state.booked_list.forEach(b=>{
-                    let item = <div>{b.date} {b.room_name}</div>
-                    booking_content.push(item)
-                })
-                return(
-                    <div className="booking_list">
-                        { booking_content }
-                    </div>
-                )
-            }
-        }
-        class PaymentInfo extends React.Component{
-            state = {
-                on: false
-            }
-            render(){
-                const status = this.props.status;
-                return(
-                    <div className="payment_div">
-                        <span>
-                            付款期限：{status==="PAID"? (
-                                <span className="paid">已付款</span>
-                            ):(
-                                <span className="unpaid">{this.props.payment_deadline}</span>
-                            )}
-                        </span>
-                        <button onClick={this.getPaymentDetail}>
-                            付款資料
-                        </button>
-                        {this.state.on && (
-                            <div className="payment_detail" id={`payment_detail_${this.props.oid}`}>
-                                <PaidForm oid={this.props.oid} pid={this.props.pid} cancel={status=="CANCEL"}/>
-                            </div>
-                        )}
-                    </div>
-                )
-            }
-            getPaymentDetail=()=>{
-                this.setState({on: !this.state.on})
-            }
+            })
         }
         class PaidForm extends React.Component{
             state = {

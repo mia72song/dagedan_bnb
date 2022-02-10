@@ -28,6 +28,6 @@ main{
 .form-control:focus, .btn:focus, .form-check-input:focus, .form-select:focus{
     box-shadow: none;
 }
-.bg-paid{
-    background-color: #FFE6D9;
+.bg-new{
+    background-color: #FFF3EE;
 }
