@@ -3,13 +3,26 @@ from datetime import date, timedelta, datetime
 
 from . import admin
 from .auth import login_required
-from App.models import Booking, Order, Mydb, Room
+from App.models import Booking, Order, Room, Mydb
+
+# 自動取消過期訂單及釋出空房
+def cancelExpiredOrder():
+    try:
+        mydb = Mydb()
+        mydb.updateStatus()
+        mydb.cancelBooking()
+        print("系統取消逾期未付款訂單")
+    except Exception as e:
+        print("資料庫錯誤：", e)
+    finally:
+        del mydb
 
 @admin.route("/board")
 @login_required
 def board():
-    today = date.today()
+    cancelExpiredOrder()
 
+    today = date.today()
     new_orders = Order.query.filter(
         Order.create_datetime.between(today-timedelta(days=6), today)
     ).filter(
@@ -31,7 +44,7 @@ def board():
         mydb = Mydb()
         calendar = mydb.getCalendar(today, today+timedelta(days=6))
     except Exception as e:
-        print(e)
+        print("資料庫錯誤：", e)
 
     return render_template(
         "admin_board.html", 
