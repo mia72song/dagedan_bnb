@@ -84,10 +84,10 @@ class Mydb:
         self.cur.execute(sql)
         self.conn.commit()
 
-    # 邏輯刪除 已「取消」的訂單的訂房明細
+    # 物理刪除 已「取消」的訂單的訂房明細
     def cancelBooking(self):
         sql = f"""
-            UPDATE booking SET is_del=1 
+            DELETE FROM booking 
             WHERE order_id IN(SELECT oid FROM orders WHERE status='CANCEL') 
             OR order_id NOT IN(SELECT oid FROM orders)
         """
@@ -102,12 +102,10 @@ class Mydb:
         sql = f"""
             SELECT room_no FROM rooms 
             WHERE is_available=1 AND room_type='{room_type}' 
-            AND room_no NOT IN(SELECT room_no FROM booking WHERE date='{date}' AND is_del=0)
+            AND room_no NOT IN(SELECT room_no FROM booking WHERE date='{date}')
         """
         self.cur.execute(sql)
         return list(item[0] for item in self.cur.fetchall())
-
-
 
     def __del__(self):
         self.cur.close()

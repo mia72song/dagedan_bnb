@@ -33,8 +33,7 @@ class User(db.Model):
 class Booking(db.Model):
     date = db.Column(db.Date, db.ForeignKey("calendar.date"), primary_key=True)
     room_no = db.Column(db.String(64), db.ForeignKey("rooms.room_no"), primary_key=True)
-    order_id = db.Column(db.String(64), db.ForeignKey("orders.oid"), primary_key=True)
-    is_del = db.Column(db.Boolean, default=False, server_default=text("0"))
+    order_id = db.Column(db.String(64), db.ForeignKey("orders.oid"), nullable=False)
 
 class Order(db.Model):
     __tablename__ = "orders"
@@ -57,7 +56,7 @@ class Order(db.Model):
     booked = db.relationship("Booking", backref="o", lazy="dynamic")
     detail = db.relationship("OrderDetail", backref="o", uselist=False)
     payment = db.relationship("PaymentAtm", backref="o", uselist=False)
-        
+    
     def getDataDict(self):
         table_name = self.__tablename__
         pk_col = "oid"
