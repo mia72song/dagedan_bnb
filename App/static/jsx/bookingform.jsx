@@ -229,6 +229,11 @@ class BookingForm extends React.Component{
     }
     //發送訂房資料
     handelSubmit=(eObj)=>{
+        const today = new Date();
+        const check_in_date = new Date(this.state.check_in_date);
+        if(today>=check_in_date){
+            return
+        }
         eObj.preventDefault();
         // 結算金額
         const amount = document.getElementById(`total_amount_${this.state.room_type}`).value;
