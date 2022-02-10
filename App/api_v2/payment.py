@@ -24,7 +24,7 @@ def createPayment(oid):
                 payment.amount = data["amount"]
                 payment.transfer_date = data["transfer_date"]
 
-                order.p = payment                
+                order.payment = payment                
                 order.status = "PENDING"
                 order.update_user = payment.update_user = "guest"
                 
