@@ -2,6 +2,7 @@
 {% block title %}Board{% endblock %}
 {% block head %}
     {{ super() }}
+    
     <style>
         .date>p{
             margin-top: 0.4rem;
@@ -21,9 +22,6 @@
     </style>
 {% endblock %}
 {% block content %}
-    <script>
-        const csrf_token = "{{ csrf_token() }}";
-    </script>
     <div class="container">
         <div class="row my-4">
             <div class="col-12 col-sm-4">

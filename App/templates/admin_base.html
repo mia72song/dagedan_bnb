@@ -66,6 +66,7 @@
     </main>
     <script type="text/babel">
         const current_user = `{{ current_user }}`;
+        const csrf_token = "{{ csrf_token() }}";
         class Menu extends React.Component{
             state = {
                 current_page: "board"
