@@ -38,33 +38,19 @@ def get_orders():
         orders = orders[end_index-limit:end_index]
     )
 
-@admin.route("/order/<oid>", methods=["GET", "PUT", "DELETE"])
+@admin.route("/order/<oid>", methods=["GET", "DELETE"])
 @login_required
 def get_order_by_id(oid):
     # 請求網址：/admin/order/XXXXX
-    order = Order.query.get(oid)
-    print(order.status.value)
-    print(order.booked)
-    print(order.payment)
-    
-    # 修改訂單狀態為：PAID，及修改付款資料
-    if request.method == "PUT":
-        update_data = request.get_json()
-        update_user = session.get("user")[0]
-
-        if order.payment and order.status.value=="PENDING":
-            pass
-        elif order.payment is None and order.status.value=="NEW":
-            pass
-        
-        print(order)
-
+    order = Order.query.get(oid)        
     # 修改訂單狀態為：CANCEL
-    elif request.method == "DELETE":
+    if request.method == "DELETE":
         if order.status.value=="NEW" or order.status.value=="PENDING":
             try:
                 order.status = "CANCEL"
                 order.update_user = session.get("user")[0]
+                if order.payment:
+                    order.payment.is_del = 1
                 mydb = Mydb()
                 mydb.cancelBooking()
             

@@ -1,4 +1,3 @@
-from time import monotonic
 import pymysql
 import os
 from datetime import date, datetime
@@ -53,10 +52,11 @@ class Mydb:
     def getCalendar(self, start_date, end_date):
         cols = self.__getColumns("calendar")
 
-        start_date_string =  datetime.strftime(start_date, DATE_FORMATTER)
-        end_date_string =  datetime.strftime(end_date, DATE_FORMATTER)
+        if not (isinstance(start_date, str) and isinstance(end_date, str)):
+            start_date =  datetime.strftime(start_date, DATE_FORMATTER)
+            end_date =  datetime.strftime(end_date, DATE_FORMATTER)
 
-        sql = f"SELECT * FROM calendar WHERE date between '{start_date_string}' AND '{end_date_string}'"
+        sql = f"SELECT * FROM calendar WHERE date between '{start_date}' AND '{end_date}'"
         self.cur.execute(sql)
         results = self.cur.fetchall()
         data = []
@@ -98,6 +98,9 @@ class Mydb:
         # 自動取消過期訂單及釋出空房
         self.updateStatus()
         self.cancelBooking()
+
+        if not isinstance(date, str):
+            date =  datetime.strftime(date, DATE_FORMATTER)
         
         sql = f"""
             SELECT room_no FROM rooms 
