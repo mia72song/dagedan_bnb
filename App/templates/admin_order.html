@@ -12,6 +12,10 @@
             max-width: 95%;
             margin: auto;
         }
+        div[id^='payment_']{
+            display: none;
+            margin-top: 5px;
+        }
     </style>
 {% endblock %}
 {% block content %}
@@ -66,8 +70,8 @@
                 <tbody style="line-height: 1.8;">
                     {% if orders %}
                         {% for order in orders %}
-                            <!--已付款-->
                             {% if order.status.value=="PAID" %}
+                            <!--已付款-->
                             <tr class="bg-paid">
                                 <td scope="row">{{ order.oid }}</th>
                                 <td>{{ order.create_datetime }}</td>
@@ -85,15 +89,18 @@
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
                                     <div class="mt-2">
                                         付款：<span class="text-success fw-bold">轉帳完成</span>
-                                        <button type="button" class="btn btn-sm btn-outline-success fw-bold mx-1">查看資料</button>
+                                        <button type="button" class="btn btn-sm btn-outline-success fw-bold mx-1" id="get_payment_btn_{{ order.oid }}">查看資料</button>
+                                    </div>
+                                    <div id="payment_{{ order.oid }}">
+                                        由PaymentForm組件渲染
                                     </div>
                                 </td>
                                 <td class="fw-bold">
                                     已付款
                                 </td>
                             </tr>
-                            <!--新訂單-->
                             {% elif order.status.value=="NEW" %}
+                            <!--新訂單-->
                             <tr class="bg-new">
                                 <td scope="row">{{ order.oid }}</th>
                                 <td>{{ order.create_datetime }}</td>
@@ -111,7 +118,10 @@
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
                                     <div class="mt-2">
                                         付款：<span class="text-decoration-none text-primary">{{ order.payment_deadline }}</span>
-                                        <button type="button" class="btn btn-sm btn-outline-primary fw-bold mx-1">確認匯款</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary fw-bold mx-1" id="get_payment_btn_{{ order.oid }}">確認匯款</button>
+                                    </div>
+                                    <div id="payment_{{ order.oid }}">
+                                        由PaymentForm組件渲染
                                     </div>
                                 </td>
                                 <td class="fw-bold">
@@ -120,8 +130,8 @@
                                     <button type="button" class="btn btn-sm btn-outline-dark fw-bold mt-2" id="cancel_btn_{{ order.oid }}">取消</button>
                                 </td>
                             </tr>
-                            <!--待確認-->
                             {% elif order.status.value=="PENDING" %}
+                            <!--待確認-->
                             <tr class="bg-pending">
                                 <td scope="row">{{ order.oid }}</th>
                                 <td>{{ order.create_datetime }}</td>
@@ -139,7 +149,10 @@
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
                                     <div class="mt-2">
                                         付款：<span class="text-decoration-none text-primary">{{ order.payment_deadline }}</span>
-                                        <button type="button" class="btn btn-sm btn-outline-primary fw-bold mx-1">確認匯款</button>
+                                        <button type="button" class="btn btn-sm btn-outline-primary fw-bold mx-1" id="get_payment_btn_{{ order.oid }}">確認匯款</button>
+                                    </div>
+                                    <div id="payment_{{ order.oid }}">
+                                        由PaymentForm組件渲染
                                     </div>
                                 </td>
                                 <td class="fw-bold text-primary">
@@ -148,8 +161,8 @@
                                     <button type="button" class="btn btn-sm btn-outline-dark fw-bold mt-2" id="cancel_btn_{{ order.oid }}">取消</button>
                                 </td>
                             </tr>
-                            <!--取消-->
                             {% elif order.status.value=="CANCEL" %}
+                            <!--取消-->
                             <tr class="text-muted">
                                 <td scope="row">{{ order.oid }}</th>
                                 <td>{{ order.create_datetime }}</td>
@@ -181,35 +194,59 @@
         </div>
     </div>
     <script type="text/babel">
-        const cancel_btns = document.querySelectorAll("button[id^='cancel_btn_']");
+        // 取消訂單
         document.querySelectorAll("button[id^='cancel_btn_']").forEach(btn=>{
-            const id = btn.id.split("_")[2];
             btn.addEventListener("click", cancelOrderById);
         })
         function cancelOrderById(eObj){
             //console.log(csrf_token);
             const oid = eObj.target.id.split("_")[2];
-            const url = `${window.origin}/admin/order/${oid}`;
-            fetch(`${window.origin}/admin/order/${oid}`, {
-                method: "delete",
-                credentials: "include",
-                headers: {"X-CSRFToken": csrf_token}
-            }).then(response=>{
+            const check = confirm(`是否取消編號：${oid} 訂單?`);
+            if(check){
+                fetch(`${window.origin}/admin/order/${oid}`, {
+                    method: "delete",
+                    credentials: "include",
+                    headers: {"X-CSRFToken": csrf_token}
+                }).then(response=>{
+                    if(response.status==200){
+                        location.href = "/admin/order";
+                    }else{
+                        console.log(response.json())
+                    }
+                })
+            }
+        }
+        // 取得匯款資料
+        document.querySelectorAll("button[id^='get_payment_btn_']").forEach(btn=>{
+            btn.addEventListener("click", getPaymentByOid);
+        })
+        function getPaymentByOid(eObj){
+            //console.log(csrf_token);
+            document.querySelectorAll("div[id^='payment_']").forEach(div=>{
+                div.style.display = "none";
+            });
+
+            const oid = eObj.target.id.split("_")[3];
+            
+            fetch(`${window.origin}/admin/api/payment/${oid}`).then(response=>{
                 if(response.status==200){
-                    location.href = "/admin/order";
+                    return response.json()
                 }else{
-                    console.log(response.json())
+                    console.log(response.json());
                 }
+            }).then(resp=>{
+                const payment_div = document.getElementById(`payment_${oid}`);
+                payment_div.style.display = "block";
+                ReactDOM.render(<PaymentForm data={resp.data} oid={oid}/>, payment_div);
             })
         }
-        class PaidForm extends React.Component{
+        class PaymentForm extends React.Component{
             state = {
                 bank: "", // 銀行
                 account_no: "", //帳號至先五碼
                 name: "", // 戶名
                 amount: "",
-                transfer_date: "",
-                past_data: {}, // 存放原始資料，以追蹤修改項目
+                transfer_date: ""
             }
             labels = {
                 bank: "匯款銀行", 
@@ -219,109 +256,24 @@
                 transfer_date: "匯款日期"
             }
             componentDidMount(){
-                if(this.props.pid!==null){
-                    getPayment(this.props.pid).then(resp=>{
-                        this.setState({
-                            bank: resp.data.bank,
-                            account_no: resp.data.account_no,
-                            name: resp.data.name,
-                            amount: resp.data.amount,
-                            transfer_date: resp.data.transfer_date,
-                            past_data: resp.data
-                        })
+                if(this.props.data){
+                    this.setState({
+                        bank: this.props.data.bank,
+                        account_no: this.props.data.account_no,
+                        name: this.props.data.name,
+                        amount: this.props.data.amount,
+                        transfer_date: this.props.data.transfer_date
                     })
                 }
             }
             render(){
-                // console.log(this.props.cancel);
-                let payment_content = []
-                Object.keys(this.labels).forEach(col=>{
-                    let item = (
-                        <div>
-                            <label for="">{this.labels[col]}：</label>
-                            <input type={col=="transfer_date"? "date" : "text"} id={`${col}_input`} value={this.state[col]} 
-                                onChange={this.handleChange(col)} required/>
-                        </div>
-                    )
-                    payment_content.push(item)
-                })
+                console.log(this.props.data);
+                console.log(this.props.oid);
                 return(
-                    <form className="payment_form" id={`payment_form_${this.props.oid}`}
-                        onSubmit={this.props.pid!==null? this.handleUpdate : this.handleCreate}>
-                        { payment_content }
-                        {this.props.pid===null? (
-                            <input type="submit" value="提交"/>
-                        ):(
-                            <input className="update_btn" type="submit" value="修改"/>
-                        )}
+                    <form className="" id={`payment_form_${this.props.oid}`}>
+                        This is PaymentForm
                     </form>
                 )
-            }
-            handleChange=(dataType)=>{
-                return(eObj=>{
-                    let value = eObj.target.value;
-                    if(dataType==="amount"){
-                        value = parseInt(eObj.target.value);
-                    }
-                    this.setState({[dataType]: value})
-                })
-            }
-            checkInputValue=(msg)=>{
-                // console.log(this.state);
-                const {bank, account_no, name, amount, transfer_date} = this.state;
-                if(account_no.length<5){
-                    alert("匯款帳號缺碼，請確認!!")
-                    return
-                }else if(typeof amount!=="number" || amount<0){
-                    alert("請輸入阿拉伯數字")
-                    return
-                }else{
-                    let check = confirm(msg)
-                    return check
-                }
-            }
-            handleCreate=(eObj)=>{
-                eObj.preventDefault();
-                const state = this.state;
-                let msg = "";
-                Object.keys(this.labels).forEach(col=>{
-                    msg = msg+ `${this.labels[col]}：${state[col]}\n`
-                })
-                msg = msg +`再次確認?`
-                const check = this.checkInputValue(msg);
-                if(check){
-                    delete state.past_data;
-                    createNewPayment(this.props.oid, state).then(resp=>{
-                        if(resp.ok){
-                            alert("新增完成")
-                            location.href = `/admin/order?id=${this.props.oid}`
-                        }
-                    })
-                }
-            }
-            handleUpdate=(eObj)=>{
-                eObj.preventDefault();
-                const state = this.state;
-                let msg = "";
-                let data = {};
-                Object.keys(this.labels).forEach(col=>{
-                    if(state[col]!==state.past_data[col]){
-                        msg = msg+ `${this.labels[col]}：${state[col]}\n`
-                        data[col] = state[col]
-                    }
-                })
-                if(msg!=="" && data!=={} && this.props.pid!==null){
-                    msg = msg +`是否確定修改?`
-                    const check = this.checkInputValue(msg);
-                    if(check){
-                        updatePayment(this.props.pid, data).then(resp=>{
-                            if(resp.ok){
-                                alert("修改完成")
-                                location.href = `/admin/order?id=${this.props.oid}`
-                            }
-                        })
-                    }
-                }
             }
         }
     </script>

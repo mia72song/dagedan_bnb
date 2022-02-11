@@ -2,7 +2,7 @@ from flask import jsonify, request
 from datetime import datetime
 
 from . import admin
-from App.models import Booking
+from App.models import Booking, Order
 from App.constants import DATETIME_FORMATTER, DATE_FORMATTER
 from .auth import login_required
 
@@ -30,3 +30,18 @@ def get_booked_list():
         return jsonify({"data": None})
 
 
+@admin.route("/api/payment/<oid>")
+@login_required
+def get_payment_by_oid(oid):
+    order = Order.query.get(oid)
+    if order.payment:
+        return jsonify({"data": order.payment.getDataDict()})
+    else:
+        return jsonify({"data": None})
+
+
+@admin.route("/api/payment/<oid>", methods=["POST", "PUT"])
+@login_required
+def update_payment_by_oid(oid):
+    order = Order.query.get(oid)
+    pass
