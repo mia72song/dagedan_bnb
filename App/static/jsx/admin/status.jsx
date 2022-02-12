@@ -13,8 +13,8 @@ class StatusSelect extends React.Component{
     }
     render(){
         return(
-            <div className="input-group mt-3">
-                <label className="input-group-text bg-secondary text-white" for="inputStatusSelect">訂單狀態</label>
+            <div className="input-group mt-3 justify-content-end">
+                <label className="input-group-text bg-secondary text-white fst-normal" for="inputStatusSelect">訂單狀態</label>
                 <select className="form-select" id="inputStatusSelect" value={this.state.order_status} onChange={this.handleSelect}>
                     <option value="all">全部訂單</option>
                     <option value="new">新訂單</option>

@@ -4,11 +4,7 @@
     {{ super() }}
 
     <style>
-        #search_wrap{
-            max-width: 95%;
-            margin: auto;
-        }
-        #databox_wrap{
+        #search_wrap, #databox_wrap{
             max-width: 95%;
             margin: auto;
         }
@@ -16,11 +12,11 @@
             display: none;
             margin-top: 10px;
         }
-        #inputStatusSelect{
-            max-width: 125px;
-        }
-        #inputGroupSelect, #keywordInput{
+        #inputStatusSelect, #inputGroupSelect, #keywordInput{
             max-width: 160px;
+        }
+        #inputStatusSelect:focus, #inputGroupSelect:focus, #keywordInput:focus{
+            border-color: #6c757d;
         }
     </style>
 {% endblock %}
@@ -28,16 +24,17 @@
     <div id="search_wrap" class="container">
         <!--由Search組件渲染-->
         <div class="row my-3">
-            <div class="col-2"></div>
-            <div class="col-3" id="status_selector">
+            <div class="col-1"></div>
+            <div class="col-4" id="status_selector">
                 <!--由StatusSelect組件渲染-->
             </div>
             <script type="text/babel" src="/static/jsx/admin/status.jsx"></script>
+            <div class="col-1"></div>
             <div class="col-5" id="group_selector">
                 <!--由KeywordSearch組件渲染-->
             </div>
             <script type="text/babel" src="/static/jsx/admin/search.jsx"></script>
-            <div class="col-2"></div>
+            <div class="col-1"></div>
         </div>
     </div>
     <div id="databox_wrap">
