@@ -16,24 +16,28 @@
             display: none;
             margin-top: 10px;
         }
-
+        #inputStatusSelect{
+            max-width: 125px;
+        }
+        #inputGroupSelect, #keywordInput{
+            max-width: 160px;
+        }
     </style>
 {% endblock %}
 {% block content %}
     <div id="search_wrap" class="container">
         <!--由Search組件渲染-->
         <div class="row my-3">
-            <div class="col-1"></div>
+            <div class="col-2"></div>
             <div class="col-3" id="status_selector">
-                由StatusSelect組件渲染
+                <!--由StatusSelect組件渲染-->
             </div>
             <script type="text/babel" src="/static/jsx/admin/status.jsx"></script>
-            <div class="col-2"></div>
             <div class="col-5" id="group_selector">
-                由KeywordSearch組件渲染
+                <!--由KeywordSearch組件渲染-->
             </div>
             <script type="text/babel" src="/static/jsx/admin/search.jsx"></script>
-            <div class="col-1"></div>
+            <div class="col-2"></div>
         </div>
     </div>
     <div id="databox_wrap">

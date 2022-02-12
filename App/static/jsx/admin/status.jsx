@@ -6,7 +6,7 @@ class StatusSelect extends React.Component{
         if(location.search.includes("status")){
             const search_string = location.search.replace("?", "").split(/[=&]/);
             const index = search_string.indexOf("status")+1;
-            this.setState({order_status: search_string[index]})
+            this.setState({order_status: search_string[index]});
         }else{
             this.setState({order_status: "all"});
         }
@@ -26,7 +26,6 @@ class StatusSelect extends React.Component{
     }
     handleSelect=(eObj)=>{
         //console.log(eObj.target.value);
-        this.setState({order_status: eObj.target.value});
         if(eObj.target.value==="all"){
             location.href = "/admin/order";
         }else{
