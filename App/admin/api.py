@@ -1,10 +1,11 @@
-from flask import jsonify, request
+from flask import jsonify, request, session
 from datetime import datetime
 
 from . import admin
-from App.models import Booking, Order
+from App.models import Booking, Order, Mydb
 from App.constants import DATETIME_FORMATTER, DATE_FORMATTER
 from .auth import login_required
+from App import db
 
 @admin.route("/api/booked")
 @login_required
@@ -28,6 +29,32 @@ def get_booked_list():
 
     else:
         return jsonify({"data": None})
+
+
+@admin.route("/api/order/<oid>", methods=["DELETE"])
+@login_required
+def cancel_order_by_id(oid):
+    order = Order.query.get(oid)
+    if order.status.value=="NEW" or order.status.value=="PENDING":
+        try:
+            order.status = "CANCEL"
+            order.update_user = session.get("user")[0]
+            if order.payment:
+                order.payment.is_del = 1
+            
+            mydb = Mydb()
+            mydb.cancelBooking()                
+            del mydb
+            
+            db.session.commit()
+            
+            return jsonify({"ok": True})
+        
+        except Exception as e:
+            return jsonify({"error": True, "message": f"伺服器內部錯誤：{e}"}), 500   
+            
+    else:
+        return jsonify({"error": True, "message": f"拒絕「取消」。原因：編號{oid} 訂單 已付款、或已取消。"}), 400
 
 
 @admin.route("/api/payment/<oid>")

@@ -3,10 +3,8 @@ class StatusSelect extends React.Component{
         order_status: "new"
     }
     componentDidMount(){
-        if(location.search.includes("status")){
-            const search_string = location.search.replace("?", "").split(/[=&]/);
-            const index = search_string.indexOf("status")+1;
-            this.setState({order_status: search_string[index]});
+        if(location.pathname.split("/")[3] && location.pathname.split("/")[3]!=="search"){
+            this.setState({order_status: location.pathname.split("/")[3]});
         }else{
             this.setState({order_status: "all"});
         }
@@ -27,9 +25,9 @@ class StatusSelect extends React.Component{
     handleSelect=(eObj)=>{
         //console.log(eObj.target.value);
         if(eObj.target.value==="all"){
-            location.href = "/admin/order";
+            location.href = "/admin/orders";
         }else{
-            location.href = `/admin/order?status=${eObj.target.value}`;
+            location.href = `/admin/orders/${eObj.target.value}`;
         }
     }
 }

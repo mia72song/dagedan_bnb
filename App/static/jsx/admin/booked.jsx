@@ -4,7 +4,7 @@ class Booked extends React.Component{
         const data = this.props.data
         const arrival_time = data.arrival_datetime.split(" ")[1].split(":");
         return(
-            <a href={`${window.origin}/admin/order/${data.order_id}`} className="text-decoration-none py-1">
+            <a href={`${window.origin}/admin/orders/search?id=${data.order_id}`} className="text-decoration-none py-1">
                 { data.booker }
                 <br/>
                 { data.phone }

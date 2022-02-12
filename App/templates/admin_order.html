@@ -13,7 +13,7 @@
             margin-top: 10px;
         }
         #inputStatusSelect, #inputGroupSelect, #keywordInput{
-            max-width: 160px;
+            max-width: 165px;
         }
         #inputStatusSelect:focus, #inputGroupSelect:focus, #keywordInput:focus{
             border-color: #6c757d;
@@ -22,7 +22,6 @@
 {% endblock %}
 {% block content %}
     <div id="search_wrap" class="container">
-        <!--由Search組件渲染-->
         <div class="row my-3">
             <div class="col-1"></div>
             <div class="col-4" id="status_selector">
@@ -55,7 +54,9 @@
                 <tbody style="line-height: 1.8;">
                     {% if orders %}
                         {% for order in orders %}
-                            {% if order.status.value=="PAID" %}
+                            {% if not order.status  %}
+                            <tr></tr>
+                            {% elif order.status.value=="PAID" %}
                             <!--已付款-->
                             <tr class="bg-paid">
                                 <td scope="row">{{ order.oid }}</th>
@@ -188,13 +189,13 @@
             const oid = eObj.target.id.split("_")[2];
             const check = confirm(`是否取消編號：${oid} 訂單?`);
             if(check){
-                fetch(`${window.origin}/admin/order/${oid}`, {
+                fetch(`${window.origin}/admin/api/order/${oid}`, {
                     method: "delete",
                     credentials: "include",
                     headers: {"X-CSRFToken": csrf_token}
                 }).then(response=>{
                     if(response.status==200){
-                        location.href = "/admin/order";
+                        location.href = "/admin/orders";
                     }else{
                         console.log(response.json())
                     }

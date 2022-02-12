@@ -110,6 +110,7 @@ class Mydb:
         self.cur.execute(sql)
         return list(item[0] for item in self.cur.fetchall())
 
+
     def __del__(self):
         self.cur.close()
         self.conn.close()
