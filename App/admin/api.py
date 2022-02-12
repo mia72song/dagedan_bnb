@@ -35,13 +35,29 @@ def get_booked_list():
 def get_payment_by_oid(oid):
     order = Order.query.get(oid)
     if order.payment:
-        return jsonify({"data": order.payment.getDataDict()})
+        payment_info = order.payment.getDataDict()
+        payment_info["transfer_date"] = datetime.strftime(payment_info["transfer_date"], DATE_FORMATTER)
+        return jsonify({"data": payment_info})
+    
     else:
         return jsonify({"data": None})
 
 
-@admin.route("/api/payment/<oid>", methods=["POST", "PUT"])
+@admin.route("/api/payment/<oid>", methods=["POST"])
+@login_required
+def create_payment_by_oid(oid):
+    order = Order.query.get(oid)
+    if order.payment:
+        return jsonify({"error": True, "message": f"拒絕「新增」。原因：編號{oid} 訂單已有匯款資料。"}), 400
+    else:
+        pass
+
+
+@admin.route("/api/payment/<oid>", methods=["PUT"])
 @login_required
 def update_payment_by_oid(oid):
     order = Order.query.get(oid)
-    pass
+    if not order.payment:
+        return jsonify({"error": True, "message": f"拒絕「修改」。原因：編號{oid} 訂單尚無匯款資料。"}), 400
+    else:
+        pass

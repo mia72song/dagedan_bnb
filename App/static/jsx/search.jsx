@@ -5,7 +5,7 @@ class Search extends React.Component{
         guests: 1
     }
     componentDidMount(){
-        if(location.pathname=="/booking" && location.search){
+        if(location.pathname==="/booking" && location.search){
             const search_string_1st = location.search.split("&")[0].split("?")[1].split("=");
             const search_string_2nd = location.search.split("&")[1].split("=");
             const search_string_3th = location.search.split("&")[2].split("=");

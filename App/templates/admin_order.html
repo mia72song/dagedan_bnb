@@ -14,8 +14,9 @@
         }
         div[id^='payment_']{
             display: none;
-            margin-top: 5px;
+            margin-top: 10px;
         }
+
     </style>
 {% endblock %}
 {% block content %}
@@ -23,36 +24,19 @@
         <!--由Search組件渲染-->
         <div class="row my-3">
             <div class="col-1"></div>
-            <div class="col-3">
-                <div class="input-group mt-3">
-                    <label class="input-group-text bg-secondary text-white" for="inputStatusSelect">訂單狀態</label>
-                    <select class="form-select" id="inputStatusSelect">
-                        <option value="all">全部訂單</option>
-                        <option value="new">新訂單</option>
-                        <option value="pending">待確認</option>
-                        <option value="paid">已付款</option>
-                    </select>
-                </div>
+            <div class="col-3" id="status_selector">
+                由StatusSelect組件渲染
             </div>
+            <script type="text/babel" src="/static/jsx/admin/status.jsx"></script>
             <div class="col-2"></div>
-            <div class="col-5">
-                <div class="input-group mt-3">
-                    <select class="form-select" id="inputGroupSelect">
-                        <option selected>請選取搜尋項目</option>
-                        <option value="order_id">訂單編號</option>
-                        <option value="phone">訂房電話</option>
-                        <option value="check_in_date">入住日期</option>
-                    </select>
-                    <input type="text" class="form-control" name="keyword" id="keyword" placeholder="請輸入關鍵字">
-                    <button class="btn btn-outline-primary" type="button">搜尋</button>
-                    </div>
-                </div>
+            <div class="col-5" id="group_selector">
+                由KeywordSearch組件渲染
             </div>
+            <script type="text/babel" src="/static/jsx/admin/search.jsx"></script>
             <div class="col-1"></div>
         </div>
     </div>
     <div id="databox_wrap">
-        <!--由DataBox組件渲染-->
         <div class="table-responsive-xl">
             <table class="table text-center my-3">
                 <thead>
@@ -88,7 +72,7 @@
                                 <td>
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
                                     <div class="mt-2">
-                                        付款：<span class="text-success fw-bold">轉帳完成</span>
+                                        付款期限：<span class="text-success fw-bold">轉帳完成</span>
                                         <button type="button" class="btn btn-sm btn-outline-success fw-bold mx-1" id="get_payment_btn_{{ order.oid }}">查看資料</button>
                                     </div>
                                     <div id="payment_{{ order.oid }}">
@@ -117,7 +101,7 @@
                                 <td>
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
                                     <div class="mt-2">
-                                        付款：<span class="text-decoration-none text-primary">{{ order.payment_deadline }}</span>
+                                        付款期限：<span class="text-decoration-none text-primary">{{ order.payment_deadline }}</span>
                                         <button type="button" class="btn btn-sm btn-outline-primary fw-bold mx-1" id="get_payment_btn_{{ order.oid }}">確認匯款</button>
                                     </div>
                                     <div id="payment_{{ order.oid }}">
@@ -148,7 +132,7 @@
                                 <td>
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
                                     <div class="mt-2">
-                                        付款：<span class="text-decoration-none text-primary">{{ order.payment_deadline }}</span>
+                                        付款期限：<span class="text-decoration-none text-primary">{{ order.payment_deadline }}</span>
                                         <button type="button" class="btn btn-sm btn-outline-primary fw-bold mx-1" id="get_payment_btn_{{ order.oid }}">確認匯款</button>
                                     </div>
                                     <div id="payment_{{ order.oid }}">
@@ -179,7 +163,7 @@
                                 <td class="fst-italic">
                                     {{ order.detail.booker_name }} | {{ order.detail.booker_phone }}
                                     <div>
-                                        付款：<span>已取消</span>
+                                        付款期限：<span>已取消</span>
                                     </div>
                                 </td>
                                 <td class="fw-bold">
@@ -193,7 +177,7 @@
             </table>
         </div>
     </div>
-    <script type="text/babel">
+    <script>
         // 取消訂單
         document.querySelectorAll("button[id^='cancel_btn_']").forEach(btn=>{
             btn.addEventListener("click", cancelOrderById);
@@ -216,65 +200,6 @@
                 })
             }
         }
-        // 取得匯款資料
-        document.querySelectorAll("button[id^='get_payment_btn_']").forEach(btn=>{
-            btn.addEventListener("click", getPaymentByOid);
-        })
-        function getPaymentByOid(eObj){
-            //console.log(csrf_token);
-            document.querySelectorAll("div[id^='payment_']").forEach(div=>{
-                div.style.display = "none";
-            });
-
-            const oid = eObj.target.id.split("_")[3];
-            
-            fetch(`${window.origin}/admin/api/payment/${oid}`).then(response=>{
-                if(response.status==200){
-                    return response.json()
-                }else{
-                    console.log(response.json());
-                }
-            }).then(resp=>{
-                const payment_div = document.getElementById(`payment_${oid}`);
-                payment_div.style.display = "block";
-                ReactDOM.render(<PaymentForm data={resp.data} oid={oid}/>, payment_div);
-            })
-        }
-        class PaymentForm extends React.Component{
-            state = {
-                bank: "", // 銀行
-                account_no: "", //帳號至先五碼
-                name: "", // 戶名
-                amount: "",
-                transfer_date: ""
-            }
-            labels = {
-                bank: "匯款銀行", 
-                account_no: "帳號末五碼", 
-                name: "匯款戶名", 
-                amount: "金額",
-                transfer_date: "匯款日期"
-            }
-            componentDidMount(){
-                if(this.props.data){
-                    this.setState({
-                        bank: this.props.data.bank,
-                        account_no: this.props.data.account_no,
-                        name: this.props.data.name,
-                        amount: this.props.data.amount,
-                        transfer_date: this.props.data.transfer_date
-                    })
-                }
-            }
-            render(){
-                console.log(this.props.data);
-                console.log(this.props.oid);
-                return(
-                    <form className="" id={`payment_form_${this.props.oid}`}>
-                        This is PaymentForm
-                    </form>
-                )
-            }
-        }
     </script>
+    <script type="text/babel" src="/static/jsx/admin/payment.jsx"></script>
 {% endblock %}
