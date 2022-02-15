@@ -47,7 +47,7 @@ def cancel_order_by_id(oid):
             del mydb
             
             db.session.commit()
-            
+
             return jsonify({"ok": True})
         
         except Exception as e:
@@ -57,34 +57,27 @@ def cancel_order_by_id(oid):
         return jsonify({"error": True, "message": f"拒絕「取消」。原因：編號{oid} 訂單 已付款、或已取消。"}), 400
 
 
-@admin.route("/api/payment/<oid>")
+@admin.route("/api/payment/<oid>", methods=["GET", "POST", "PUT"])
 @login_required
 def get_payment_by_oid(oid):
     order = Order.query.get(oid)
-    if order.payment:
-        payment_info = order.payment.getDataDict()
-        payment_info["transfer_date"] = datetime.strftime(payment_info["transfer_date"], DATE_FORMATTER)
-        return jsonify({"data": payment_info})
-    
-    else:
-        return jsonify({"data": None})
+    if request.method=="GET": 
+        if order.payment:
+            payment_info = order.payment.getDataDict()
+            payment_info["transfer_date"] = datetime.strftime(payment_info["transfer_date"], DATE_FORMATTER)
+            return jsonify({"data": payment_info})
+        
+        else:
+            return jsonify({"data": None})
 
+    elif request.method=="POST":
+        if order.payment:
+            return jsonify({"error": True, "message": f"拒絕「新增」。原因：編號{oid} 訂單已有匯款資料。"}), 400
+        else:
+            pass
 
-@admin.route("/api/payment/<oid>", methods=["POST"])
-@login_required
-def create_payment_by_oid(oid):
-    order = Order.query.get(oid)
-    if order.payment:
-        return jsonify({"error": True, "message": f"拒絕「新增」。原因：編號{oid} 訂單已有匯款資料。"}), 400
-    else:
-        pass
-
-
-@admin.route("/api/payment/<oid>", methods=["PUT"])
-@login_required
-def update_payment_by_oid(oid):
-    order = Order.query.get(oid)
-    if not order.payment:
-        return jsonify({"error": True, "message": f"拒絕「修改」。原因：編號{oid} 訂單尚無匯款資料。"}), 400
-    else:
-        pass
+    elif request.method=="PUT":
+        if not order.payment:
+            return jsonify({"error": True, "message": f"拒絕「修改」。原因：編號{oid} 訂單尚無匯款資料。"}), 400
+        else:
+            pass

@@ -41,8 +41,8 @@
             <table class="table text-center my-3">
                 <thead>
                     <tr>
-                        <th scope="col">訂單編號</th>
-                        <th scope="col">建立時間</th>
+                        <th scope="col" style="width: 120px;">訂單編號</th>
+                        <th scope="col" style="width: 120px;">建立時間</th>
                         <th scope="col">入住 / 退房日期</th>
                         <th scope="col">天數</th>
                         <th scope="col">人數</th>
@@ -204,4 +204,16 @@
         }
     </script>
     <script type="text/babel" src="/static/jsx/admin/payment.jsx"></script>
+    <div class="d-flex justify-content-center mb-3 ">
+        <div class="btn-group" role="group" aria-label="Basic outlined example">
+            <button type="button" class="btn btn-sm btn-outline-secondary" style="padding: 5px 10px;" id="toPrevPage"><</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary fw-bold" style="padding: 5px 10px;">{{ page }}</button>
+            <button type="button" class="btn btn-sm btn-outline-secondary" style="padding: 5px 10px;" id="toNextPage">></button>
+        </div>
+    </div>
+    <script>
+        const page_no = "{{ page }}";
+        const prev_btn = document.getElementById("toPrevPage");
+        const next_btn = document.getElementById("toNextPage");
+    </script>
 {% endblock %}

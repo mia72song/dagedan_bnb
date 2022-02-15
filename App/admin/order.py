@@ -23,7 +23,8 @@ def get_all_orders():
     return render_template(
         "admin_order.html", 
         current_user = session.get("user")[1],
-        orders = orders[end_index-limit:end_index]
+        orders = orders[end_index-limit:end_index],
+        page = page
     )
 
 
@@ -50,7 +51,8 @@ def get_orders_by_status(status):
         return render_template(
             "admin_order.html", 
             current_user = session.get("user")[1],
-            orders = orders[end_index-limit:end_index]
+            orders = orders[end_index-limit:end_index],
+            page = page
         )
     else:
         abort(404)
@@ -59,6 +61,13 @@ def get_orders_by_status(status):
 @admin.route("/orders/search")
 @login_required
 def search_orders_by_keyword():
+    limit = 10
+    try:
+        page = request.args.get("page", 1)
+        end_index = limit*int(page)
+    except ValueError:
+        abort(404)
+
     orders = []
     if request.args.get("id"):
         order = Order.query.get(request.args.get("id"))
@@ -77,5 +86,6 @@ def search_orders_by_keyword():
     return render_template(
         "admin_order.html", 
         current_user = session.get("user")[1],
-        orders = orders
+        orders = orders[end_index-limit:end_index],
+        page = page
     )
